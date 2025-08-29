@@ -1,7 +1,7 @@
 <script setup>
-import NavBar from '@/views/NavBar/index.vue'
-import Play from '@/views/Play/index.vue'
-import TabBar from '@/views/TabBar/index.vue'
+import NavBar from '@/views/Layout/components/NavBar.vue'
+import Play from '@/views/Layout/components/Play.vue'
+import TabBar from '@/views/Layout/components/TabBar.vue'
 </script>
 
 <template>
