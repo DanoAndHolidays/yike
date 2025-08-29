@@ -10,7 +10,7 @@
             <h3>分类</h3>
         </div>
         <div class="shang">
-            <h3>+</h3>
+            <i class="fa-solid fa-plus fa-xl"></i>
         </div>
         <div>
             <h3>剧集</h3>
