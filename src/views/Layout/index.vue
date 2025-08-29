@@ -15,10 +15,15 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
 
 <style scoped lang="scss">
 .parent-container {
+    margin: auto;
     position: relative;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    min-width: 375px;
+    min-height: 667px;
+    max-width: 500px;
+
 
     .play {
         height: calc(100vh - $tab-bar-height);

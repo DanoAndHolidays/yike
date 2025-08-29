@@ -3,8 +3,17 @@
     margin: 0;
 }
 
+html {
+    border: 0;
+    margin: 0;
+}
+
 body {
     border: 0;
     margin: 0;
     background-color: $text-color-2;
+}
+
+* {
+    box-sizing: border-box;
 }
