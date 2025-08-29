@@ -1,9 +1,10 @@
 <script setup>
-import TabBar from './views/TabBar.vue';
+
 </script>
 
 <template>
-  <TabBar />
+  <RouterView />
+
 </template>
 
 <style scoped></style>
