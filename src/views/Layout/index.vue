@@ -1,13 +1,16 @@
 <script setup>
 import NavBar from '@/views/Layout/components/NavBar.vue'
-import Play from '@/views/Layout/components/Play.vue'
+import PlayBar from '@/views/Layout/components/PlayBar.vue'
 import TabBar from '@/views/Layout/components/TabBar.vue'
 </script>
 
 <template>
     <div class="parent-container">
         <nav-bar />
-        <play />
+        <div class="test">
+            <play-bar />
+            <play-bar />
+        </div>
         <TabBar />
     </div>
 
@@ -19,26 +22,43 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
     position: relative;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
     min-width: 375px;
     min-height: 667px;
     max-width: 500px;
 
+    overflow-x: auto;
+    /* 隐藏默认的滚动条样式 */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+
+    /* IE and Edge */
+    &::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, and Opera */
+    }
+
+    .test {
+        overflow-x: auto;
+    }
 
     .play {
         height: calc(100vh - $tab-bar-height);
     }
 
     .tab-bar {
-        position: relative;
+        position: fixed;
         bottom: 0;
-        width: 100%;
+        width: 100vw;
+        max-width: 500px;
     }
 
     .nav-bar {
-        position: absolute;
+        position: fixed;
         top: 0;
-        width: 100%;
+
+        width: 100vw;
+        max-width: 500px;
     }
 }
 </style>

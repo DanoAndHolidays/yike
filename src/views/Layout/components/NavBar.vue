@@ -47,9 +47,8 @@ const openBar = ref(false);
     color: $text-color-1;
     display: flex;
     justify-content: space-around;
-    overflow-x: hidden;
     align-items: center;
-    z-index: 100;
+    z-index: 11;
     background-image: linear-gradient(to bottom,
             rgba(0, 0, 0, 0.3),
             rgba(0, 0, 0, 0));

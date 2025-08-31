@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import { createMessage } from '@/utils/message'
+import Video from './Video.vue';
 
-const isLike = ref(true);
-const isFavorite = ref(true);
+const isLike = ref(false);
+const isFavorite = ref(false);
 
 const isShare = ref(false);
 const isMute = ref(true);//默认静音
@@ -13,9 +14,7 @@ const tab = ref(null);
 
 <template>
     <div class="play">
-        <div class="video">
-            视频
-        </div>
+        <Video />
         <div class="tab" ref="tab">
             <div @click="isLike = !isLike">
                 <i class="fa-solid fa-heart fa-2xl" :class="{ 'active-like': isLike }"></i>
@@ -57,7 +56,6 @@ const tab = ref(null);
     position: relative;
 
     .video {
-        background-color: rgb(90, 90, 155);
         height: 100%;
         width: 100%;
     }
@@ -71,7 +69,7 @@ const tab = ref(null);
         bottom: 0;
         text-align: center;
         margin-bottom: 20px;
-        z-index: 100;
+        z-index: 10;
 
         div {
             margin: 10px;

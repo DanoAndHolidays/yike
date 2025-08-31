@@ -29,5 +29,10 @@
     justify-content: space-around;
     height: $tab-bar-height;
     align-items: center;
+    z-index: 8;
+
+    h3 {
+        margin: 0;
+    }
 }
 </style>
