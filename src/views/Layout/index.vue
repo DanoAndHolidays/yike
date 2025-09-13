@@ -9,7 +9,6 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
         <nav-bar />
         <div class="test">
             <play-bar />
-            <play-bar />
         </div>
         <TabBar />
     </div>
@@ -39,7 +38,7 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
     }
 
     .test {
-        overflow-x: auto;
+        background-color: red;
     }
 
     .play {
