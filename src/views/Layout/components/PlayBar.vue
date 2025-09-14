@@ -13,6 +13,13 @@ const tab = ref(null)
 let player = null
 const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
 
+const props = defineProps({
+    videoJsId: {
+        type: String,
+        required: true
+    }
+})
+
 const toggleMute = () => {
     isMute.value = !isMute.value
     createMessage(isMute.value ? '已静音' : '解除静音')
@@ -80,7 +87,7 @@ onMounted(() => {
 
         }
     }
-    player = videojs('my-player', options, function onPlayerReady() {
+    player = videojs(props.videoJsId, options, function onPlayerReady() {
         videojs.log('播放器准备好了!')
         // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
         this.play()
@@ -106,7 +113,7 @@ onMounted(() => {
 <template>
     <div class="play">
         <div class="video">
-            <video id="my-player" webkit-playsinline="true" @click="handerTouched" @touchend="handerTouched"
+            <video :id="props.videoJsId" webkit-playsinline="true" @click="handerTouched" @touchend="handerTouched"
                 playsinline="ture" class="vjs-control-bar video-js" preload="auto" muted>
                 <source :src="src" type="video/mp4" />
             </video>

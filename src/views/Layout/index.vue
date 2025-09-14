@@ -2,13 +2,14 @@
 import NavBar from '@/views/Layout/components/NavBar.vue'
 import PlayBar from '@/views/Layout/components/PlayBar.vue'
 import TabBar from '@/views/Layout/components/TabBar.vue'
+import Video from './components/Video.vue'
 </script>
 
 <template>
     <div class="parent-container">
         <nav-bar />
         <div class="test">
-            <play-bar />
+            <Video />
         </div>
         <TabBar />
     </div>
@@ -38,7 +39,7 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
     }
 
     .test {
-        background-color: red;
+        background-color: rgb(0, 0, 0);
     }
 
     .play {
@@ -50,12 +51,12 @@ import TabBar from '@/views/Layout/components/TabBar.vue'
         bottom: 0;
         width: 100vw;
         max-width: 500px;
+        z-index: 1000;
     }
 
     .nav-bar {
         position: fixed;
         top: 0;
-
         width: 100vw;
         max-width: 500px;
     }
