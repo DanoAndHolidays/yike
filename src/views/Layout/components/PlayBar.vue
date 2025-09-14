@@ -2,7 +2,7 @@
 import { createMessage } from '@/utils/message'
 import { ref, onMounted } from 'vue'
 import videojs from 'video.js'
-import 'video.js/dist/video-js.min.css'
+import 'video.js/dist/video-js.css'
 
 const isLike = ref(false)
 const isFavorite = ref(false)
@@ -11,7 +11,7 @@ const isMute = ref(true) //默认静音
 const tab = ref(null)
 
 let player = null
-const src = ref('https://playletcdn.nnchenxin.cn/video/jaxczcqrgdq/9.mp4')
+const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
 
 const toggleMute = () => {
     isMute.value = !isMute.value
@@ -20,22 +20,66 @@ const toggleMute = () => {
     player.muted(isMute.value)
 }
 
-const handerClick = () => {
-    console.log('click')
-    console.log(player.paused())
+const handerClick = (e) => {
+    console.log('触发事件处理函数:', e);
+    console.log('没点之前是', player.paused() ? '暂停' : '播放');
+    e.stopPropagation()
 
     if (player.paused()) {
-        player.play()
-        player.controls(false)
+        console.log('pause->play');
+        player.play();
+        // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
+
     } else {
-        player.pause()
-        player.controls(true)
+        console.log('play->pause');
+        player.pause();
+
     }
+    console.log('现在是', player.paused() ? '暂停' : '播放');
+}
+
+
+const handerTouched = (e) => {
+    console.log('触发事件处理函数:', e);
+    console.log('没点之前是', player.paused() ? '暂停' : '播放');
+    e.stopPropagation()
+    if (player.paused()) {
+        console.log('pause->play');
+        player.play();
+        // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
+        player.controls(false); // 注意：这会完全禁用控制栏，而不是隐藏
+    } else {
+        console.log('play->pause');
+        player.pause();
+        player.controls(true); // 暂停时显示控制栏
+    }
+    console.log('现在是', player.paused() ? '暂停' : '播放');
 }
 
 onMounted(() => {
     // 添加初始化宽和高，否则加载播放器的时候会闪一下,添加了还是哈
-    let options = { height: '1415', width: '795.94', autoplay: 'muted', aspectRatio: '9:16' }
+    let options = {
+        height: '1415',
+        width: '795.94',
+        autoplay: 'muted',
+        aspectRatio: '9:16',
+        controlBar: {
+            fullscreenToggle: false,
+            playToggle: false,
+            volumeMenuButton: false,
+            // durationDisplay: false,
+            // currentTimeDisplay: false,
+            timeDivider: false,
+            volumePanel: false,
+            pictureInPictureToggle: false,
+            remainingTimeDisplay: false,
+        },
+        userAction: {
+            click: true,
+            doubleClick: false,
+
+        }
+    }
     player = videojs('my-player', options, function onPlayerReady() {
         videojs.log('播放器准备好了!')
         // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
@@ -47,10 +91,12 @@ onMounted(() => {
     // 添加播放器事件监听
     player.on('play', () => {
         console.log('视频开始播放')
+
     })
 
     player.on('pause', () => {
         console.log('视频暂停')
+
     })
 
     player.muted(isMute.value)
@@ -59,11 +105,13 @@ onMounted(() => {
 
 <template>
     <div class="play">
-        <div class="video" @click="handerClick" @touchend="handerClick">
-            <video id="my-player" class="video-js" controls preload="auto" muted>
+        <div class="video">
+            <video id="my-player" webkit-playsinline="true" @click="handerTouched" @touchend="handerTouched"
+                playsinline="ture" class="vjs-control-bar video-js" preload="auto" muted>
                 <source :src="src" type="video/mp4" />
             </video>
         </div>
+
         <div class="tab" ref="tab">
             <div @click="isLike = !isLike">
                 <i class="fa-solid fa-heart fa-2xl" :class="{ 'active-like': isLike }"></i>
@@ -110,6 +158,7 @@ onMounted(() => {
     height: 100%;
     width: 100%;
     position: relative;
+    z-index: 10;
 
     .video {
         height: 100%;
@@ -122,7 +171,7 @@ onMounted(() => {
         color: $text-color-1;
         position: absolute;
         right: 0;
-        bottom: 0;
+        bottom: 8px;
         text-align: center;
         margin-bottom: 20px;
         z-index: 10;
@@ -151,7 +200,7 @@ onMounted(() => {
         color: $text-color-1;
         position: absolute;
         left: 0;
-        bottom: 0;
+        bottom: 8px;
         margin-bottom: 20px;
         z-index: 100;
         margin: 10px;

@@ -1,0 +1,26 @@
+.vjs-control-bar {
+    background-color: rgba(255, 0, 0, 0) !important;
+
+    .vjs-control.vjs-progress-control {
+        background-color: rgba(0, 0, 0, 0);
+        .vjs-load-progress {
+            background-color: $primary-color !important;
+            opacity: 1;
+            border-radius: 50px;
+        }
+        .vjs-progress-holder {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 50px;
+        }
+        .vjs-slider {
+            border-radius: 50px;
+            .vjs-play-progress.vjs-slider-bar {
+                border-radius: 50px;
+            }
+        }
+    }
+}
+
+.video-js .vjs-load-progress div {
+    background-color: rgba(190, 41, 41, 0) !important;
+}
