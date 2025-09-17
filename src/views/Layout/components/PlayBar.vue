@@ -16,8 +16,8 @@ const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
 const props = defineProps({
     videoJsId: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const toggleMute = () => {
@@ -28,39 +28,36 @@ const toggleMute = () => {
 }
 
 const handerClick = (e) => {
-    console.log('触发事件处理函数:', e);
-    console.log('没点之前是', player.paused() ? '暂停' : '播放');
+    console.log('触发事件处理函数:', e)
+    console.log('没点之前是', player.paused() ? '暂停' : '播放')
     e.stopPropagation()
 
     if (player.paused()) {
-        console.log('pause->play');
-        player.play();
+        console.log('pause->play')
+        player.play()
         // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
-
     } else {
-        console.log('play->pause');
-        player.pause();
-
+        console.log('play->pause')
+        player.pause()
     }
-    console.log('现在是', player.paused() ? '暂停' : '播放');
+    console.log('现在是', player.paused() ? '暂停' : '播放')
 }
 
-
 const handerTouched = (e) => {
-    console.log('触发事件处理函数:', e);
-    console.log('没点之前是', player.paused() ? '暂停' : '播放');
+    console.log('触发事件处理函数:', e)
+    console.log('没点之前是', player.paused() ? '暂停' : '播放')
     e.stopPropagation()
     if (player.paused()) {
-        console.log('pause->play');
-        player.play();
+        console.log('pause->play')
+        player.play()
         // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
-        player.controls(false); // 注意：这会完全禁用控制栏，而不是隐藏
+        player.controls(false) // 注意：这会完全禁用控制栏，而不是隐藏
     } else {
-        console.log('play->pause');
-        player.pause();
-        player.controls(true); // 暂停时显示控制栏
+        console.log('play->pause')
+        player.pause()
+        player.controls(true) // 暂停时显示控制栏
     }
-    console.log('现在是', player.paused() ? '暂停' : '播放');
+    console.log('现在是', player.paused() ? '暂停' : '播放')
 }
 
 onMounted(() => {
@@ -84,8 +81,7 @@ onMounted(() => {
         userAction: {
             click: true,
             doubleClick: false,
-
-        }
+        },
     }
     player = videojs(props.videoJsId, options, function onPlayerReady() {
         videojs.log('播放器准备好了!')
@@ -98,23 +94,30 @@ onMounted(() => {
     // 添加播放器事件监听
     player.on('play', () => {
         console.log('视频开始播放')
-
     })
 
     player.on('pause', () => {
         console.log('视频暂停')
-
     })
 
     player.muted(isMute.value)
 })
+
+// @click="handerTouched" @touchend="handerTouched"
+// 事件的穿透还是有些问题，先搞滑动
 </script>
 
 <template>
     <div class="play">
         <div class="video">
-            <video :id="props.videoJsId" webkit-playsinline="true" @click="handerTouched" @touchend="handerTouched"
-                playsinline="ture" class="vjs-control-bar video-js" preload="auto" muted>
+            <video
+                :id="props.videoJsId"
+                webkit-playsinline="true"
+                playsinline="ture"
+                class="vjs-control-bar video-js"
+                preload="auto"
+                muted
+            >
                 <source :src="src" type="video/mp4" />
             </video>
         </div>
@@ -148,29 +151,25 @@ onMounted(() => {
             <h3>剧名剧名剧名</h3>
             <small>当前剧集 2</small>
         </div>
+        <div class="placeholder"></div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.video {
-    background-color: rgb(0, 0, 0);
-
-    .video-js {
-        height: 100%;
-        border: 0;
-    }
-}
-
 .play {
+    .video {
+        background-color: rgb(0, 0, 0);
+        height: calc(100% - $tab-bar-height);
+        width: 100%;
+        .video-js {
+            height: 100%;
+            border: 0;
+        }
+    }
     height: 100%;
     width: 100%;
     position: relative;
     z-index: 10;
-
-    .video {
-        height: 100%;
-        width: 100%;
-    }
 
     .tab {
         display: flex;
@@ -178,7 +177,7 @@ onMounted(() => {
         color: $text-color-1;
         position: absolute;
         right: 0;
-        bottom: 8px;
+        bottom: $tab-bar-height;
         text-align: center;
         margin-bottom: 20px;
         z-index: 10;
@@ -207,7 +206,7 @@ onMounted(() => {
         color: $text-color-1;
         position: absolute;
         left: 0;
-        bottom: 8px;
+        bottom: $tab-bar-height;
         margin-bottom: 20px;
         z-index: 100;
         margin: 10px;
@@ -216,6 +215,11 @@ onMounted(() => {
         h3 {
             margin-bottom: 10px;
         }
+    }
+
+    .placeholder {
+        display: block;
+        height: $tab-bar-height;
     }
 }
 </style>

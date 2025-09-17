@@ -13,7 +13,6 @@ import Video from './components/Video.vue'
         </div>
         <TabBar />
     </div>
-
 </template>
 
 <style scoped lang="scss">
@@ -25,6 +24,7 @@ import Video from './components/Video.vue'
     min-width: 375px;
     min-height: 667px;
     max-width: 500px;
+    overflow: hidden;
 
     overflow-x: auto;
     /* 隐藏默认的滚动条样式 */
@@ -40,10 +40,8 @@ import Video from './components/Video.vue'
 
     .test {
         background-color: rgb(0, 0, 0);
-    }
-
-    .play {
-        height: calc(100vh - $tab-bar-height);
+        height: 300vh;
+        overflow: hidden;
     }
 
     .tab-bar {

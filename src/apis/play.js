@@ -7,7 +7,7 @@ import httpInstance from '@/utils/request'
  * @param {String} zlsj 默认跳过加密
  * @returns 返回一个promise
  */
-export const getRandom = (page, limit, zlsj = 'zlsj') => {
+export const getRandom = (page = 1, limit = 15, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/random',
         method: 'GET',
