@@ -328,14 +328,7 @@
                     // 初始化滚动到第一个视频
                     scrollToCurrent();
                     
-                    // 添加键盘事件支持
-                    window.addEventListener('keydown', (e) => {
-                        if (e.key === 'ArrowDown') {
-                            next();
-                        } else if (e.key === 'ArrowUp') {
-                            prev();
-                        }
-                    });
+                    
                 });
                 
                 return {

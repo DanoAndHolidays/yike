@@ -3,6 +3,7 @@ import { createMessage } from '@/utils/message'
 import { ref, onMounted } from 'vue'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
+import _ from 'lodash'
 
 const isLike = ref(false)
 const isFavorite = ref(false)
@@ -14,15 +15,19 @@ let player = null
 const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
 
 const props = defineProps({
-    videoJsId: {
+    videoInfo: {
         type: String,
+        required: true,
+    },
+    videoIsPlaying: {
+        type: Boolean,
         required: true,
     },
 })
 
 const toggleMute = () => {
     isMute.value = !isMute.value
-    createMessage(isMute.value ? '已静音' : '解除静音')
+    createMessage(isMute.value ? '静音开启' : '静音解除')
 
     player.muted(isMute.value)
 }
@@ -83,7 +88,7 @@ onMounted(() => {
             doubleClick: false,
         },
     }
-    player = videojs(props.videoJsId, options, function onPlayerReady() {
+    player = videojs(props.videoInfo, options, function onPlayerReady() {
         videojs.log('播放器准备好了!')
         // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
         this.play()
@@ -103,7 +108,7 @@ onMounted(() => {
     player.muted(isMute.value)
 })
 
-// @click="handerTouched" @touchend="handerTouched"
+//@click="handerTouched" @touchend="handerTouched"
 // 事件的穿透还是有些问题，先搞滑动
 </script>
 
@@ -111,7 +116,7 @@ onMounted(() => {
     <div class="play">
         <div class="video">
             <video
-                :id="props.videoJsId"
+                :id="props.videoInfo"
                 webkit-playsinline="true"
                 playsinline="ture"
                 class="vjs-control-bar video-js"
