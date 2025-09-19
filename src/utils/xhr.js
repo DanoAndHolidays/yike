@@ -1,3 +1,5 @@
+// 使用xhr实现的请求，实际上没啥用
+
 const xhr = new XMLHttpRequest()
 
 xhr.timeout = 3000

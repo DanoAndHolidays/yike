@@ -1,6 +1,6 @@
 .vjs-control-bar {
     background-color: rgba(255, 0, 0, 0) !important;
-
+    width: 100%;
     .vjs-control.vjs-progress-control {
         background-color: rgba(0, 0, 0, 0);
         .vjs-load-progress {
@@ -18,6 +18,14 @@
                 border-radius: 50px;
             }
         }
+    }
+    .vjs-poster {
+        user-select: none;
+        pointer-events: none;
+        width: 100%;
+        background-color: rgb(0, 0, 0);
+        filter: blur(3px);
+        transform: scale(1.05);
     }
 }
 

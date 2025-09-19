@@ -1,6 +1,6 @@
 <script setup>
 import { createMessage } from '@/utils/message'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import _ from 'lodash'
@@ -10,18 +10,55 @@ const isFavorite = ref(false)
 const isShare = ref(false)
 const isMute = ref(true) //默认静音
 const tab = ref(null)
-
+const isEnded = ref(false)
 let player = null
-const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
+// const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
+
+const autoPlay = (playing) => {
+    if (playing) {
+        player.play()
+    } else {
+        player.pause()
+    }
+}
 
 const props = defineProps({
+    Playing: {
+        type: Boolean,
+    },
     videoInfo: {
         type: String,
-        required: true,
     },
     videoIsPlaying: {
         type: Boolean,
-        required: true,
+    },
+    eid: {
+        type: Number,
+    },
+    episode: {
+        type: Number,
+    },
+    episode_total: {
+        type: Number,
+    },
+    img: {
+        type: String,
+    },
+    is_vip: {
+        type: Number,
+    },
+
+    title: {
+        type: String,
+    },
+    url: {
+        type: String,
+    },
+    url2: {
+        type: String,
+    },
+    vid: {
+        type: Number,
     },
 })
 
@@ -70,7 +107,6 @@ onMounted(() => {
     let options = {
         height: '1415',
         width: '795.94',
-        autoplay: 'muted',
         aspectRatio: '9:16',
         controlBar: {
             fullscreenToggle: false,
@@ -91,7 +127,7 @@ onMounted(() => {
     player = videojs(props.videoInfo, options, function onPlayerReady() {
         videojs.log('播放器准备好了!')
         // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
-        this.play()
+        // this.play()
         this.on('ended', function () {
             videojs.log('播放结束!')
         })
@@ -99,6 +135,8 @@ onMounted(() => {
     // 添加播放器事件监听
     player.on('play', () => {
         console.log('视频开始播放')
+
+        isEnded.value = false
     })
 
     player.on('pause', () => {
@@ -106,15 +144,33 @@ onMounted(() => {
     })
 
     player.muted(isMute.value)
+
+    player.on('ended', function () {
+        isEnded.value = true
+    })
 })
 
 //@click="handerTouched" @touchend="handerTouched"
 // 事件的穿透还是有些问题，先搞滑动
+
+onMounted(() => {
+    autoPlay(props.Playing)
+})
+
+watch(props, () => {
+    autoPlay(props.Playing)
+})
 </script>
 
 <template>
     <div class="play">
-        <div class="video">
+        <div
+            class="video"
+            :class="{
+                'is-puased': !props.Playing,
+                'is-ended': isEnded,
+            }"
+        >
             <video
                 :id="props.videoInfo"
                 webkit-playsinline="true"
@@ -122,8 +178,9 @@ onMounted(() => {
                 class="vjs-control-bar video-js"
                 preload="auto"
                 muted
+                :poster="props.img"
             >
-                <source :src="src" type="video/mp4" />
+                <source :src="props.url2" type="video/mp4" />
             </video>
         </div>
 
@@ -142,7 +199,7 @@ onMounted(() => {
             </div>
             <div>
                 <i class="fa-solid fa-bars-staggered fa-2xl"></i>
-                <p>120集</p>
+                <p>{{ props.episode_total }}集</p>
             </div>
             <div @click="toggleMute" class="mute">
                 <i class="fa-solid fa-volume-xmark fa-2xl" v-if="isMute"></i>
@@ -153,8 +210,8 @@ onMounted(() => {
             </el-drawer>
         </div>
         <div class="bottom">
-            <h3>剧名剧名剧名</h3>
-            <small>当前剧集 2</small>
+            <h3>{{ props.title }}</h3>
+            <small>当前剧集 {{ props.episode }}</small>
         </div>
         <div class="placeholder"></div>
     </div>
@@ -162,13 +219,40 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .play {
+    .is-puased {
+        filter: blur(10px);
+        transform: scale(1.05);
+        transition: all 0.4s;
+    }
+    .is-ended {
+        transition: all 1s;
+        position: relative;
+        filter: blur(5px);
+        transform: scale(1.05);
+        &::after {
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            color: $text-color-1;
+            text-align: center;
+            height: 100px;
+            width: 100px;
+            z-index: 200;
+        }
+    }
+
     .video {
+        position: relative;
         background-color: rgb(0, 0, 0);
         height: calc(100% - $tab-bar-height);
         width: 100%;
         .video-js {
             height: 100%;
             border: 0;
+        }
+        .text {
+            position: absolute;
+            background-color: red;
         }
     }
     height: 100%;

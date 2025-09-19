@@ -1,36 +1,18 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { createMessage } from '@/utils/message'
-import { getRandom } from '@/apis/play'
+import updateVideoList from '@/utils/handleVideo'
 import _ from 'lodash'
 
-const videoList = ref([
-    {
-        name: 'video1',
-        id: 'my-player1',
-        isPlaying: false,
-    },
-    {
-        name: 'video2',
-        id: 'my-player2',
-        isPlaying: true,
-    },
-    {
-        name: 'video3',
-        id: 'my-player3',
-        isPlaying: false,
-    },
-])
-
 // 0上一个,1当前,2下一个
-const curIndex = ref(1)
+const curIndex = ref(0)
 const isDragging = ref(false)
 const startY = ref(0)
 const currentY = ref(0)
 const offsetY = ref(0)
-const isRequire = ref(false)
-const playInfo = ref([false, true, false])
+// const isRequire = ref(false)
+const videoInfoList = ref([])
 
 const videoElement = ref(null)
 
@@ -39,41 +21,57 @@ const TARGGET_Y = ref(80)
 // 用于保证切换到制定视频，不会因为默认事件而影响
 const TIME_INTEVAL = ref(400)
 
-const updateVideoList = () => {}
-
-const _requireNew = () => {
+const _requireNew = async (di) => {
     // showMessage('正在请求...')
-
-    setTimeout(() => {
-        // showMessage('请求完成')
-        createMessage('请求完成')
-    }, 1000)
+    videoInfoList.value = await updateVideoList(di)
+    for (let item of videoInfoList.value) {
+        showMessage(item)
+    }
+    // showMessage(videoInfoList.value)
+    // createMessage('请求完成')
 }
 
 const requireNew = _.debounce(_requireNew, 100)
 
-const updataPlayInfo = () => {
-    for (let video of videoList.value) {
-        // showMessage(video)
-        video.isPlaying = false
-        // showMessage(video)
-    }
-    videoList.value[curIndex.value].isPlaying = true
-    showMessage(videoList.value)
-}
+// const updataPlayInfo = () => {
+//     for (let video of videoList.value) {
+//         // showMessage(video)
+//         video.isPlaying = false
+//         // showMessage(video)
+//     }
+//     videoList.value[curIndex.value].isPlaying = true
+//     showMessage(videoList.value)
+// }
 
 // 显示提示
 const showMessage = (text) => {
     console.log('---CONSOLE---', text)
 }
-const next = () => {
-    if (curIndex.value < videoList.value.length - 1) {
-        // showMessage('下滑 → 下一个')
+
+const nextHandle = () => {
+    if (curIndex.value == videoInfoList.value.length - 1) {
+        showMessage('nextHandle1:' + curIndex.value)
+        createMessage('请求')
+        requireNew(false)
+        curIndex.value = videoInfoList.value.length - 2
+        showMessage('nextHandle2:' + curIndex.value)
+        scrollToCurrent(false)
+        showMessage('nextHandle3:' + curIndex.value)
+    }
+}
+
+const next = async () => {
+    if (curIndex.value < videoInfoList.value.length - 1) {
         curIndex.value++
+        showMessage('next:' + curIndex.value)
         scrollToCurrent()
     } else {
         createMessage('到底了')
-        requireNew()
+        await requireNew(false)
+        setTimeout(() => {
+            curIndex.value = 0
+            scrollToCurrent()
+        }, 400)
     }
 }
 
@@ -84,11 +82,14 @@ const prev = () => {
         scrollToCurrent()
     } else {
         createMessage('到顶了')
-        requireNew()
     }
 }
 
-const scrollToCurrent = () => {
+/**
+ * @description
+ * @param {Boolen} option 默认为true：丝滑滚动，false：取消
+ */
+const scrollToCurrent = (option = true) => {
     // console.log(videoElement.value)
 
     if (videoElement.value) {
@@ -96,25 +97,31 @@ const scrollToCurrent = () => {
 
         const videoHeight = videoElementRef.height
         // showMessage(curIndex.value * videoHeight)
-        videoElement.value.scrollTo({
-            top: curIndex.value * videoHeight,
-            behavior: 'smooth',
-        })
-
-        // 这里的setTimeout是为了保证在触摸默认事件的影响下完成切换视频
-        setTimeout(() => {
+        if (option) {
             videoElement.value.scrollTo({
                 top: curIndex.value * videoHeight,
                 behavior: 'smooth',
             })
-        }, TIME_INTEVAL.value)
-
-        setTimeout(() => {
+        } else {
             videoElement.value.scrollTo({
                 top: curIndex.value * videoHeight,
-                behavior: 'smooth',
             })
-        }, TIME_INTEVAL.value * 1.5)
+        }
+
+        // // 这里的setTimeout是为了保证在触摸默认事件的影响下完成切换视频
+        // setTimeout(() => {
+        //     videoElement.value.scrollTo({
+        //         top: curIndex.value * videoHeight,
+        //         behavior: 'smooth',
+        //     })
+        // }, TIME_INTEVAL.value)
+
+        // setTimeout(() => {
+        //     videoElement.value.scrollTo({
+        //         top: curIndex.value * videoHeight,
+        //         behavior: 'smooth',
+        //     })
+        // }, TIME_INTEVAL.value * 1.5)
     }
 }
 
@@ -129,7 +136,7 @@ const _moveWithScroll = () => {
         const scrollDistance = curIndex.value * videoHeight - offsetY.value
 
         // 应用滚动效果，使用平滑过渡
-        showMessage(scrollDistance)
+        // showMessage(scrollDistance)
         videoElement.value.scrollTo({
             top: scrollDistance,
             behavior: 'smooth',
@@ -178,6 +185,10 @@ const onTouchEnd = (e) => {
         prev()
     } else if (offsetY.value < -TARGGET_Y.value) {
         next()
+
+        // setTimeout(() => {
+        //     nextHandle()
+        // }, 1000)
     } else {
         // 滚动到当前视频
         scrollToCurrent()
@@ -243,6 +254,10 @@ const _handleWheel = (e) => {
 
 const handleWheel = _.debounce(_handleWheel, 200)
 
+onBeforeMount(() => {
+    requireNew()
+})
+
 onMounted(() => {
     scrollToCurrent()
 
@@ -260,8 +275,6 @@ onMounted(() => {
         handleWheel(e)
     })
 })
-
-watch(curIndex, updataPlayInfo)
 </script>
 
 <template>
@@ -278,10 +291,19 @@ watch(curIndex, updataPlayInfo)
     >
         <PlayBar
             class="play"
-            v-for="video in videoList"
-            :key="video.id"
-            :videoInfo="video.id"
-            :videoIsPlaying="video.isPlaying"
+            v-for="(video, index) in videoInfoList"
+            :key="video.eid"
+            :videoInfo="`video${video.title}${video.eid}`"
+            :eid="video.eid"
+            :episode="video.episode"
+            :episode_total="video.episode_total"
+            :img="video.img"
+            :is_vip="video.is_vip"
+            :title="video.title"
+            :url="video.url"
+            :url2="video.url2"
+            :vid="video.vid"
+            :Playing="index == curIndex"
         ></PlayBar>
     </div>
 </template>

@@ -71,7 +71,7 @@ export const getNextEpisode = (vid, eid, page, limit, zlsj = 'zlsj') => {
  * @param {String} zlsj 默认跳过加密
  * @returns 返回一个promise
  */
-export const getCategoryEpisode = (name_en, page, limit, zlsj) => {
+export const getCategoryEpisode = (name_en, page, limit, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/list',
         method: 'GET',
@@ -90,7 +90,7 @@ export const getCategoryEpisode = (name_en, page, limit, zlsj) => {
  * @param {String} zlsj 默认跳过加密
  * @returns 返回一个promise
  */
-export const getVideoAddress = (eid, zlsj) => {
+export const getVideoAddress = (eid, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/auth',
         method: 'POST',

@@ -25,6 +25,7 @@ import Video from './components/Video.vue'
     min-height: 667px;
     max-width: 500px;
     overflow: hidden;
+    box-shadow: 0px 0px 30px 3px rgba(0, 0, 0, 0.8);
 
     overflow-x: auto;
     /* 隐藏默认的滚动条样式 */
