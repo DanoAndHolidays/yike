@@ -3,8 +3,8 @@ export const createMessage = (message) => {
     ElMessage({
         message: message,
         type: 'success',
-        duration: 1500,
+        duration: 900,
         plain: true,
-        offset: 64,
+        offset: 90,
     })
 }

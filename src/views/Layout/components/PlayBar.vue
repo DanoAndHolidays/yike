@@ -1,15 +1,33 @@
 <script setup>
 import { createMessage } from '@/utils/message'
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import _ from 'lodash'
 
+// 应用运行信息
+import { useAppStore } from '@/stores/app'
+const appStore = useAppStore()
+
+// 用户信息浏览器存储
+import { useUserStore } from '@/stores/user'
+// import { use } from 'video.js/dist/types/tech/middleware'
+const userStore = useUserStore()
+
+// 处理滑动与点击的冲突
+let startX = 0
+let startY = 0
+let isDragging = false
+const currentMoveThreshold = 30
+
+// 侧边按钮的状态管理
 const isLike = ref(false)
 const isFavorite = ref(false)
 const isShare = ref(false)
-const isMute = ref(true) //默认静音
+const isMute = userStore.getIsMute() //默认静音
+
 const tab = ref(null)
+
 const isEnded = ref(false)
 let player = null
 // const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
@@ -20,6 +38,10 @@ const autoPlay = (playing) => {
     } else {
         player.pause()
     }
+}
+
+const autoMute = () => {
+    player.muted(isMute.value)
 }
 
 const props = defineProps({
@@ -62,44 +84,77 @@ const props = defineProps({
     },
 })
 
-const toggleMute = () => {
+const toggleMute = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
     isMute.value = !isMute.value
     createMessage(isMute.value ? '静音开启' : '静音解除')
-
     player.muted(isMute.value)
 }
 
-const handerClick = (e) => {
-    console.log('触发事件处理函数:', e)
-    console.log('没点之前是', player.paused() ? '暂停' : '播放')
+const toggleFavorite = (e) => {
     e.stopPropagation()
-
-    if (player.paused()) {
-        console.log('pause->play')
-        player.play()
-        // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
-    } else {
-        console.log('play->pause')
-        player.pause()
-    }
-    console.log('现在是', player.paused() ? '暂停' : '播放')
+    e.preventDefault()
+    isFavorite.value = !isFavorite.value
+    createMessage(isFavorite.value ? '收藏成功' : '收藏移除')
 }
 
-const handerTouched = (e) => {
-    console.log('触发事件处理函数:', e)
-    console.log('没点之前是', player.paused() ? '暂停' : '播放')
-    e.stopPropagation()
-    if (player.paused()) {
-        console.log('pause->play')
-        player.play()
-        // 播放时隐藏控制栏，但Video.js在播放时可能会自动隐藏，所以可能需要额外处理
-        player.controls(false) // 注意：这会完全禁用控制栏，而不是隐藏
-    } else {
-        console.log('play->pause')
-        player.pause()
-        player.controls(true) // 暂停时显示控制栏
+// 触摸开始事件
+function handleTouchStart(e) {
+    // e.stopPropagation()
+    e.preventDefault()
+
+    const touch = e.touches ? e.touches[0] : e
+    startX = touch.clientX
+    startY = touch.clientY
+
+    isDragging = false
+}
+
+// 触摸移动事件
+function handleTouchMove(e) {
+    // e.stopPropagation()
+    e.preventDefault()
+
+    if (!startX || !startY) return
+
+    const touch = e.touches ? e.touches[0] : e
+    const currentX = touch.clientX
+    const currentY = touch.clientY
+
+    const deltaX = Math.abs(currentX - startX)
+    const deltaY = Math.abs(currentY - startY)
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+    // 如果移动距离超过阈值，则认为是滑动
+    if (distance > currentMoveThreshold) {
+        isDragging = true
     }
-    console.log('现在是', player.paused() ? '暂停' : '播放')
+}
+
+// 触摸结束事件
+function handleTouchEnd(e) {
+    // e.stopPropagation()
+    e.preventDefault()
+
+    if (!startX || !startY) return
+
+    // 如果不是滑动且时间小于阈值，则认为是点击
+    if (!isDragging) {
+        // console.log('点击，不是滑动')
+
+        if (player.paused()) {
+            player.play()
+            createMessage('继续播放')
+        } else {
+            player.pause()
+            createMessage('暂停播放')
+        }
+    }
+
+    // 重置状态
+    startX = 0
+    startY = 0
 }
 
 onMounted(() => {
@@ -123,24 +178,27 @@ onMounted(() => {
             click: true,
             doubleClick: false,
         },
+        controls: true,
     }
     player = videojs(props.videoInfo, options, function onPlayerReady() {
-        videojs.log('播放器准备好了!')
+        // videojs.log('播放器准备好了!')
         // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
         // this.play()
-        this.on('ended', function () {
-            videojs.log('播放结束!')
-        })
+        // this.on('ended', function () {
+        //     videojs.log('播放结束!')
+        // })
+
+        appStore.setIsReady()
     })
     // 添加播放器事件监听
     player.on('play', () => {
-        console.log('视频开始播放')
-
+        // console.log('视频开始播放')
+        // createMessage('继续播放')
         isEnded.value = false
     })
 
     player.on('pause', () => {
-        console.log('视频暂停')
+        // console.log()
     })
 
     player.muted(isMute.value)
@@ -148,22 +206,47 @@ onMounted(() => {
     player.on('ended', function () {
         isEnded.value = true
     })
+
+    // console.log('视频组件准备完毕')
 })
-
-//@click="handerTouched" @touchend="handerTouched"
-// 事件的穿透还是有些问题，先搞滑动
-
 onMounted(() => {
     autoPlay(props.Playing)
+    autoMute()
 })
 
 watch(props, () => {
     autoPlay(props.Playing)
+    autoMute()
 })
 </script>
 
 <template>
     <div class="play">
+        <div class="tab" ref="tab">
+            <div @click="isLike = !isLike" @touchend="isLike = !isLike">
+                <i class="fa-solid fa-heart fa-2xl" :class="{ 'active-like': isLike }"></i>
+                <p>12.3万</p>
+            </div>
+            <div @click="toggleFavorite" @touchend="toggleFavorite">
+                <i class="fa-solid fa-star fa-2xl" :class="{ 'active-favorite': isFavorite }"></i>
+                <p>1.9万</p>
+            </div>
+            <div @click="isShare = true" @touchend="isShare = true">
+                <i class="fa-solid fa-share fa-2xl"></i>
+                <p>0.9万</p>
+            </div>
+            <div>
+                <i class="fa-solid fa-bars-staggered fa-2xl"></i>
+                <p>{{ props.episode_total }}集</p>
+            </div>
+            <div @click="toggleMute" @touchend="toggleMute" class="mute">
+                <i class="fa-solid fa-volume-xmark fa-2xl" v-if="isMute"></i>
+                <i class="fa-solid fa-volume-low fa-2xl" v-else></i>
+            </div>
+            <el-drawer v-model="isShare" title="暂未实现" :with-header="true" direction="btt">
+                <p></p>
+            </el-drawer>
+        </div>
         <div
             class="video"
             :class="{
@@ -172,6 +255,9 @@ watch(props, () => {
             }"
         >
             <video
+                @touchstart="handleTouchStart"
+                @touchmove="handleTouchMove"
+                @touchend="handleTouchEnd"
                 :id="props.videoInfo"
                 webkit-playsinline="true"
                 playsinline="ture"
@@ -184,31 +270,6 @@ watch(props, () => {
             </video>
         </div>
 
-        <div class="tab" ref="tab">
-            <div @click="isLike = !isLike">
-                <i class="fa-solid fa-heart fa-2xl" :class="{ 'active-like': isLike }"></i>
-                <p>12.3万</p>
-            </div>
-            <div @click="isFavorite = !isFavorite">
-                <i class="fa-solid fa-star fa-2xl" :class="{ 'active-favorite': isFavorite }"></i>
-                <p>1.9万</p>
-            </div>
-            <div @click="isShare = true">
-                <i class="fa-solid fa-share fa-2xl"></i>
-                <p>0.9万</p>
-            </div>
-            <div>
-                <i class="fa-solid fa-bars-staggered fa-2xl"></i>
-                <p>{{ props.episode_total }}集</p>
-            </div>
-            <div @click="toggleMute" class="mute">
-                <i class="fa-solid fa-volume-xmark fa-2xl" v-if="isMute"></i>
-                <i class="fa-solid fa-volume-low fa-2xl" v-else></i>
-            </div>
-            <el-drawer v-model="isShare" title="暂未实现" :with-header="true" direction="btt">
-                <p></p>
-            </el-drawer>
-        </div>
         <div class="bottom">
             <h3>{{ props.title }}</h3>
             <small>当前剧集 {{ props.episode }}</small>

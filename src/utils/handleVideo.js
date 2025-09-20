@@ -29,8 +29,6 @@ const getVideoAdd = async (eid) => {
  * @returns 返回一个用于渲染队列的数组
  */
 const updateVideoList = async (di) => {
-    console.log(di)
-
     if (randomList.value.length == 0) {
         await getRandomList()
     }

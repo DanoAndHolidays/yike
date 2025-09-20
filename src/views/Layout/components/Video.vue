@@ -24,9 +24,9 @@ const TIME_INTEVAL = ref(400)
 const _requireNew = async (di) => {
     // showMessage('正在请求...')
     videoInfoList.value = await updateVideoList(di)
-    for (let item of videoInfoList.value) {
-        showMessage(item)
-    }
+    // for (let item of videoInfoList.value) {
+    //     showMessage(item)
+    // }
     // showMessage(videoInfoList.value)
     // createMessage('请求完成')
 }
@@ -50,20 +50,20 @@ const showMessage = (text) => {
 
 const nextHandle = () => {
     if (curIndex.value == videoInfoList.value.length - 1) {
-        showMessage('nextHandle1:' + curIndex.value)
+        // showMessage('nextHandle1:' + curIndex.value)
         createMessage('请求')
         requireNew(false)
         curIndex.value = videoInfoList.value.length - 2
-        showMessage('nextHandle2:' + curIndex.value)
+        // showMessage('nextHandle2:' + curIndex.value)
         scrollToCurrent(false)
-        showMessage('nextHandle3:' + curIndex.value)
+        // showMessage('nextHandle3:' + curIndex.value)
     }
 }
 
 const next = async () => {
     if (curIndex.value < videoInfoList.value.length - 1) {
         curIndex.value++
-        showMessage('next:' + curIndex.value)
+        // showMessage('next:' + curIndex.value)
         scrollToCurrent()
     } else {
         createMessage('到底了')
@@ -274,6 +274,10 @@ onMounted(() => {
     window.addEventListener('wheel', (e) => {
         handleWheel(e)
     })
+})
+
+onMounted(() => {
+    // console.log('Video组件加载完毕')
 })
 </script>
 

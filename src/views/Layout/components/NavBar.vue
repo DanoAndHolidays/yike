@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const openBar = ref(false);
+const openBar = ref(false)
 </script>
 
 <template>
@@ -10,10 +10,13 @@ const openBar = ref(false);
             <i class="fa-solid fa-bars fa-lg"></i>
         </div>
         <div>
+            <h3>热门</h3>
+        </div>
+        <div>
             <h3>赘婿</h3>
         </div>
         <div>
-            <h3>重生穿越</h3>
+            <h3>重生</h3>
         </div>
         <div>
             <h3>都市</h3>
@@ -33,11 +36,16 @@ const openBar = ref(false);
         <div>
             <i class="fa-solid fa-magnifying-glass fa-lg"></i>
         </div>
-        <el-drawer v-model="openBar" title="暂未实现" :with-header="true" direction="ltr" size="300">
+        <el-drawer
+            v-model="openBar"
+            title="暂未实现"
+            :with-header="true"
+            direction="ltr"
+            size="300"
+        >
             <p></p>
         </el-drawer>
     </div>
-
 </template>
 
 <style scoped lang="scss">
@@ -49,8 +57,7 @@ const openBar = ref(false);
     justify-content: space-around;
     align-items: center;
     z-index: 11;
-    background-image: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.3),
-            rgba(0, 0, 0, 0));
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+    backdrop-filter: blur(1px);
 }
 </style>

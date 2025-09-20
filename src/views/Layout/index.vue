@@ -1,8 +1,10 @@
 <script setup>
 import NavBar from '@/views/Layout/components/NavBar.vue'
-import PlayBar from '@/views/Layout/components/PlayBar.vue'
+// import PlayBar from '@/views/Layout/components/PlayBar.vue'
 import TabBar from '@/views/Layout/components/TabBar.vue'
 import Video from './components/Video.vue'
+// import Start from '@/views/Start/index.vue'
+// import { ref } from 'vue'
 </script>
 
 <template>

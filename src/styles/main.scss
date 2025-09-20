@@ -7,6 +7,24 @@ body {
     border: 0;
     margin: 0;
     background-color: $text-color-2;
+
+    .el-message {
+        background-color: $text-color-3 !important;
+        border: 0px !important;
+        opacity: 0.95;
+        border-radius: 13px;
+        transition: all 0.5s;
+        padding: 10px !important;
+
+        .el-message__icon {
+            display: none !important;
+        }
+
+        .el-message__content {
+            color: $text-color-1 !important;
+            font-weight: bolder;
+        }
+    }
 }
 
 * {
