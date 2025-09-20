@@ -1,19 +1,25 @@
 <script setup>
-import NavBar from '@/views/Layout/components/NavBar.vue'
 // import PlayBar from '@/views/Layout/components/PlayBar.vue'
-import TabBar from '@/views/Layout/components/TabBar.vue'
-import Video from './components/Video.vue'
+import Start from '@/views/Start/index.vue'
+import TabBar from './components/TabBar.vue'
 // import Start from '@/views/Start/index.vue'
 // import { ref } from 'vue'
+
+import { useAppStore } from '@/stores/app'
+const appStore = useAppStore()
+
+// appStore.setIsReady()
+
+const isReady = appStore.getIsReady()
 </script>
 
 <template>
     <div class="parent-container">
-        <nav-bar />
-        <div class="test">
-            <Video />
+        <Start v-if="!isReady" class="start" />
+        <div class="view">
+            <router-view />
         </div>
-        <TabBar />
+        <TabBar class="tab-bar" />
     </div>
 </template>
 
@@ -41,25 +47,24 @@ import Video from './components/Video.vue'
         /* Chrome, Safari, and Opera */
     }
 
-    .test {
+    .start {
+        user-select: none;
+        position: absolute;
+        z-index: 2000;
+    }
+
+    .view {
         background-color: rgb(0, 0, 0);
         height: 300vh;
         overflow: hidden;
     }
-
     .tab-bar {
         position: fixed;
-        bottom: 0;
+        bottom: 0px;
         width: 100vw;
         max-width: 500px;
         z-index: 1000;
-    }
-
-    .nav-bar {
-        position: fixed;
-        top: 0;
-        width: 100vw;
-        max-width: 500px;
+        user-select: none;
     }
 }
 </style>

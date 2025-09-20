@@ -69,10 +69,10 @@
         position: absolute;
         bottom: 0;
         margin: 64px 0;
-        color: $text-color-2;
+        color: $text-color-1;
         font-size: 0.8rem;
         text-align: center;
-        opacity: 0.8;
+        opacity: 0.85;
     }
 }
 </style>

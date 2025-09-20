@@ -1,6 +1,6 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
 import _ from 'lodash'

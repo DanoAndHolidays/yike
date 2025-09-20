@@ -320,6 +320,7 @@ watch(props, () => {
     width: 100%;
     position: relative;
     z-index: 10;
+    user-select: none;
 
     .tab {
         display: flex;
@@ -331,6 +332,12 @@ watch(props, () => {
         text-align: center;
         margin-bottom: 20px;
         z-index: 10;
+
+        @media screen and (min-width: 500px) {
+            & {
+                cursor: pointer;
+            }
+        }
 
         div {
             margin: 10px;

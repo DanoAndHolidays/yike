@@ -59,5 +59,11 @@ const openBar = ref(false)
     z-index: 11;
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
     backdrop-filter: blur(1px);
+    user-select: none;
+    @media screen and (min-width: 500px) {
+        & {
+            cursor: pointer;
+        }
+    }
 }
 </style>
