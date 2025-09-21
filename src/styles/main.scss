@@ -10,11 +10,11 @@ body {
 
     .el-message {
         background-color: $text-color-3 !important;
-        border: 0px !important;
+        border: 3.5px #323232 solid !important;
         opacity: 0.95;
-        border-radius: 13px;
+        border-radius: 50px;
         transition: all 0.5s;
-        padding: 10px !important;
+        padding: 8px !important;
 
         .el-message__icon {
             display: none !important;
