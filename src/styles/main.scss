@@ -29,4 +29,15 @@ body {
 
 * {
     box-sizing: border-box;
+    &:focus {
+        outline: none;
+    }
+
+    user-select: none;
+}
+
+button {
+    &:active {
+        transform: scale(0.99);
+    }
 }

@@ -10,26 +10,54 @@ const userName = ref('Dano想放假')
     <div class="header-container">
         <div class="header">
             <div class="left">
-                <div class="item">添加朋友</div>
+                <div class="item">
+                    <!-- <el-icon></el-icon> -->
+                    <el-icon size="1rem" style="vertical-align: middle"><User /></el-icon>
+                    添加朋友
+                </div>
             </div>
             <div class="right">
-                <div class="item">新访客 {{ newVisiter }}</div>
-                <div class="item">图</div>
-                <div class="item">图</div>
+                <div class="item">
+                    <!-- <el-icon></el-icon> -->
+                    <el-icon size="1rem" style="vertical-align: middle"><Pointer /></el-icon>
+                    新访客 {{ newVisiter }}
+                </div>
+                <div class="item icon">
+                    <el-icon size="1rem" style="vertical-align: middle"><Search /></el-icon>
+                </div>
+                <div class="item icon">
+                    <el-icon size="1rem" style="vertical-align: middle"><More /></el-icon>
+                </div>
             </div>
         </div>
         <div class="avater">
             <el-avatar class="eav" :size="110" src="/src/assets/avater.jpg" />
 
             <div class="profile">
-                <div class="name">{{ userName }}</div>
-                <div class="id">一刻号：{{ yikiID }}</div>
+                <div class="name">
+                    {{ userName }}
+                    <div class="func">
+                        <el-icon size="1rem" color="#e3e3e3"><CaretBottom /></el-icon>
+                    </div>
+                </div>
+                <div class="id">
+                    一刻号：{{ yikiID }}
+                    <el-icon style="vertical-align: middle"><FullScreen /></el-icon>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.func {
+    display: inline-block;
+    border-radius: 100px;
+    padding: 0 8px;
+    background-color: #91919143;
+    // padding: 10px;
+}
+
 .header-container {
     width: 100%;
     height: 25vh;

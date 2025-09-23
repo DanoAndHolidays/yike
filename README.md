@@ -1,4 +1,20 @@
+<div align="center">
+
+![logo](/logo.png){: width="350"} ![](/icon.png){.icon}
+
+<style>
+.icon{
+    width:150px;
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+</style>
+
 # 一刻短剧
+
+![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF)
+
+</div>
 
 ### 项目介绍
 
@@ -6,7 +22,9 @@
 
 由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖屏播放体验，前端界面将模仿抖音的交互与视觉风格。
 
-![yike](yike.gif)
+_(左侧一刻短剧，右侧抖音)_
+![yike](yike.gif){: height="505"}![](/demoMine.png){: height="500"}
+
 ### 功能实现
 
 - 模仿首页的滑动无限加载（随机的短剧
@@ -80,7 +98,11 @@ Axios 和 Fetch API 是目前前端项目中使用最广泛的两种方式，本
 
 ### 9.22.25
 
-- 添加动态背景水印
+- 添加动态背景水印❎
+
+### 9.23.25
+
+- 完成了静态的我的页✅
 
 ### 待完成...
 

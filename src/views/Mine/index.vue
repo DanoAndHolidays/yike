@@ -1,12 +1,14 @@
 <script setup>
 import MineHeader from './components/MineHeader.vue'
 import MIneStatistic from './components/MIneStatistic.vue'
+import MineTab from './components/MineTab.vue'
 </script>
 
 <template>
     <div class="container">
         <MineHeader />
         <MIneStatistic />
+        <MineTab />
     </div>
 </template>
 
@@ -17,5 +19,6 @@ import MIneStatistic from './components/MIneStatistic.vue'
     background-color: $tiktok-background-color-1;
     color: $text-color-1;
     // margin: 15px;
+    // pointer-events: none;
 }
 </style>
