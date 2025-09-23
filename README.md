@@ -1,14 +1,6 @@
 <div align="center">
 
-![logo](/logo.png){: width="350"} ![](/icon.png){.icon}
-
-<style>
-.icon{
-    width:150px;
-    border-radius: 8px; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-</style>
+![logo](/logo.png) ![](/icon.png)
 
 # 一刻短剧
 
@@ -24,8 +16,14 @@
 
 <div align="center">
 
-![yike](yike.gif){: height="505"}![](/demoMine.png){: height="500"}
+<div >
+
+</div>
+
+![](/demoMine.png)
 _(左侧一刻短剧，右侧抖音)_
+
+![yike](yike.gif)
 
 </div>
 
