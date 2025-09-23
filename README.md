@@ -12,7 +12,7 @@
 
 # 一刻短剧
 
-![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF)
+![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/JSes6-FFCA28) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF) ![](https://img.shields.io/badge/CSS3-7E57C2)
 
 </div>
 
@@ -22,8 +22,12 @@
 
 由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖屏播放体验，前端界面将模仿抖音的交互与视觉风格。
 
-_(左侧一刻短剧，右侧抖音)_
+<div align="center">
+
 ![yike](yike.gif){: height="505"}![](/demoMine.png){: height="500"}
+_(左侧一刻短剧，右侧抖音)_
+
+</div>
 
 ### 功能实现
 
