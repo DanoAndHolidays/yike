@@ -1,0 +1,24 @@
+name: 打包一刻短剧
+
+permissions:
+  contents: write
+
+on: push
+jobs:
+  test-actions:
+    name: 测试Actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: 读取仓库内容
+        uses: actions/checkout@v4
+
+      - name: 安装依赖，初始化
+        run: |
+          npm install
+          npm run build
+
+      - name: 部署一刻📺
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
