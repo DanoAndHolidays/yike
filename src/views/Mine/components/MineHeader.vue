@@ -4,6 +4,8 @@ import { ref } from 'vue'
 const newVisiter = ref(3)
 const yikiID = ref(81759321887)
 const userName = ref('Dano想放假')
+
+const src = '/src/assets/avater.jpg'
 </script>
 
 <template>
@@ -31,8 +33,7 @@ const userName = ref('Dano想放假')
             </div>
         </div>
         <div class="avater">
-            <el-avatar class="eav" :size="110" src="/src/assets/avater.jpg" />
-
+            <div class="eav"></div>
             <div class="profile">
                 <div class="name">
                     {{ userName }}
@@ -124,6 +125,12 @@ const userName = ref('Dano想放假')
         align-items: center;
         .eav {
             border: 3px $text-color-1 solid;
+            height: 110px;
+            width: 110px;
+            border-radius: 50%;
+            background-image: url('/src/assets/avater.jpg');
+            background-position: center center; /* 背景图片居中 */
+            background-size: cover; /* 背景图片覆盖容器 */
         }
 
         .profile {
