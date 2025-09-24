@@ -1,12 +1,15 @@
 :root {
     border: 0;
     margin: 0;
+    --el-menu-hover-text-color: $primary-color;
+    --el-color-primary: $primary-color !important;
 }
 
 body {
     border: 0;
     margin: 0;
     background-color: $text-color-2;
+    overflow: hidden !important;
 
     .el-message {
         background-color: $text-color-3 !important;
@@ -24,6 +27,68 @@ body {
             color: $text-color-1 !important;
             font-weight: bolder;
         }
+    }
+    .el-overlay {
+        position: absolute !important;
+        overflow: hidden !important;
+    }
+    .el-drawer__header {
+        margin: 0;
+        padding: 10px 15px;
+        color: $text-color-1;
+    }
+    .el-drawer__close-btn {
+        &:hover {
+            color: $primary-color !important;
+        }
+    }
+    .el-drawer {
+        color: $text-color-1;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        position: absolute !important;
+        width: 100% !important;
+        background-color: $tiktok-background-color-1;
+        overflow: hidden !important;
+        /* 隐藏默认的滚动条样式 */
+        scrollbar-width: none !important;
+        /* Firefox */
+        -ms-overflow-style: none !important;
+
+        /* IE and Edge */
+        &::-webkit-scrollbar {
+            display: none !important;
+            /* Chrome, Safari, and Opera */
+        }
+
+        .el-drawer__body {
+            // background-color: green;
+            padding: 15px;
+            font-size: small;
+
+            overflow: hidden !important;
+            /* 隐藏默认的滚动条样式 */
+            scrollbar-width: none !important;
+            /* Firefox */
+            -ms-overflow-style: none !important;
+
+            /* IE and Edge */
+            &::-webkit-scrollbar {
+                display: none !important;
+                /* Chrome, Safari, and Opera */
+            }
+        }
+    }
+
+    /* 隐藏默认的滚动条样式 */
+    scrollbar-width: none !important;
+    /* Firefox */
+    -ms-overflow-style: none !important;
+
+    /* IE and Edge */
+    &::-webkit-scrollbar {
+        display: none !important;
+        /* Chrome, Safari, and Opera */
     }
 }
 

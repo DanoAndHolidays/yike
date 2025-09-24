@@ -4,6 +4,7 @@ import { ref, onMounted, watch } from 'vue'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import _ from 'lodash'
+import { applog } from '@/utils/applog'
 
 // 应用运行信息
 import { useAppStore } from '@/stores/app'
@@ -25,6 +26,10 @@ const isLike = ref(false)
 const isFavorite = ref(false)
 const isShare = ref(false)
 const isMute = userStore.getIsMute() //默认静音
+const isEpisode = ref(false)
+
+const shareTitle = ref('分享给朋友')
+const episodeTitle = ref('剧集观看模式')
 
 const tab = ref(null)
 
@@ -52,6 +57,7 @@ const props = defineProps({
         type: String,
     },
     videoIsPlaying: {
+        // 似乎是没有用了
         type: Boolean,
     },
     eid: {
@@ -235,7 +241,7 @@ watch(props, () => {
                 <i class="fa-solid fa-share fa-2xl"></i>
                 <p>0.9万</p>
             </div>
-            <div>
+            <div @click="isEpisode = true" @touchend="isEpisode = true">
                 <i class="fa-solid fa-bars-staggered fa-2xl"></i>
                 <p>{{ props.episode_total }}集</p>
             </div>
@@ -243,8 +249,33 @@ watch(props, () => {
                 <i class="fa-solid fa-volume-xmark fa-2xl" v-if="isMute"></i>
                 <i class="fa-solid fa-volume-low fa-2xl" v-else></i>
             </div>
-            <el-drawer v-model="isShare" title="暂未实现" :with-header="true" direction="btt">
-                <p></p>
+            <el-drawer
+                v-model="isShare"
+                :title="shareTitle"
+                :with-header="true"
+                direction="btt"
+                :lock-scroll="true"
+                custom-class="no-scroll-drawer"
+                append-to="#parent-container"
+                size="25%"
+            >
+                <div class="share-title">
+                    <div>{{ props.title }} &nbsp;当前剧集{{ props.episode }}</div>
+                </div>
+                <br />
+                朋友 朋友 朋友
+            </el-drawer>
+            <el-drawer
+                v-model="isEpisode"
+                :title="episodeTitle"
+                :with-header="true"
+                direction="btt"
+                :lock-scroll="true"
+                custom-class="no-scroll-drawer"
+                append-to="#parent-container"
+                size="50%"
+            >
+                <el-button>test</el-button>
             </el-drawer>
         </div>
         <div
@@ -333,6 +364,12 @@ watch(props, () => {
         margin-bottom: 20px;
         z-index: 10;
 
+        .share-title {
+            display: flex;
+
+            background-color: red;
+        }
+
         @media screen and (min-width: 500px) {
             & {
                 cursor: pointer;
@@ -377,6 +414,16 @@ watch(props, () => {
     .placeholder {
         display: block;
         height: $tab-bar-height;
+    }
+}
+
+.no-scroll-drawer {
+    :deep(.el-drawer__body) {
+        overflow: hidden !important;
+    }
+
+    :deep(.el-drawer) {
+        overflow: hidden;
     }
 }
 </style>

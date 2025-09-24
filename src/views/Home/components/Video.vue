@@ -1,12 +1,14 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
 import _ from 'lodash'
+// import { applog } from '@/utils/applog'
 
 // 0上一个,1当前,2下一个
 const curIndex = ref(0)
+
 const isDragging = ref(false)
 const startY = ref(0)
 const currentY = ref(0)
@@ -16,14 +18,24 @@ const videoInfoList = ref([])
 
 const videoElement = ref(null)
 
+// 存储当前的短剧信息，用于获取剧集信息
+import { useEpisodeStore } from '@/stores/episode'
+const episodeStore = useEpisodeStore()
+
+const updataCurEpisodeInfo = (obj) => {
+    // applog(obj)
+    episodeStore.updata(obj)
+}
+
 // 目标切换距离
 const TARGGET_Y = ref(80)
 // 用于保证切换到制定视频，不会因为默认事件而影响
-const TIME_INTEVAL = ref(400)
+// const TIME_INTEVAL = ref(400)
 
 const _requireNew = async (di) => {
     // showMessage('正在请求...')
     videoInfoList.value = await updateVideoList(di)
+    updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
     // for (let item of videoInfoList.value) {
     //     showMessage(item)
     // }
@@ -43,7 +55,7 @@ const requireNew = _.debounce(_requireNew, 100)
 //     showMessage(videoList.value)
 // }
 
-// 显示提示
+// 开发辅助函数 显示提示
 const showMessage = (text) => {
     console.log('---CONSOLE---', text)
 }
@@ -107,21 +119,6 @@ const scrollToCurrent = (option = true) => {
                 top: curIndex.value * videoHeight,
             })
         }
-
-        // // 这里的setTimeout是为了保证在触摸默认事件的影响下完成切换视频
-        // setTimeout(() => {
-        //     videoElement.value.scrollTo({
-        //         top: curIndex.value * videoHeight,
-        //         behavior: 'smooth',
-        //     })
-        // }, TIME_INTEVAL.value)
-
-        // setTimeout(() => {
-        //     videoElement.value.scrollTo({
-        //         top: curIndex.value * videoHeight,
-        //         behavior: 'smooth',
-        //     })
-        // }, TIME_INTEVAL.value * 1.5)
     }
 }
 
@@ -254,8 +251,8 @@ const _handleWheel = (e) => {
 
 const handleWheel = _.debounce(_handleWheel, 200)
 
-onBeforeMount(() => {
-    requireNew()
+onBeforeMount(async () => {
+    await requireNew()
 })
 
 onMounted(() => {
@@ -278,6 +275,10 @@ onMounted(() => {
 
 onMounted(() => {
     // console.log('Video组件加载完毕')
+})
+
+watch(curIndex, () => {
+    updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
 })
 </script>
 

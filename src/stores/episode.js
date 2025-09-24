@@ -1,18 +1,17 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { applog } from '@/utils/applog'
 
 export const useEpisodeStore = defineStore('episode', () => {
-    let episode = ref([])
-    function addAndUpdata(new_episode) {
-        episode.value = Array.from(new_episode)
+    let curEpisode = ref({})
+    function updata(new_episode) {
+        curEpisode.value = new_episode
+        // let shit = new_episode.eid
+        // console.log(shit, new_episode)
     }
     function get() {
-        return episode
+        return curEpisode
     }
 
-    return { episode, addAndUpdata, get }
-})
-
-export const useVideoStore = defineStore('video', () => {
-    let video = ref([])
+    return { curEpisode, updata, get }
 })

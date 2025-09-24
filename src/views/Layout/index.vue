@@ -14,7 +14,7 @@ const isReady = appStore.getIsReady()
 </script>
 
 <template>
-    <div class="parent-container">
+    <div class="parent-container" id="parent-container">
         <Start v-if="!isReady" class="start" />
         <div class="view">
             <router-view />
@@ -32,7 +32,7 @@ const isReady = appStore.getIsReady()
     min-width: 375px;
     min-height: 667px;
     max-width: 500px;
-    overflow: hidden;
+    overflow: hidden !important;
     box-shadow: 0px 0px 30px 3px rgba(0, 0, 0, 0.8);
 
     overflow-x: auto;

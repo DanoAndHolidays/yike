@@ -1,7 +1,7 @@
 import httpInstance from '@/utils/request'
 
 /**
- * @description 获取随机剧集
+ * @description 获取随机剧集✅
  * @param {Number} page 页数
  * @param {Number} limit 每页大小
  * @param {String} zlsj 默认跳过加密
@@ -20,7 +20,7 @@ export const getRandom = (page = 1, limit = 15, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 获取所有剧集
+ * @description 获取所有剧集，从第一集开始
  * @param {Number} vid 短剧ID
  * @param {Number} page 页数
  * @param {Number} limit 每页大小
@@ -41,7 +41,7 @@ export const getAllEpisode = (vid, page, limit, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 获取下一集
+ * @description 获取当前剧集之后的剧集
  * @param {Number} vid 短剧ID
  * @param {Number} eid 剧集ID
  * @param {Number} page 页数
@@ -85,7 +85,7 @@ export const getCategoryEpisode = (name_en, page, limit, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 短剧鉴权（获取视频的地址）
+ * @description 短剧鉴权（获取视频的地址）✅
  * @param {Number} eid 剧集ID
  * @param {String} zlsj 默认跳过加密
  * @returns 返回一个promise
