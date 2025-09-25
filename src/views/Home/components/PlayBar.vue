@@ -12,6 +12,7 @@ import avater_cat from '@/assets/avater_cat.jpg'
 import avater_junhe from '@/assets/avater_junhe.jpg'
 import avater_sister from '@/assets/avater_sister.jpg'
 import avater_ji from '@/assets/avater_ji.jpg'
+import Page from './Page.vue'
 
 const friendInfo = ref([
     {
@@ -365,11 +366,15 @@ const handleShare = (e) => {
                         <div class="text">
                             <div class="title">{{ props.title }}</div>
                             <div class="details">
-                                <div>全{{ props.episode_total }}集</div>
-                                <div>当前剧集 {{ props.episode }}</div>
-                                <div class="content">
-                                    {{ detailContent }}
+                                <div>当前剧集 &nbsp; {{ props.episode }}</div>
+                                <div>
+                                    剧集ID：{{ props.eid }} &nbsp; &nbsp;VIP：
+                                    {{ props.is_vip }}
                                 </div>
+
+                                <div></div>
+
+                                <div class="content">{{ detailContent }}</div>
                             </div>
                         </div>
                     </div>
@@ -377,15 +382,9 @@ const handleShare = (e) => {
                         <div class="button-group">
                             <button>进入追剧模式</button>
                         </div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor quia
-                        distinctio minima cupiditate incidunt tempora, culpa, necessitatibus minus
-                        repellendus dolorem in, neque expedita deserunt placeat repellat adipisci
-                        vero est. Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
-                        illum harum quas voluptatem. Quidem exercitationem modi earum cum ut ullam
-                        aut autem odio, deserunt, dignissimos quibusdam aliquid rem totam omnis!
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga ut, molestias
-                        explicabo consequatur velit beatae accusamus inventore odio enim saepe.
-                        Explicabo minus dolore sequi tempora nihil iste, fugiat culpa sunt.
+                        <Page :vid="props.vid">
+                            <div>全{{ props.episode_total }}集</div>
+                        </Page>
                     </div>
                 </div>
             </el-drawer>

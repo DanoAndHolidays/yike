@@ -39,7 +39,7 @@ body {
         .episode-info {
             display: flex;
             img {
-                background-color: red;
+                background-color: $tiktok-background-color-1;
                 height: 200px;
                 border-radius: 15px;
                 border: $tiktok-text-color-1 1px solid;
