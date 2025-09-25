@@ -10,6 +10,99 @@ body {
     margin: 0;
     background-color: $text-color-2;
     overflow: hidden !important;
+    .share-title {
+        margin: 5px 5px;
+        margin-top: 0;
+    }
+
+    .disabled {
+        pointer-events: none !important;
+        opacity: 0.4 !important;
+        // cursor: not-allowed;
+    }
+
+    .share-button {
+        width: 100%;
+        height: 40px;
+        margin-top: 10px;
+        border-radius: 12px;
+        border: #d8728020 1.5px solid;
+        color: $primary-color;
+        background-color: #d8728049;
+        font-size: larger;
+        font-weight: bolder;
+    }
+
+    .episode-drawer {
+        width: calc(100% + 15px);
+
+        .episode-info {
+            display: flex;
+            img {
+                background-color: red;
+                height: 200px;
+                border-radius: 15px;
+                border: $tiktok-text-color-1 1px solid;
+                box-shadow: 0 0 5px 5px $tiktok-background-color-1;
+                margin-right: 15px;
+            }
+
+            .text {
+                flex: 1;
+                border-bottom: 1px #e3e3e31b solid;
+                .title {
+                    font-size: 1.3rem;
+                    color: $text-color-1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: calc(100% - 20px);
+                }
+
+                .details {
+                    color: $text-color-4;
+                    .content {
+                        opacity: 0.5;
+                        border-top: 1px #e3e3e33d solid;
+                        margin-top: 5px;
+                        padding-top: 3px;
+                    }
+                }
+            }
+        }
+
+        .episode-select {
+            width: 100%;
+            .button-group {
+                width: 100%;
+                button {
+                    width: 100%;
+                    // width: 100%;
+                    height: 40px;
+                    margin-top: 10px;
+                    border-radius: 12px;
+                    border: #d8728020 1.5px solid;
+                    color: $primary-color;
+                    background-color: #d8728049;
+                    font-size: larger;
+                    font-weight: bolder;
+                }
+            }
+        }
+    }
+
+    .share-drawer {
+        display: flex;
+
+        width: 100%;
+        height: 80px;
+        overflow: scroll;
+        overflow-y: hidden;
+        // background-color: red;
+
+        /* 隐藏默认的滚动条样式 */
+        scrollbar-width: thin;
+    }
 
     .el-message {
         background-color: $text-color-3 !important;
@@ -34,8 +127,11 @@ body {
     }
     .el-drawer__header {
         margin: 0;
-        padding: 10px 15px;
+        padding: 10px 15px 7px;
         color: $text-color-1;
+        // font-weight: bold;
+        font-size: small;
+        opacity: 0.9;
     }
     .el-drawer__close-btn {
         &:hover {
@@ -63,7 +159,9 @@ body {
 
         .el-drawer__body {
             // background-color: green;
+            width: calc(100% - 15px);
             padding: 15px;
+            padding-top: 0px;
             font-size: small;
 
             overflow: hidden !important;

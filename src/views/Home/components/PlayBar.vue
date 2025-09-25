@@ -1,10 +1,60 @@
 <script setup>
 import { createMessage } from '@/utils/message'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import _ from 'lodash'
 import { applog } from '@/utils/applog'
+import ShareDrawer from './ShareDrawer.vue'
+
+import avater_jungle from '@/assets/avater_jungle.jpg'
+import avater_cat from '@/assets/avater_cat.jpg'
+import avater_junhe from '@/assets/avater_junhe.jpg'
+import avater_sister from '@/assets/avater_sister.jpg'
+import avater_ji from '@/assets/avater_ji.jpg'
+
+const friendInfo = ref([
+    {
+        name: 'Jungle',
+        url: avater_jungle,
+    },
+    {
+        name: '整个萝莉当岛主',
+        url: avater_cat,
+    },
+    {
+        name: '中非小炮弹',
+        url: avater_junhe,
+    },
+    {
+        name: '弈',
+        url: avater_sister,
+    },
+    {
+        name: '珍珠鸡一柱擎天',
+        url: avater_ji,
+    },
+    {
+        name: 'Jungle',
+        url: avater_jungle,
+    },
+    {
+        name: '整个萝莉当岛主',
+        url: avater_cat,
+    },
+    {
+        name: '中非小炮弹',
+        url: avater_junhe,
+    },
+    {
+        name: '弈',
+        url: avater_sister,
+    },
+    {
+        name: '珍珠鸡一柱擎天',
+        url: avater_ji,
+    },
+])
 
 // 应用运行信息
 import { useAppStore } from '@/stores/app'
@@ -30,6 +80,10 @@ const isEpisode = ref(false)
 
 const shareTitle = ref('分享给朋友')
 const episodeTitle = ref('剧集观看模式')
+const detailContent = ref(`一刻短剧由Dano基于Apifox公开项目
+    「悦享好剧」开发，仅做学习研究使用。
+    若有Bug请发邮件或在GitHub中提出issue。
+    主要技术栈：「 Vue 」「 Vite 」「 Pinia 」「 Vue Router 」`)
 
 const tab = ref(null)
 
@@ -224,6 +278,16 @@ watch(props, () => {
     autoPlay(props.Playing)
     autoMute()
 })
+
+const shareFriendNum = ref(0)
+const shareButtonActive = computed(() => {
+    return shareFriendNum.value ? true : false
+})
+
+const handleShare = (e) => {
+    shareFriendNum.value += e
+    console.log(shareFriendNum.value)
+}
 </script>
 
 <template>
@@ -250,6 +314,7 @@ watch(props, () => {
                 <i class="fa-solid fa-volume-low fa-2xl" v-else></i>
             </div>
             <el-drawer
+                close-delay="200"
                 v-model="isShare"
                 :title="shareTitle"
                 :with-header="true"
@@ -258,14 +323,33 @@ watch(props, () => {
                 custom-class="no-scroll-drawer"
                 append-to="#parent-container"
                 size="25%"
+                class="el-drawer"
             >
                 <div class="share-title">
-                    <div>{{ props.title }} &nbsp;当前剧集{{ props.episode }}</div>
+                    <div>{{ props.title }} &nbsp;第{{ props.episode }}集</div>
                 </div>
-                <br />
-                朋友 朋友 朋友
+                <div class="share-drawer" id="share-drawer">
+                    <ShareDrawer
+                        @onShare="handleShare"
+                        v-for="value in friendInfo"
+                        :key="value.name"
+                        :name="value.name"
+                        :url="value.url"
+                    />
+                </div>
+                <button
+                    @click="((isShare = false), createMessage('分享成功'))"
+                    @touchend="isShare = false"
+                    class="button share-button"
+                    :class="{ disabled: !shareButtonActive }"
+                >
+                    一键分享
+                </button>
             </el-drawer>
+
+            <!-- 剧集抽屉 -->
             <el-drawer
+                resizable
                 v-model="isEpisode"
                 :title="episodeTitle"
                 :with-header="true"
@@ -275,7 +359,35 @@ watch(props, () => {
                 append-to="#parent-container"
                 size="50%"
             >
-                <el-button>test</el-button>
+                <div class="episode-drawer">
+                    <div class="episode-info">
+                        <img :src="props.img" :alt="props.title" />
+                        <div class="text">
+                            <div class="title">{{ props.title }}</div>
+                            <div class="details">
+                                <div>全{{ props.episode_total }}集</div>
+                                <div>当前剧集 {{ props.episode }}</div>
+                                <div class="content">
+                                    {{ detailContent }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="episode-select">
+                        <div class="button-group">
+                            <button>进入追剧模式</button>
+                        </div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor quia
+                        distinctio minima cupiditate incidunt tempora, culpa, necessitatibus minus
+                        repellendus dolorem in, neque expedita deserunt placeat repellat adipisci
+                        vero est. Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
+                        illum harum quas voluptatem. Quidem exercitationem modi earum cum ut ullam
+                        aut autem odio, deserunt, dignissimos quibusdam aliquid rem totam omnis!
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga ut, molestias
+                        explicabo consequatur velit beatae accusamus inventore odio enim saepe.
+                        Explicabo minus dolore sequi tempora nihil iste, fugiat culpa sunt.
+                    </div>
+                </div>
             </el-drawer>
         </div>
         <div

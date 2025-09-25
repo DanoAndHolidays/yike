@@ -1,6 +1,6 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
 import _ from 'lodash'
@@ -251,6 +251,18 @@ const _handleWheel = (e) => {
 
 const handleWheel = _.debounce(_handleWheel, 200)
 
+const keyupHandle = (e) => {
+    e.preventDefault()
+    if (e.key === 'ArrowDown') {
+        next()
+    } else if (e.key === 'ArrowUp') {
+        prev()
+        // console.log('shit')
+    }
+}
+
+// const wheelHandle = (e) => {}
+
 onBeforeMount(async () => {
     await requireNew()
 })
@@ -259,18 +271,13 @@ onMounted(() => {
     scrollToCurrent()
 
     // 添加键盘事件支持
-    window.addEventListener('keyup', (e) => {
-        e.preventDefault()
-        if (e.key === 'ArrowDown') {
-            next()
-        } else if (e.key === 'ArrowUp') {
-            prev()
-            // console.log('shit')
-        }
-    })
-    window.addEventListener('wheel', (e) => {
-        handleWheel(e)
-    })
+    window.addEventListener('keyup', keyupHandle)
+    window.addEventListener('wheel', handleWheel)
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('keyup', keyupHandle)
+    window.removeEventListener('wheel', handleWheel)
 })
 
 onMounted(() => {

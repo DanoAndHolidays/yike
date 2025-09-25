@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 
 const name = ref('first')
+
+const handleClick = () => {}
 </script>
 
 <template>
     <div class="tab-container">
-        <el-tabs stretch="true" v-model="name" class="demo-tabs" @tab-click="handleClick">
+        <el-tabs :stretch="true" v-model="name" class="demo-tabs" @tab-click="handleClick">
             <el-tab-pane class="demo" label="作品" name="first">
                 <div class="left">
                     <div class="icon">
@@ -19,7 +21,7 @@ const name = ref('first')
                         <small>开始在抖音记录生活</small>
                     </div>
                 </div>
-                <button class="tbbutton">去发布</button>
+                <button class="tbbutton" @click="">去发布</button>
             </el-tab-pane>
             <el-tab-pane label="私密">
                 <div style="text-align: center">暂未实现</div>
@@ -32,19 +34,19 @@ const name = ref('first')
 
 <style lang="scss" scoped>
 .tab-container {
-    ::v-deep .el-tabs__item.is-active {
+    ::v-deep(.el-tabs__item.is-active) {
         color: $text-color-1;
     }
 
-    ::v-deep .el-tabs__active-bar {
+    ::v-deep(.el-tabs__active-bar) {
         background-color: #eec83c;
     }
 
-    ::v-deep .el-tabs__nav-wrap:after {
+    ::v-deep(.el-tabs__nav-wrap):after {
         display: none !important;
     }
 
-    ::v-deep .el-tabs__item {
+    ::v-deep(.el-tabs__item) {
         padding: 30px !important;
         color: $text-color-4;
         font-size: 1rem;
