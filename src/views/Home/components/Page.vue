@@ -12,7 +12,7 @@ const getAllEpisodeList = async (vid, page, limit) => {
     let res = await getAllEpisode(vid, page, limit)
 
     allEpisodeList.value = await res.data.data.data
-    console.log(allEpisodeList.value)
+    // console.log(allEpisodeList.value)
 }
 
 onMounted(() => {
@@ -23,10 +23,11 @@ onMounted(() => {
 <template>
     <div class="info"><slot></slot></div>
     <div class="container">
+        <div class="fade-top"></div>
         <div class="content">
             <div v-for="item in allEpisodeList" :key="item.url">{{ item.episode }}</div>
         </div>
-
+        <div class="fade-bottom"></div>
         <div class="footer">
             Copyright &copy;2025 Dano
             <br />
@@ -44,16 +45,33 @@ onMounted(() => {
 
 .container {
     // margin-top: 10px;
-    max-height: 500px;
+    height: 40vh;
     width: 100%;
     // border: red solid 2px;
     display: flex;
     justify-content: center;
-    align-items: center;
+
+    position: relative;
+
+    .fade-top {
+        position: absolute;
+        top: 0vh;
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
+        pointer-events: none;
+        // opacity: 0;
+        // transition: opacity 0.3s;
+        z-index: 10; /* 确保在内容之上 */
+        // background-color: red;
+    }
 
     .content {
-        height: 450px;
+        // border-top: #656565 1px solid;
+        border-bottom: #65656574 1px solid;
 
+        height: 30vh;
+        // border: red solid 2px;
         overflow: scroll;
         overflow-x: hidden;
         scrollbar-width: none;
@@ -75,6 +93,7 @@ onMounted(() => {
         width: 100%;
         padding: 10px 0;
         // margin: 10px 0;
+        position: relative;
 
         div {
             // border: green solid 2px;
@@ -99,14 +118,28 @@ onMounted(() => {
         }
     }
 
+    .fade-bottom {
+        position: absolute;
+        bottom: 10vh;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.25));
+        pointer-events: none;
+        // opacity: 0;
+        // transition: opacity 0.3s;
+        z-index: 10; /* 确保在内容之上 */
+        // background-color: red;
+    }
+
     .footer {
         position: absolute;
-        bottom: 0;
+        bottom: 2vh;
         margin: 64px 0;
         color: $text-color-1;
         font-size: 0.8rem;
         text-align: center;
         opacity: 0.4;
+        margin: 0;
     }
 }
 </style>

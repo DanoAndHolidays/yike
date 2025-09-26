@@ -267,17 +267,25 @@ onBeforeMount(async () => {
     await requireNew()
 })
 
-onMounted(() => {
-    scrollToCurrent()
-
+const addKeyAndWheelEvent = () => {
     // 添加键盘事件支持
     window.addEventListener('keyup', keyupHandle)
     window.addEventListener('wheel', handleWheel)
+}
+
+const removeKeyAndWheelEvent = () => {
+    window.removeEventListener('keyup', keyupHandle)
+    window.removeEventListener('wheel', handleWheel)
+}
+
+onMounted(() => {
+    scrollToCurrent()
+
+    addKeyAndWheelEvent()
 })
 
 onBeforeUnmount(() => {
-    window.removeEventListener('keyup', keyupHandle)
-    window.removeEventListener('wheel', handleWheel)
+    removeKeyAndWheelEvent()
 })
 
 onMounted(() => {
@@ -287,6 +295,18 @@ onMounted(() => {
 watch(curIndex, () => {
     updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
 })
+
+const isEpisodeDrawerOpen = ref(false)
+
+const handleOnEpisode = (e) => {
+    if (e) {
+        isEpisodeDrawerOpen.value = true
+        removeKeyAndWheelEvent()
+    } else {
+        isEpisodeDrawerOpen.value = false
+        addKeyAndWheelEvent()
+    }
+}
 </script>
 
 <template>
@@ -302,6 +322,7 @@ watch(curIndex, () => {
         @mouseleave="onMouseEnd"
     >
         <PlayBar
+            @onEpisode="handleOnEpisode"
             class="play"
             v-for="(video, index) in videoInfoList"
             :key="video.eid"

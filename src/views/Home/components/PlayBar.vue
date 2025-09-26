@@ -12,15 +12,22 @@ import avater_cat from '@/assets/avater_cat.jpg'
 import avater_junhe from '@/assets/avater_junhe.jpg'
 import avater_sister from '@/assets/avater_sister.jpg'
 import avater_ji from '@/assets/avater_ji.jpg'
+import avater_gebi from '@/assets/avater_gebi.jpg'
+import avater_weixin from '@/assets/avater_weixin.png'
+
 import Page from './Page.vue'
 
 const friendInfo = ref([
     {
+        name: '微信好友',
+        url: avater_weixin,
+    },
+    {
         name: 'Jungle',
         url: avater_jungle,
     },
     {
-        name: '整个萝莉当岛主',
+        name: '萝莉岛主',
         url: avater_cat,
     },
     {
@@ -32,28 +39,12 @@ const friendInfo = ref([
         url: avater_sister,
     },
     {
-        name: '珍珠鸡一柱擎天',
+        name: '鸡鸡一柱擎天',
         url: avater_ji,
     },
     {
-        name: 'Jungle',
-        url: avater_jungle,
-    },
-    {
-        name: '整个萝莉当岛主',
-        url: avater_cat,
-    },
-    {
-        name: '中非小炮弹',
-        url: avater_junhe,
-    },
-    {
-        name: '弈',
-        url: avater_sister,
-    },
-    {
-        name: '珍珠鸡一柱擎天',
-        url: avater_ji,
+        name: '隔壁小孩',
+        url: avater_gebi,
     },
 ])
 
@@ -80,7 +71,7 @@ const isMute = userStore.getIsMute() //默认静音
 const isEpisode = ref(false)
 
 const shareTitle = ref('分享给朋友')
-const episodeTitle = ref('剧集观看模式')
+const episodeTitle = ref('剧集信息')
 const detailContent = ref(`一刻短剧由Dano基于Apifox公开项目
     「悦享好剧」开发，仅做学习研究使用。
     若有Bug请发邮件或在GitHub中提出issue。
@@ -289,6 +280,17 @@ const handleShare = (e) => {
     shareFriendNum.value += e
     console.log(shareFriendNum.value)
 }
+
+const emit = defineEmits(['onEpisode'])
+
+const handleShareClick = () => {
+    isEpisode.value = true
+    emit('onEpisode', true)
+}
+
+const handleClosed = () => {
+    emit('onEpisode', false)
+}
 </script>
 
 <template>
@@ -306,7 +308,7 @@ const handleShare = (e) => {
                 <i class="fa-solid fa-share fa-2xl"></i>
                 <p>0.9万</p>
             </div>
-            <div @click="isEpisode = true" @touchend="isEpisode = true">
+            <div @click="handleShareClick" @touchend="handleShareClick">
                 <i class="fa-solid fa-bars-staggered fa-2xl"></i>
                 <p>{{ props.episode_total }}集</p>
             </div>
@@ -350,6 +352,7 @@ const handleShare = (e) => {
 
             <!-- 剧集抽屉 -->
             <el-drawer
+                @close="handleClosed"
                 resizable
                 v-model="isEpisode"
                 :title="episodeTitle"
@@ -358,7 +361,7 @@ const handleShare = (e) => {
                 :lock-scroll="true"
                 custom-class="no-scroll-drawer"
                 append-to="#parent-container"
-                size="50%"
+                size="75%"
             >
                 <div class="episode-drawer">
                     <div class="episode-info">
