@@ -167,7 +167,7 @@
                     font-size: small;
                     // background-color: red;
                     // border: red solid 2px;
-                    width: 9.5vw;
+                    width: 40px;
                     border-radius: 100px;
                     opacity: 0.8;
                     text-align: center;
@@ -190,7 +190,7 @@
             h3 {
                 margin-bottom: 10px;
                 // border: red solid 2px;
-                width: 30vw;
+                width: 150px;
                 border-radius: 100px;
                 opacity: 0.8;
             }
@@ -198,7 +198,7 @@
             small {
                 display: block;
                 // border: red solid 2px;
-                width: 50vw;
+                width: 200px;
                 border-radius: 100px;
                 opacity: 0.8;
             }
