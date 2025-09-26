@@ -18,6 +18,8 @@ const getAllEpisodeList = async (vid, page, limit) => {
 onMounted(() => {
     getAllEpisodeList(props.vid, 1, 1000)
 })
+
+const emit = defineEmits(['onToEpisodeMode'])
 </script>
 
 <template>

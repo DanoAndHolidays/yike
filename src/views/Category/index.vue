@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <div class="container">category</div>
+    <div class="container">category 暂未实现</div>
 </template>
 
 <style lang="scss" scoped>

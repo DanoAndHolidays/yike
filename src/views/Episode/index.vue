@@ -1,9 +1,7 @@
 <script setup></script>
 
 <template>
-    <div class="container">
-        episode
-    </div>
+    <div class="container">episode 暂未实现</div>
 </template>
 
 <style lang="scss" scoped>

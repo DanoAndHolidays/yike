@@ -6,6 +6,7 @@ import 'video.js/dist/video-js.css'
 import _ from 'lodash'
 import { applog } from '@/utils/applog'
 import ShareDrawer from './ShareDrawer.vue'
+import EndingInfo from './EndingInfo.vue'
 
 import avater_jungle from '@/assets/avater_jungle.jpg'
 import avater_cat from '@/assets/avater_cat.jpg'
@@ -13,7 +14,7 @@ import avater_junhe from '@/assets/avater_junhe.jpg'
 import avater_sister from '@/assets/avater_sister.jpg'
 import avater_ji from '@/assets/avater_ji.jpg'
 import avater_gebi from '@/assets/avater_gebi.jpg'
-import avater_weixin from '@/assets/avater_weixin.png'
+import avater_weixin from '@/assets/avater_weixin.jpg'
 
 import Page from './Page.vue'
 
@@ -293,6 +294,11 @@ const handleShareClick = () => {
 const handleClosed = () => {
     emit('onEpisode', false)
 }
+
+const openEpisodeMode = () => {
+    createMessage('已进入追剧模式')
+    isEpisode.value = false
+}
 </script>
 
 <template>
@@ -385,7 +391,7 @@ const handleClosed = () => {
                     </div>
                     <div class="episode-select">
                         <div class="button-group">
-                            <button>进入追剧模式</button>
+                            <button @click="openEpisodeMode">进入追剧模式</button>
                         </div>
                         <Page :vid="props.vid">
                             <div>全{{ props.episode_total }}集</div>
@@ -394,13 +400,10 @@ const handleClosed = () => {
                 </div>
             </el-drawer>
         </div>
-        <div
-            class="video"
-            :class="{
-                'is-puased': !props.Playing,
-                'is-ended': isEnded,
-            }"
-        >
+
+        <EndingInfo @onToEpisodeMode="openEpisodeMode" class="end-info" v-if="isEnded" />
+
+        <div class="video" :class="{ 'is-ended': isEnded }">
             <video
                 @touchstart="handleTouchStart"
                 @touchmove="handleTouchMove"
@@ -427,15 +430,25 @@ const handleClosed = () => {
 
 <style scoped lang="scss">
 .play {
-    .is-puased {
-        filter: blur(10px);
-        transform: scale(1.05);
-        transition: all 0.4s;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    user-select: none;
+    // background-color: transparent;
+
+    .end-info {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
     }
+
     .is-ended {
         transition: all 1s;
         position: relative;
-        filter: blur(5px);
+        filter: blur(5px) brightness(80%) contrast(110%) saturate(120%);
         transform: scale(1.05);
         &::after {
             position: absolute;
@@ -463,11 +476,6 @@ const handleClosed = () => {
             background-color: red;
         }
     }
-    height: 100%;
-    width: 100%;
-    position: relative;
-    z-index: 10;
-    user-select: none;
 
     .tab {
         display: flex;

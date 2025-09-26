@@ -21,7 +21,7 @@
                     <p class="animation-placehoder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 </div>
                 <div>
-                    <i class="fa-solid fa-volume-low fa-2xl"></i>
+                    <i class="fa-solid fa-volume-xmark fa-2xl"></i>
                 </div>
             </div>
             <div class="video">
@@ -156,6 +156,7 @@
 
             div {
                 margin: 10px;
+                margin-top: 17px;
 
                 i {
                     color: $text-color-4;

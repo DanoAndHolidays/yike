@@ -312,15 +312,13 @@ const handleOnEpisode = (e) => {
 const readyVideoNum = ref(0)
 
 const videosIsReady = computed(() => {
-    console.log(readyVideoNum.value)
+    // console.log(readyVideoNum.value)
 
     if (readyVideoNum.value >= videoInfoList.value.length && videoInfoList.value.length != 0) {
-        console.log('yes')
+        // console.log('yes')
 
         return true
     } else {
-        console.log('no')
-
         return false
     }
 })
@@ -374,7 +372,7 @@ const handleVideoReady = (e) => {
 <style scoped lang="scss">
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.4s ease;
+    transition: opacity 0.6s ease;
 }
 
 .v-enter-from,
