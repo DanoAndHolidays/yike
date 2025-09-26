@@ -6,6 +6,7 @@ export const useAppStore = defineStore('appInfo', () => {
     const isReady = ref(false)
     function setIsReady() {
         if (isReady.value) {
+            applog('切换加载完成')
             return
         } else {
             isReady.value = true

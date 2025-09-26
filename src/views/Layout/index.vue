@@ -17,7 +17,7 @@ const isReady = appStore.getIsReady()
     <div class="parent-container" id="parent-container">
         <Start v-if="!isReady" class="start" />
         <div class="view">
-            <router-view />
+            <KeepAlive><router-view /></KeepAlive>
         </div>
         <TabBar class="tab-bar" />
     </div>

@@ -1,8 +1,9 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
+import LoadingPage from './LoadingPage.vue'
 import _ from 'lodash'
 // import { applog } from '@/utils/applog'
 
@@ -307,6 +308,24 @@ const handleOnEpisode = (e) => {
         addKeyAndWheelEvent()
     }
 }
+
+const readyVideoNum = ref(0)
+
+const videosIsReady = computed(() => {
+    if (readyVideoNum.value === videoInfoList.value.length && videoInfoList.value.length != 0) {
+        console.log('yes')
+
+        return true
+    } else {
+        console.log('no')
+
+        return false
+    }
+})
+
+const handleVideoReady = (e) => {
+    readyVideoNum.value += e
+}
 </script>
 
 <template>
@@ -321,7 +340,16 @@ const handleOnEpisode = (e) => {
         @mouseup="onMouseEnd"
         @mouseleave="onMouseEnd"
     >
+        <Transition>
+            <KeepAlive>
+                <div class="loading-page" v-if="!videosIsReady">
+                    <LoadingPage />
+                </div>
+            </KeepAlive>
+        </Transition>
+
         <PlayBar
+            @onVideoReady="handleVideoReady"
             @onEpisode="handleOnEpisode"
             class="play"
             v-for="(video, index) in videoInfoList"
@@ -342,9 +370,19 @@ const handleOnEpisode = (e) => {
 </template>
 
 <style scoped lang="scss">
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.4s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
 .video-container {
     height: 100vh;
     overflow: scroll;
+    position: relative;
 
     /* 隐藏默认的滚动条样式 */
     scrollbar-width: none;
@@ -359,6 +397,17 @@ const handleOnEpisode = (e) => {
     .play {
         height: calc(100vh);
         overflow: hidden;
+    }
+
+    .loading-page {
+        position: absolute;
+        z-index: 15;
+        height: 100%;
+        width: 100%;
+    }
+
+    .unshow {
+        display: none;
     }
 }
 </style>

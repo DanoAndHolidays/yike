@@ -21,6 +21,7 @@ import NavBar from '@/views/Home/components/NavBar.vue'
         top: 0;
         width: 100vw;
         max-width: 500px;
+        z-index: 1000;
     }
 }
 </style>

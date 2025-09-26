@@ -17,6 +17,8 @@ import avater_weixin from '@/assets/avater_weixin.png'
 
 import Page from './Page.vue'
 
+// const videojsIsReady = ref(false)
+
 const friendInfo = ref([
     {
         name: '微信好友',
@@ -239,7 +241,7 @@ onMounted(() => {
         // this.on('ended', function () {
         //     videojs.log('播放结束!')
         // })
-
+        emit('onVideoReady', 1)
         appStore.setIsReady()
     })
     // 添加播放器事件监听
@@ -281,7 +283,7 @@ const handleShare = (e) => {
     console.log(shareFriendNum.value)
 }
 
-const emit = defineEmits(['onEpisode'])
+const emit = defineEmits(['onEpisode', 'onVideoReady'])
 
 const handleShareClick = () => {
     isEpisode.value = true
