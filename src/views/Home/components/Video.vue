@@ -312,7 +312,9 @@ const handleOnEpisode = (e) => {
 const readyVideoNum = ref(0)
 
 const videosIsReady = computed(() => {
-    if (readyVideoNum.value === videoInfoList.value.length && videoInfoList.value.length != 0) {
+    console.log(readyVideoNum.value)
+
+    if (readyVideoNum.value >= videoInfoList.value.length && videoInfoList.value.length != 0) {
         console.log('yes')
 
         return true
