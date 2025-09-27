@@ -56,11 +56,39 @@ body {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    width: calc(100% - 20px);
+                    width: calc(100% - 40px);
                 }
 
                 .details {
                     color: $text-color-4;
+                    .head {
+                        display: flex;
+                        justify-content: space-between;
+
+                        div.normal {
+                            margin: 0px 10px;
+                            padding: 0 5px;
+                            border: 1.5px $text-color-4 solid;
+                            border-radius: 100px;
+                            opacity: 0.7;
+                        }
+                        div.nomal {
+                            margin: 0px 10px;
+                            padding: 0 5px;
+                            border: 1.5px $favorite-color solid;
+                            border-radius: 100px;
+                            opacity: 0.7;
+                        }
+
+                        div.coll {
+                            color: $favorite-color;
+                            margin: 0px 10px;
+                            padding: 0 5px;
+                            border: 1.5px $favorite-color solid;
+                            border-radius: 100px;
+                            opacity: 0.7;
+                        }
+                    }
                     .content {
                         opacity: 0.5;
                         border-top: 1px #e3e3e33d solid;

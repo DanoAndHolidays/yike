@@ -1,18 +1,64 @@
 <script setup>
 import { getAllEpisode } from '@/apis/play'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, nextTick } from 'vue'
 
 const props = defineProps({
     vid: Number,
 })
 
+import { useDramaStore } from '@/stores/useDramaStore'
+const dramaStore = useDramaStore()
+
+const isWatched = (eid) => {
+    const watchRecord = dramaStore.getWatchRecord(props.vid)?.value
+    if (!watchRecord) return false
+
+    // watchRecord.episodes 是 Set，所以用 has 判断
+    return watchRecord.episodes.has(eid)
+}
+
+const islastEpisode = (eid) => {
+    const watchRecord = dramaStore.getWatchRecord(props.vid)?.value
+    if (!watchRecord) return false
+
+    // watchRecord.episodes 是 Set，所以用 has 判断
+    return watchRecord.lastEpisode === eid
+}
+
 const allEpisodeList = ref([])
+
+// 存放每一集 DOM 元素
+const episodeRefs = {}
+
+// 存放内容容器 DOM
+const contentWrapper = ref(null)
 
 const getAllEpisodeList = async (vid, page, limit) => {
     let res = await getAllEpisode(vid, page, limit)
 
     allEpisodeList.value = await res.data.data.data
-    // console.log(allEpisodeList.value)
+
+    // 下一轮 DOM 更新完成后滚动到最后观看位置
+    nextTick(() => {
+        scrollToLastEpisode()
+    })
+}
+
+// 滚动到最后观看集数，只在 content 内部滚动
+const scrollToLastEpisode = () => {
+    // 得到最新剧集的数字
+    const lastEid = dramaStore.getWatchRecord(props.vid)?.value.lastEpisode
+
+    // 获取ref
+    const el = episodeRefs[lastEid]
+    if (el && contentWrapper.value) {
+        // 计算相对于 contentWrapper 的位置
+        const top = el.offsetTop - contentWrapper.value.offsetTop
+        contentWrapper.value.scrollTo({
+            top: top - contentWrapper.value.clientHeight / 2 + el.clientHeight / 2, // 居中显示
+            behavior: 'smooth',
+        })
+    }
 }
 
 onMounted(() => {
@@ -26,8 +72,15 @@ const emit = defineEmits(['onToEpisodeMode'])
     <div class="info"><slot></slot></div>
     <div class="container">
         <div class="fade-top"></div>
-        <div class="content">
-            <div v-for="item in allEpisodeList" :key="item.url">{{ item.episode }}</div>
+        <div class="content" ref="contentWrapper">
+            <div
+                v-for="item in allEpisodeList"
+                :key="item.url"
+                :ref="(el) => (episodeRefs[item.eid] = el)"
+                :class="{ wached: isWatched(item.eid), lasted: islastEpisode(item.eid) }"
+            >
+                {{ item.episode }}
+            </div>
         </div>
         <div class="fade-bottom"></div>
         <div class="footer">
@@ -52,8 +105,8 @@ const emit = defineEmits(['onToEpisodeMode'])
     // border: red solid 2px;
     display: flex;
     justify-content: center;
-
     position: relative;
+    overflow-y: auto;
 
     .fade-top {
         position: absolute;
@@ -97,6 +150,21 @@ const emit = defineEmits(['onToEpisodeMode'])
         // margin: 10px 0;
         position: relative;
 
+        .wached {
+            background-color: #9b9b9b5f;
+            opacity: 0.4;
+            border: #e3e3e37a 1px solid;
+        }
+
+        .lasted {
+            border: #c7a2a747 1px solid;
+            color: $primary-color;
+            background-color: #d8728049;
+
+            filter: brightness(110%);
+            opacity: 1;
+        }
+
         div {
             // border: green solid 2px;
             display: flex;
@@ -113,7 +181,7 @@ const emit = defineEmits(['onToEpisodeMode'])
             transition: all 0.2s;
 
             &:hover {
-                border: #d8728020 1.5px solid;
+                border: #c7a2a747 1px solid;
                 color: $primary-color;
                 background-color: #d8728049;
             }

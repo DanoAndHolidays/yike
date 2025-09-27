@@ -16,6 +16,50 @@ import avater_ji from '@/assets/avater_ji.jpg'
 import avater_gebi from '@/assets/avater_gebi.jpg'
 import avater_weixin from '@/assets/avater_weixin.jpg'
 
+import { useDramaStore } from '@/stores/useDramaStore'
+const dramaStore = useDramaStore()
+
+const props = defineProps({
+    Playing: {
+        type: Boolean,
+    },
+    videoInfo: {
+        type: String,
+    },
+    videoIsPlaying: {
+        // 似乎是没有用了
+        type: Boolean,
+    },
+    eid: {
+        type: Number,
+    },
+    episode: {
+        type: Number,
+    },
+    episode_total: {
+        type: Number,
+    },
+    img: {
+        type: String,
+    },
+    is_vip: {
+        type: Number,
+    },
+
+    title: {
+        type: String,
+    },
+    url: {
+        type: String,
+    },
+    url2: {
+        type: String,
+    },
+    vid: {
+        type: Number,
+    },
+})
+
 import Page from './Page.vue'
 
 // const videojsIsReady = ref(false)
@@ -67,8 +111,8 @@ let isDragging = false
 const currentMoveThreshold = 30
 
 // 侧边按钮的状态管理
-const isLike = ref(false)
-const isFavorite = ref(false)
+const isLike = dramaStore.isLiked(props.vid)
+const isFavorite = dramaStore.isCollected(props.vid)
 const isShare = ref(false)
 const isMute = userStore.getIsMute() //默认静音
 const isEpisode = ref(false)
@@ -81,6 +125,10 @@ const detailContent = ref(`一刻短剧由Dano基于Apifox公开项目
     主要技术栈：「 Vue 」「 Vite 」「 Pinia 」「 Vue Router 」`)
 
 const tab = ref(null)
+
+const handleLike = () => {
+    dramaStore.toggleLike(props.vid)
+}
 
 const isEnded = ref(false)
 let player = null
@@ -98,47 +146,6 @@ const autoMute = () => {
     player.muted(isMute.value)
 }
 
-const props = defineProps({
-    Playing: {
-        type: Boolean,
-    },
-    videoInfo: {
-        type: String,
-    },
-    videoIsPlaying: {
-        // 似乎是没有用了
-        type: Boolean,
-    },
-    eid: {
-        type: Number,
-    },
-    episode: {
-        type: Number,
-    },
-    episode_total: {
-        type: Number,
-    },
-    img: {
-        type: String,
-    },
-    is_vip: {
-        type: Number,
-    },
-
-    title: {
-        type: String,
-    },
-    url: {
-        type: String,
-    },
-    url2: {
-        type: String,
-    },
-    vid: {
-        type: Number,
-    },
-})
-
 const toggleMute = (e) => {
     e.stopPropagation()
     e.preventDefault()
@@ -150,7 +157,8 @@ const toggleMute = (e) => {
 const toggleFavorite = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    isFavorite.value = !isFavorite.value
+    // isFavorite.value = !isFavorite.value
+    dramaStore.toggleCollection(props.vid)
     createMessage(isFavorite.value ? '收藏成功' : '收藏移除')
 }
 
@@ -236,19 +244,12 @@ onMounted(() => {
         controls: true,
     }
     player = videojs(props.videoInfo, options, function onPlayerReady() {
-        // videojs.log('播放器准备好了!')
-        // 最新的浏览器一般禁止video自动播放，直接调用play()会报错。只有用户在页面上操作后或者在video标签上添加muted（静音）属性，才能调用play函数。本案例是在video标签上添加了muted属性。
-        // this.play()
-        // this.on('ended', function () {
-        //     videojs.log('播放结束!')
-        // })
         emit('onVideoReady', 1)
         appStore.setIsReady()
     })
     // 添加播放器事件监听
     player.on('play', () => {
-        // console.log('视频开始播放')
-        // createMessage('继续播放')
+        dramaStore.updateWatchRecord(props.vid, props.eid)
         isEnded.value = false
     })
 
@@ -304,7 +305,7 @@ const openEpisodeMode = () => {
 <template>
     <div class="play">
         <div class="tab" ref="tab">
-            <div @click="isLike = !isLike" @touchend="isLike = !isLike">
+            <div @click="handleLike" @touchend="handleLike">
                 <i class="fa-solid fa-heart fa-2xl" :class="{ 'active-like': isLike }"></i>
                 <p>12.3万</p>
             </div>
@@ -369,7 +370,7 @@ const openEpisodeMode = () => {
                 :lock-scroll="true"
                 custom-class="no-scroll-drawer"
                 append-to="#parent-container"
-                size="75%"
+                size="80%"
             >
                 <div class="episode-drawer">
                     <div class="episode-info">
@@ -377,15 +378,19 @@ const openEpisodeMode = () => {
                         <div class="text">
                             <div class="title">{{ props.title }}</div>
                             <div class="details">
-                                <div>当前剧集 &nbsp; {{ props.episode }}</div>
-                                <div>
-                                    剧集ID：{{ props.eid }} &nbsp; &nbsp;VIP：
-                                    {{ props.is_vip }}
+                                <div class="head">
+                                    <div>
+                                        当前剧集 &nbsp;
+                                        {{ props.episode }}
+                                    </div>
+                                    <div :class="{ coll: isFavorite, normal: !isFavorite }">
+                                        {{ isFavorite ? '已收藏' : '未收藏' }}
+                                    </div>
                                 </div>
 
-                                <div></div>
-
-                                <div class="content">{{ detailContent }}</div>
+                                <div class="content">
+                                    {{ detailContent }}
+                                </div>
                             </div>
                         </div>
                     </div>
