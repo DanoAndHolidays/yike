@@ -20,7 +20,7 @@ export const getRandom = (page = 1, limit = 15, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 获取所有剧集，从第一集开始
+ * @description 获取所有剧集，从第一集开始✅
  * @param {Number} vid 短剧ID
  * @param {Number} page 页数
  * @param {Number} limit 每页大小
@@ -41,7 +41,7 @@ export const getAllEpisode = (vid, page, limit, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 获取当前剧集之后的剧集
+ * @description 获取当前剧集之后的剧集（感觉没什么用
  * @param {Number} vid 短剧ID
  * @param {Number} eid 剧集ID
  * @param {Number} page 页数
@@ -102,7 +102,7 @@ export const getVideoAddress = (eid, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 保存观看记录
+ * @description 保存观看记录（已通过本地存储实现
  * @param {Number} uid 用户ID，默认815551832537446
  * @param {Number} vid 短剧ID
  * @param {Number} eid 剧集ID
@@ -125,7 +125,7 @@ export const saveWatchRecord = (uid = 815551832537446, vid, eid, second = 3, zls
 }
 
 /**
- * @description 获取观看记录
+ * @description 获取观看记录（已通过本地存储实现
  * @param {Number} uid 用户ID，默认815551832537446
  * @param {Number} page 页数
  * @param {String} zlsj 默认跳过加密

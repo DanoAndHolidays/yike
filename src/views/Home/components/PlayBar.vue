@@ -16,9 +16,6 @@ import avater_ji from '@/assets/avater_ji.jpg'
 import avater_gebi from '@/assets/avater_gebi.jpg'
 import avater_weixin from '@/assets/avater_weixin.jpg'
 
-import { useDramaStore } from '@/stores/useDramaStore'
-const dramaStore = useDramaStore()
-
 const props = defineProps({
     Playing: {
         type: Boolean,
@@ -59,6 +56,10 @@ const props = defineProps({
         type: Number,
     },
 })
+
+// 存储观看记录、收藏等。
+import { useDramaStore } from '@/stores/useDramaStore'
+const dramaStore = useDramaStore()
 
 import Page from './Page.vue'
 
@@ -334,7 +335,7 @@ const openEpisodeMode = () => {
                 :lock-scroll="true"
                 custom-class="no-scroll-drawer"
                 append-to="#parent-container"
-                size="25%"
+                size="28%"
                 class="el-drawer"
             >
                 <div class="share-title">

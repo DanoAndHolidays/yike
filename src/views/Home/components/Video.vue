@@ -19,6 +19,18 @@ const videoInfoList = ref([])
 
 const videoElement = ref(null)
 
+/**
+ * 由于没有专门用于批量请求eid信息的接口，我只能使用获取剧集播放地址的接口来间接获取剧集信息，
+ * 但是对于大量的剧集信息，想要通过这一个接口来获取是很困难的，会造成流量很大，
+ * 我的想法是本地存储一部分之前通过随机获取的剧集信息，这样就能减少发送请求的次数.
+ */
+// 存储剧集信息
+import { useDramaInfo } from '@/stores/useDramaInfo'
+const dramaInfo = useDramaInfo()
+
+/**
+ * 这部分倒底是做什么的我已经不记得了，我也不敢动...
+ */
 // 存储当前的短剧信息，用于获取剧集信息
 import { useEpisodeStore } from '@/stores/episode'
 const episodeStore = useEpisodeStore()
@@ -34,14 +46,13 @@ const TARGGET_Y = ref(80)
 // const TIME_INTEVAL = ref(400)
 
 const _requireNew = async (di) => {
-    // showMessage('正在请求...')
     videoInfoList.value = await updateVideoList(di)
+    // console.log('test1', videoInfoList.value)
+    videoInfoList.value.forEach((item) => {
+        dramaInfo.updateDramaInfo(item)
+    })
+
     updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
-    // for (let item of videoInfoList.value) {
-    //     showMessage(item)
-    // }
-    // showMessage(videoInfoList.value)
-    // createMessage('请求完成')
 }
 
 const requireNew = _.debounce(_requireNew, 100)

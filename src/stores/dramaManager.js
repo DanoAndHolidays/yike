@@ -3,6 +3,7 @@ export class DramaManager {
     constructor(data) {
         this.likes = new Set(data?.likes || [])
         this.collections = new Set(data?.collections || [])
+
         this.watchRecords = new Map(
             (data?.watchRecords || []).map((r) => [
                 r.id,
@@ -40,6 +41,15 @@ export class DramaManager {
 
     getWatchRecord(id) {
         return this.watchRecords.get(id) || null
+    }
+
+    getLikes() {
+        return this.likes || null
+    }
+
+    getCollections = () => {
+        // console.log(this.collections)
+        return this.collections || null
     }
 
     // 序列化为 JSON，利于Pinia 持久化

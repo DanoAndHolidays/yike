@@ -206,6 +206,32 @@ body {
         }
     }
 
+    .tab-header {
+        .el-tabs__header {
+            .el-tabs__nav-wrap.is-top::after {
+                color: $text-color-4;
+                opacity: 0.5;
+            }
+
+            .el-tabs__active-bar {
+                background-color: $primary-color;
+                opacity: 0.9;
+            }
+            .el-tabs__item {
+                margin: 5px 0;
+                opacity: 0.7;
+                height: 70px;
+                font-weight: bold;
+                color: $text-color-4;
+
+                font-size: 1rem;
+                &.is-active {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+
     /* 隐藏默认的滚动条样式 */
     scrollbar-width: none !important;
     /* Firefox */

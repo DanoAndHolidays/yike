@@ -42,6 +42,13 @@ export const useDramaStore = defineStore('drama', () => {
     const isLiked = (vid) => computed(() => manager.likes.has(vid))
     const isCollected = (vid) => computed(() => manager.collections.has(vid))
     const getWatchRecord = (vid) => computed(() => manager.getWatchRecord(vid))
+    const getLikes = () => {
+        return Array.from(manager.getLikes())
+    }
+
+    const getCollections = () => {
+        return Array.from(manager.getCollections())
+    }
 
     return {
         manager,
@@ -52,5 +59,7 @@ export const useDramaStore = defineStore('drama', () => {
         isCollected,
         getWatchRecord,
         clearAllData,
+        getLikes,
+        getCollections,
     }
 })
