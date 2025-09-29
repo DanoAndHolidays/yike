@@ -33,6 +33,25 @@ body {
         font-weight: bolder;
     }
 
+    .like-container {
+        div.normal {
+            margin: 0px 10px;
+            padding: 0 5px;
+            border: 1.5px $text-color-4 solid;
+            border-radius: 100px;
+            opacity: 0.7;
+        }
+
+        div.coll {
+            color: $like-color !important;
+            margin: 0px 10px;
+            padding: 0 5px;
+            border: 1.5px $like-color solid !important;
+            border-radius: 100px;
+            opacity: 1;
+        }
+    }
+
     .episode-drawer {
         width: calc(100% + 15px);
 
@@ -69,13 +88,6 @@ body {
                             margin: 0px 10px;
                             padding: 0 5px;
                             border: 1.5px $text-color-4 solid;
-                            border-radius: 100px;
-                            opacity: 0.7;
-                        }
-                        div.nomal {
-                            margin: 0px 10px;
-                            padding: 0 5px;
-                            border: 1.5px $favorite-color solid;
                             border-radius: 100px;
                             opacity: 0.7;
                         }
@@ -208,6 +220,7 @@ body {
 
     .tab-header {
         .el-tabs__header {
+            margin-bottom: 5px;
             .el-tabs__nav-wrap.is-top::after {
                 color: $text-color-4;
                 opacity: 0.5;
@@ -220,7 +233,7 @@ body {
             .el-tabs__item {
                 margin: 5px 0;
                 opacity: 0.7;
-                height: 70px;
+                height: 55px;
                 font-weight: bold;
                 color: $text-color-4;
 
@@ -256,5 +269,27 @@ body {
 button {
     &:active {
         transform: scale(0.99);
+    }
+}
+
+.header-container {
+    .el-statistic {
+        height: 20px;
+        .el-statistic__head {
+            margin: 0;
+            text-align: center;
+            color: $tiktok-text-color-1;
+            font-weight: bold;
+            font-size: larger;
+        }
+        .el-statistic__content {
+            text-align: center;
+            .el-statistic__number {
+                text-align: center;
+                color: $text-color-1;
+                font-weight: bold;
+                font-size: larger;
+            }
+        }
     }
 }

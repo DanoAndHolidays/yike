@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+    name: 'Mine',
+})
 import MineHeader from './components/MineHeader.vue'
 import MIneStatistic from './components/MIneStatistic.vue'
 import MineTab from './components/MineTab.vue'

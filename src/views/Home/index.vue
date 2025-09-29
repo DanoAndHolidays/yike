@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+    name: 'Home',
+})
 import Video from '@/views/Home/components/Video.vue'
 import NavBar from '@/views/Home/components/NavBar.vue'
 </script>

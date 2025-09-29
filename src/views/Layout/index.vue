@@ -7,17 +7,25 @@ import TabBar from './components/TabBar.vue'
 
 import { useAppStore } from '@/stores/app'
 const appStore = useAppStore()
-
+import { ref } from 'vue'
 // appStore.setIsReady()
 
 const isReady = appStore.getIsReady()
+
+const keepAliveList = ref(['Home', 'Mine'])
 </script>
 
 <template>
     <div class="parent-container" id="parent-container">
         <Start v-if="!isReady" class="start" />
         <div class="view">
-            <KeepAlive><router-view /></KeepAlive>
+            <router-view v-slot="{ Component }">
+                <keep-alive :include="keepAliveList">
+                    <component :is="Component" />
+                </keep-alive>
+            </router-view>
+
+            <!-- <router-view /> -->
         </div>
         <TabBar class="tab-bar" />
     </div>

@@ -39,6 +39,18 @@ export class DramaManager {
         }
     }
 
+    getLikesCount() {
+        return this.likes.size
+    }
+
+    getCollectionsCount() {
+        return this.collections.size
+    }
+
+    getWatchRecordsCount() {
+        return this.watchRecords.size
+    }
+
     getWatchRecord(id) {
         return this.watchRecords.get(id) || null
     }

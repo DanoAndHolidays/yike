@@ -327,7 +327,7 @@ const openEpisodeMode = () => {
                 <i class="fa-solid fa-volume-low fa-2xl" v-else></i>
             </div>
             <el-drawer
-                close-delay="200"
+                :close-delay="200"
                 v-model="isShare"
                 :title="shareTitle"
                 :with-header="true"

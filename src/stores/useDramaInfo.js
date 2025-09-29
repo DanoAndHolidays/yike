@@ -11,9 +11,9 @@ export const useDramaInfo = defineStore('dramaInfo', () => {
     )
 
     watch(
-        () => infoManager.toJOSN(),
+        infoManager,
         (newVale) => {
-            localStorage.setItem('dramaInfo', JSON.stringify(newVale))
+            localStorage.setItem('dramaInfo', JSON.stringify(newVale.toJOSN()))
         },
         { deep: true },
     )

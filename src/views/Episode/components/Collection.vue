@@ -10,8 +10,10 @@ import { onMounted } from 'vue'
 
 import { getAllEpisode } from '@/apis/play'
 const getDramaInfo = async (vid) => {
-    const res = await getAllEpisode(vid, 1, 1)
+    const res = await getAllEpisode(vid, 2, 15)
     const info = await res.data.data.data[0]
+    console.log('log info', info)
+
     return info
 }
 
@@ -24,18 +26,25 @@ const handleCollection = async () => {
     // 通过 Promise.all 等待所有 getDramaInfo 调用完成
     let newCollections = await Promise.all(
         collections.map(async (item) => {
-            const have = dramaInfo.isHas(item)
+            let have = dramaInfo.isHas(item)
             if (have) {
+                // console.log('have', have)
+                have.vid = item
+                console.log('have', have)
+
                 return have
             } else {
                 // 等待 getDramaInfo 执行完毕，得到 info 数据
-                const info = await getDramaInfo(item)
-                return info
+                // let info = await getDramaInfo(item)
+                // console.log('get', info)
+                return {}
             }
         }),
     )
 
-    renderInfo.value = newCollections
+    renderInfo.value = newCollections.reverse()
+
+    console.log('log renderInfo', renderInfo.value)
 }
 
 onMounted(() => {
@@ -47,18 +56,19 @@ onMounted(() => {
     <div class="container1">
         <InfoCard
             v-for="item in renderInfo"
-            :key="item.vid"
-            :episode="item.episode"
-            :episode_total="item.episode_total"
-            :img="item.img"
-            :title="item.title"
+            :key="item?.vid"
+            :episode="item?.episode"
+            :episode_total="item?.episode_total"
+            :img="item?.img"
+            :title="item?.title"
+            :vid="item?.vid"
         />
     </div>
 </template>
 
 <style lang="scss" scoped>
 .container1 {
-    height: calc(100vh - $tab-bar-height - 110px);
+    height: calc(100vh - $tab-bar-height - 55px);
     width: 100%;
     background-color: $tiktok-background-color-1;
     color: $text-color-1;

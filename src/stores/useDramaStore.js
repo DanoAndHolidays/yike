@@ -21,15 +21,15 @@ export const useDramaStore = defineStore('drama', () => {
 
     // Actions
     function toggleLike(vid) {
-        manager.toggleLike(vid)
+        if (vid) manager.toggleLike(vid)
     }
 
     function toggleCollection(vid) {
-        manager.toggleCollection(vid)
+        if (vid) manager.toggleCollection(vid)
     }
 
     function updateWatchRecord(vid, eid) {
-        manager.updateWatchRecord(vid, eid)
+        if (vid && eid) manager.updateWatchRecord(vid, eid)
     }
 
     // 新增清除本地信息功能
@@ -38,7 +38,6 @@ export const useDramaStore = defineStore('drama', () => {
         localStorage.removeItem('dramaStore')
     }
 
-    // Getters
     const isLiked = (vid) => computed(() => manager.likes.has(vid))
     const isCollected = (vid) => computed(() => manager.collections.has(vid))
     const getWatchRecord = (vid) => computed(() => manager.getWatchRecord(vid))
@@ -49,6 +48,10 @@ export const useDramaStore = defineStore('drama', () => {
     const getCollections = () => {
         return Array.from(manager.getCollections())
     }
+
+    const likesCount = computed(() => manager.likes.size)
+    const collectionsCount = computed(() => manager.collections.size)
+    const watchRecordsCount = computed(() => manager.watchRecords.size)
 
     return {
         manager,
@@ -61,5 +64,8 @@ export const useDramaStore = defineStore('drama', () => {
         clearAllData,
         getLikes,
         getCollections,
+        likesCount,
+        collectionsCount,
+        watchRecordsCount,
     }
 })

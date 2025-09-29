@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+defineOptions({
+    name: 'Category',
+})
+</script>
 
 <template>
     <div class="container">category 暂未实现</div>

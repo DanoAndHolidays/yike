@@ -53,8 +53,8 @@ const formattedTime = computed(() => {
 import { createMessage } from '@/utils/message'
 
 const hander = () => {
-    dramaStore.toggleCollection(props.vid)
-    dramaStore.isCollected(props.vid).value ? createMessage('已收藏') : createMessage('已取消')
+    dramaStore.toggleLike(props.vid)
+    dramaStore.isLiked(props.vid).value ? createMessage('已添加') : createMessage('已取消')
 }
 </script>
 
@@ -69,11 +69,11 @@ const hander = () => {
                         <div class="head" @click="hander">
                             <div
                                 :class="{
-                                    coll: dramaStore.isCollected(props.vid).value,
-                                    normal: !dramaStore.isCollected(props.vid).value,
+                                    coll: dramaStore.isLiked(props.vid).value,
+                                    normal: !dramaStore.isLiked(props.vid).value,
                                 }"
                             >
-                                {{ dramaStore.isCollected(props.vid).value ? '已收藏' : '未收藏' }}
+                                {{ dramaStore.isLiked(props.vid).value ? '已添加' : '已取消' }}
                             </div>
                         </div>
                     </div>
