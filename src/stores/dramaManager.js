@@ -55,6 +55,10 @@ export class DramaManager {
         return this.watchRecords.get(id) || null
     }
 
+    getWatchRecordAll() {
+        return this.watchRecords || null
+    }
+
     getLikes() {
         return this.likes || null
     }

@@ -137,17 +137,19 @@ const hander = () => {
                         div.normal {
                             margin: 0px 10px;
                             padding: 0 5px;
-                            border: 1.5px $text-color-4 solid;
+                            border: 2.5px $text-color-4 solid;
                             border-radius: 100px;
                             opacity: 0.7;
+                            font-weight: bold;
                         }
 
                         div.coll {
                             color: $favorite-color;
                             margin: 0px 10px;
                             padding: 0 5px;
-                            border: 1.5px $favorite-color solid;
+                            border: 2.5px $favorite-color solid;
                             border-radius: 100px;
+                            font-weight: bold;
                             opacity: 0.7;
                         }
                     }

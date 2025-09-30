@@ -15,14 +15,22 @@ const dramaStore = useDramaStore()
 
 <template>
     <div class="container">
-        <!-- <Statistic /> -->
+        <Statistic />
         <el-tabs :stretch="true" class="tab-header">
+            <el-tab-pane>
+                <template #label name="a">
+                    <span class="custom-tabs-label">
+                        <el-icon style="vertical-align: middle" size="24px"><Clock /></el-icon>
+                        <div>历史 {{ dramaStore.watchRecordsCount }}</div>
+                    </span>
+                </template>
+                <History />
+            </el-tab-pane>
             <el-tab-pane>
                 <template #label name="a">
                     <span class="custom-tabs-label">
                         <i class="fa-solid fa-star fa-xl"> </i>
                         <div>收藏 {{ dramaStore.collectionsCount }}</div>
-                        <div></div>
                     </span>
                 </template>
                 <Collection />
@@ -35,15 +43,6 @@ const dramaStore = useDramaStore()
                     </span>
                 </template>
                 <Like />
-            </el-tab-pane>
-            <el-tab-pane>
-                <template #label name="a">
-                    <span class="custom-tabs-label">
-                        <el-icon style="vertical-align: middle" size="24px"><Clock /></el-icon>
-                        <div>观看历史 {{ dramaStore.watchRecordsCount }}</div>
-                    </span>
-                </template>
-                <History />
             </el-tab-pane>
         </el-tabs>
     </div>

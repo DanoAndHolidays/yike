@@ -1,136 +1,116 @@
 <script setup>
-// import { Ship } from '@element-plus/icons-vue/dist/types'
-import InfoCard from './InfoCard.vue'
+import HistoryCard from './HistoryCard.vue'
+// import InfoCard from './InfoCard.vue'
+import { ref, computed } from 'vue'
+
+import { useDramaInfo } from '@/stores/useDramaInfo'
+const dramaInfo = useDramaInfo()
+
+import { onMounted } from 'vue'
+
+import { getAllEpisode } from '@/apis/play'
+const getDramaInfo = async (vid) => {
+    const res = await getAllEpisode(vid, 2, 15)
+    const info = await res.data.data.data[0]
+    console.log('log info', info)
+
+    return info
+}
+
+const renderInfo = ref([])
 
 import { useDramaStore } from '@/stores/useDramaStore'
-import { reactive } from 'vue'
 const dramaStore = useDramaStore()
+const handleHistory = async () => {
+    const collections = dramaStore.getWatchRecordAll()
 
-const date = new Date()
+    // console.log('collections', collections)
 
-const formattedDate = date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    // 通过 Promise.all 等待所有 getDramaInfo 调用完成
+    let newCollections = await Promise.all(
+        collections.map(async (item) => {
+            let have = dramaInfo.isHas(item[0])
+            if (have) {
+                // console.log('have', have)
+                have.vid = item[0]
+                have.time = formatDate(item[1].timestamp)
+                // console.log('have', have)
+
+                return have
+            } else {
+                // 等待 getDramaInfo 执行完毕，得到 info 数据
+                // let info = await getDramaInfo(item)
+                // console.log('get', info)
+                return {}
+            }
+        }),
+    )
+
+    renderInfo.value = newCollections.reverse()
+
+    console.log('log renderInfo', renderInfo.value)
+}
+
+onMounted(() => {
+    handleHistory()
 })
 
-// console.log(formattedDate)
+function formatDate(date) {
+    if (!(date instanceof Date)) {
+        date = new Date(date) // 允许传入时间戳或字符串
+    }
 
-const info = reactive({
-    time: formattedDate,
-    episode: 1,
-    episode_total: 90,
-    img: 'https://static.zhonglian.com/upload/200004/2024/03/15/11/23cccb6a812a50bb82341654a2309ab9.png',
-    isColloected: true,
-    title: '儿媳的反击',
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0') // 月份从0开始
+    const day = String(date.getDate()).padStart(2, '0')
+    const hour = String(date.getHours()).padStart(2, '0')
+    const minute = String(date.getMinutes()).padStart(2, '0')
+
+    return `${year}-${month}-${day} ${hour}:${minute}`
+}
+
+const formattedTime = computed(() => {
+    if (dramaStore.getWatchRecord(props?.vid).value?.timestamp) {
+        return formatDate(dramaStore.getWatchRecord(props.vid).value.timestamp)
+    } else {
+        return '暂无数据'
+    }
 })
+
+import { createMessage } from '@/utils/message'
 </script>
 
 <template>
-    <div class="container2">
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="23"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        /><InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
-        />
-        <InfoCard
-            :time="info.time"
-            :episode="info.episode"
-            :episode_total="info.episode_total"
-            :img="info.img"
-            :is-colloected="true"
-            :title="info.title"
-            :watched-num="230"
+    <div class="history-container">
+        <HistoryCard
+            class="con"
+            v-for="item in renderInfo"
+            :title="item.title"
+            :img="item.img"
+            :time="item.time"
         />
     </div>
 </template>
 
 <style lang="scss" scoped>
-.container2 {
-    height: calc(100vh - $tab-bar-height - 110px);
+.history-container {
+    .con {
+        // border: wheat 2px solid;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 3 / 4;
+    }
+    height: calc(100vh - $tab-bar-height - $episode-height);
     width: 100%;
     background-color: $tiktok-background-color-1;
     color: $text-color-1;
-    overflow: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 15px;
+    display: grid;
+    grid-template-columns: repeat(3, auto); /* 三列，均分 */
+
+    gap: 2px; /* 行列间距 */
+    // padding: 0 15px;
 
     /* 隐藏默认的滚动条样式 */
     scrollbar-width: none;

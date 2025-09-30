@@ -12,7 +12,7 @@ import { getAllEpisode } from '@/apis/play'
 const getDramaInfo = async (vid) => {
     const res = await getAllEpisode(vid, 2, 15)
     const info = await res.data.data.data[0]
-    console.log('log info', info)
+    // console.log('log info', info)
 
     return info
 }
@@ -30,7 +30,7 @@ const handleCollection = async () => {
             if (have) {
                 // console.log('have', have)
                 have.vid = item
-                console.log('have', have)
+                // console.log('have', have)
 
                 return have
             } else {
@@ -44,7 +44,7 @@ const handleCollection = async () => {
 
     renderInfo.value = newCollections.reverse()
 
-    console.log('log renderInfo', renderInfo.value)
+    // console.log('log renderInfo', renderInfo.value)
 }
 
 onMounted(() => {
@@ -68,7 +68,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .container1 {
-    height: calc(100vh - $tab-bar-height - 55px);
+    height: calc(100vh - $tab-bar-height - $episode-height);
     width: 100%;
     background-color: $tiktok-background-color-1;
     color: $text-color-1;
