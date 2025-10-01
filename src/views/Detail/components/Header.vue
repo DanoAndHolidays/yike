@@ -19,7 +19,7 @@ const detailContent = ref(`一刻短剧由Dano基于Apifox公开项目
 <template>
     <div class="detail-container">
         <div class="card">
-            <CategoryCard :img="props.img" :episode_total="34" rank="一刻独播" />
+            <CategoryCard :img="props.img" :episode_total="props.episode_total" rank="一刻独播" />
         </div>
         <div class="infomation">
             <div class="text">
