@@ -50,6 +50,14 @@ const handleCollection = async () => {
 onMounted(() => {
     handleCollection()
 })
+// 用于跳转至详情页
+import router from '@/router'
+import { useVidStore } from '@/stores/user'
+const vidStore = useVidStore()
+const toDetail = (vid) => {
+    router.push('detail')
+    vidStore.setVidAndShowDetail(vid)
+}
 </script>
 
 <template>
@@ -62,6 +70,7 @@ onMounted(() => {
             :img="item?.img"
             :title="item?.title"
             :vid="item?.vid"
+            @click="toDetail(item?.vid)"
         />
     </div>
 </template>

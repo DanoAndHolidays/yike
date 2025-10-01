@@ -4,7 +4,7 @@ const props = defineProps({
     vid: Number,
     title: String,
     lastEpisode: Number,
-    time: Number,
+    time: String,
 })
 </script>
 

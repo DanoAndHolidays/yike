@@ -1,12 +1,21 @@
 <script setup>
+defineOptions({
+    name: 'Category',
+})
+
 import CategoryCard from './components/CategoryCard.vue'
 import Header from './components/Header.vue'
 import { onMounted, ref } from 'vue'
 import { getCategoryEpisode } from '@/apis/play'
 
-defineOptions({
-    name: 'Category',
-})
+// 用于跳转至详情页
+import router from '@/router'
+import { useVidStore } from '@/stores/user'
+const vidStore = useVidStore()
+const toDetail = (vid) => {
+    router.push('detail')
+    vidStore.setVidAndShowDetail(vid)
+}
 
 const curIndex = ref(0)
 const categoryContentList = ref([])
@@ -39,6 +48,7 @@ onMounted(() => {
                 :tag="item.tag"
                 :rank="item.rank"
                 :title="item.title"
+                @click="toDetail(item.vid)"
             />
         </div>
     </div>

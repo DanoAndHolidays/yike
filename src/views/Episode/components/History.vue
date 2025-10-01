@@ -78,6 +78,14 @@ const formattedTime = computed(() => {
 })
 
 import { createMessage } from '@/utils/message'
+// 用于跳转至详情页
+import router from '@/router'
+import { useVidStore } from '@/stores/user'
+const vidStore = useVidStore()
+const toDetail = (vid) => {
+    router.push('detail')
+    vidStore.setVidAndShowDetail(vid)
+}
 </script>
 
 <template>
@@ -88,6 +96,7 @@ import { createMessage } from '@/utils/message'
             :title="item.title"
             :img="item.img"
             :time="item.time"
+            @click="toDetail(item.vid)"
         />
     </div>
 </template>

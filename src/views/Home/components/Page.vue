@@ -4,6 +4,7 @@ import { computed, onMounted, ref, nextTick } from 'vue'
 
 const props = defineProps({
     vid: Number,
+    size: Boolean,
 })
 
 import { useDramaStore } from '@/stores/useDramaStore'
@@ -47,7 +48,7 @@ const getAllEpisodeList = async (vid, page, limit) => {
 // 滚动到最后观看集数，只在 content 内部滚动
 const scrollToLastEpisode = () => {
     // 得到最新剧集的数字
-    const lastEid = dramaStore.getWatchRecord(props.vid)?.value.lastEpisode
+    const lastEid = dramaStore.getWatchRecord(props.vid)?.value?.lastEpisode ?? 1
 
     // 获取ref
     const el = episodeRefs[lastEid]
@@ -70,9 +71,9 @@ const emit = defineEmits(['onToEpisodeMode'])
 
 <template>
     <div class="info"><slot></slot></div>
-    <div class="container">
+    <div class="container" :style="props.size ? 'height:55vh;' : ''">
         <div class="fade-top"></div>
-        <div class="content" ref="contentWrapper">
+        <div class="content" ref="contentWrapper" :style="props.size ? 'height:45vh;' : ''">
             <div
                 v-for="item in allEpisodeList"
                 :key="item.url"

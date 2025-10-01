@@ -66,7 +66,7 @@ const hander = () => {
                 <div class="text">
                     <div class="info">
                         <div class="title">{{ props.title }}</div>
-                        <div class="head" @click="hander">
+                        <div class="head" @click.stop.prevent="hander">
                             <div
                                 :class="{
                                     coll: dramaStore.isCollected(props.vid).value,

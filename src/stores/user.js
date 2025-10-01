@@ -19,3 +19,30 @@ export const useUserStore = defineStore(
     },
     { persist: true },
 )
+
+export const useVidStore = defineStore(
+    'vidInfo',
+    () => {
+        const vid = ref(0)
+        const showDetail = ref(false)
+
+        function setVidAndShowDetail(num) {
+            vid.value = num
+            console.log('vid:', vid.value)
+
+            showDetail.value = true
+            console.log('show:', showDetail.value)
+        }
+        const getVid = computed(() => vid.value)
+
+        function unShowDetial() {
+            showDetail.value = false
+            console.log('show:', showDetail.value)
+        }
+
+        const getShowdetial = computed(() => showDetail.value)
+
+        return { vid, setVidAndShowDetail, getVid, unShowDetial, getShowdetial, showDetail }
+    },
+    { persist: true },
+)

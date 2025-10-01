@@ -4,9 +4,13 @@ import Start from '@/views/Start/index.vue'
 import TabBar from './components/TabBar.vue'
 // import Start from '@/views/Start/index.vue'
 // import { ref } from 'vue'
-
+import Detail from '@/views/Detail/index.vue'
 import { useAppStore } from '@/stores/app'
 const appStore = useAppStore()
+
+import { useVidStore } from '@/stores/user'
+const vidStore = useVidStore()
+
 import { ref } from 'vue'
 // appStore.setIsReady()
 
@@ -24,8 +28,6 @@ const keepAliveList = ref(['Home', 'Mine'])
                     <component :is="Component" />
                 </keep-alive>
             </router-view>
-
-            <!-- <router-view /> -->
         </div>
         <TabBar class="tab-bar" />
     </div>

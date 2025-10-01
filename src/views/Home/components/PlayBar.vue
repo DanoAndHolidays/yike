@@ -7,6 +7,7 @@ import _ from 'lodash'
 import { applog } from '@/utils/applog'
 import ShareDrawer from './ShareDrawer.vue'
 import EndingInfo from './EndingInfo.vue'
+// import toDetial from '@/utils/toDetail'
 
 import avater_jungle from '@/assets/avater_jungle.jpg'
 import avater_cat from '@/assets/avater_cat.jpg'
@@ -15,6 +16,11 @@ import avater_sister from '@/assets/avater_sister.jpg'
 import avater_ji from '@/assets/avater_ji.jpg'
 import avater_gebi from '@/assets/avater_gebi.jpg'
 import avater_weixin from '@/assets/avater_weixin.jpg'
+
+// 用于跳转至详情页
+import router from '@/router'
+import { useVidStore } from '@/stores/user'
+const vidStore = useVidStore()
 
 const props = defineProps({
     Playing: {
@@ -116,6 +122,8 @@ const isLike = dramaStore.isLiked(props.vid)
 const isFavorite = dramaStore.isCollected(props.vid)
 const isShare = ref(false)
 const isMute = userStore.getIsMute() //默认静音
+
+// 控制抽屉的开关，这变量名，我自己起的，也是醉了
 const isEpisode = ref(false)
 
 const shareTitle = ref('分享给朋友')
@@ -298,6 +306,8 @@ const handleClosed = () => {
 }
 
 const openEpisodeMode = () => {
+    router.push('detail')
+    vidStore.setVidAndShowDetail(props.vid)
     createMessage('已进入追剧模式')
     isEpisode.value = false
 }
