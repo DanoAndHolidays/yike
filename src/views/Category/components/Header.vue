@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 
+const emit = defineEmits(['changecategory'])
+
 const renderList = ref([
     {
         title: '热门',
@@ -45,6 +47,11 @@ const renderList = ref([
 ])
 
 const curIndex = ref(0)
+
+const clickHandle = (index) => {
+    curIndex.value = index
+    emit('changecategory', curIndex.value, renderList.value[curIndex.value].name_en)
+}
 </script>
 
 <template>
@@ -56,7 +63,7 @@ const curIndex = ref(0)
             class="tag"
             v-for="item in renderList"
             :key="item.index"
-            @click="curIndex = item.index"
+            @click="clickHandle(item.index)"
         >
             <h3 :class="{ active: item.index == curIndex }">{{ item.title }}</h3>
         </div>
@@ -72,21 +79,20 @@ const curIndex = ref(0)
     height: 2.5rem;
     overflow: hidden;
     color: $text-color-4;
-
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 11;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
-    backdrop-filter: blur(1px);
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+    backdrop-filter: blur(15px);
     user-select: none;
+
     @media screen and (min-width: 500px) {
         & {
             cursor: pointer;
         }
     }
 
-    // border-bottom: 1px solid $tiktok-text-color-1;
     margin-bottom: 5px;
     .tag {
         .active {
@@ -95,7 +101,6 @@ const curIndex = ref(0)
             transition: color 0.3s;
             transform: scale(1.05);
             transform: translateY(1px);
-            opacity: 0.9;
         }
     }
 }

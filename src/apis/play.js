@@ -53,7 +53,7 @@ export const getNextEpisode = (vid, eid, page, limit, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/watch',
         method: 'GET',
-        param: {
+        params: {
             vid,
             eid,
             page,
@@ -75,7 +75,7 @@ export const getCategoryEpisode = (name_en, page, limit, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/list',
         method: 'GET',
-        param: {
+        params: {
             name_en,
             page,
             limit,
@@ -135,7 +135,7 @@ export const getWatchRecord = (uid = 815551832537446, page, zlsj = 'zlsj') => {
     return httpInstance({
         url: '/api/playlet/record',
         method: 'GET',
-        param: {
+        params: {
             uid,
             page,
             zlsj,
