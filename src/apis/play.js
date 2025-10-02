@@ -41,7 +41,7 @@ export const getAllEpisode = (vid, page, limit, zlsj = 'zlsj') => {
 }
 
 /**
- * @description 获取当前剧集之后的剧集（感觉没什么用
+ * @description 获取当前剧集之后的剧集
  * @param {Number} vid 短剧ID
  * @param {Number} eid 剧集ID
  * @param {Number} page 页数

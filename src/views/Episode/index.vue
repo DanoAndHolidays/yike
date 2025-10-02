@@ -20,7 +20,7 @@ const dramaStore = useDramaStore()
             <el-tab-pane>
                 <template #label name="a">
                     <span class="custom-tabs-label">
-                        <el-icon style="vertical-align: middle" size="24px"><Clock /></el-icon>
+                        <el-icon style="vertical-align: middle" size="21px"><Clock /></el-icon>
                         <div>历史 {{ dramaStore.watchRecordsCount }}</div>
                     </span>
                 </template>
@@ -29,7 +29,7 @@ const dramaStore = useDramaStore()
             <el-tab-pane>
                 <template #label name="a">
                     <span class="custom-tabs-label">
-                        <i class="fa-solid fa-star fa-xl"> </i>
+                        <i class="fa-solid fa-star fa-lg"> </i>
                         <div>收藏 {{ dramaStore.collectionsCount }}</div>
                     </span>
                 </template>
@@ -38,7 +38,7 @@ const dramaStore = useDramaStore()
             <el-tab-pane>
                 <template #label name="a">
                     <span class="custom-tabs-label">
-                        <i class="fa-solid fa-heart fa-xl"> </i>
+                        <i class="fa-solid fa-heart fa-lg"> </i>
                         <div>喜欢 {{ dramaStore.likesCount }}</div>
                     </span>
                 </template>

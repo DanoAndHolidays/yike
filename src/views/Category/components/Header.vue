@@ -87,12 +87,6 @@ const clickHandle = (index) => {
     backdrop-filter: blur(15px);
     user-select: none;
 
-    @media screen and (min-width: 500px) {
-        & {
-            cursor: pointer;
-        }
-    }
-
     margin-bottom: 5px;
     .tag {
         .active {

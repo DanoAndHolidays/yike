@@ -306,9 +306,9 @@ const handleClosed = () => {
 }
 
 const openEpisodeMode = () => {
-    router.push('detail')
+    router.push('/detail')
     vidStore.setVidAndShowDetail(props.vid)
-    createMessage('已进入追剧模式')
+    // createMessage('已进入追剧模式')
     isEpisode.value = false
 }
 </script>
@@ -407,7 +407,7 @@ const openEpisodeMode = () => {
                     </div>
                     <div class="episode-select">
                         <div class="button-group">
-                            <button @click="openEpisodeMode">进入追剧模式</button>
+                            <button @click="openEpisodeMode">详情</button>
                         </div>
                         <Page :vid="props.vid" @on-to-episode-mode="openEpisodeMode">
                             <div>全{{ props.episode_total }}集</div>

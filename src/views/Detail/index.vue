@@ -20,7 +20,7 @@ import { getAllEpisode } from '@/apis/play'
 const getAllEpisodeList = async (vid, page, limit) => {
     let res = await getAllEpisode(vid, page, limit)
     allEpisodeList.value = await res.data.data.data[0]
-    console.log(allEpisodeList.value)
+    // console.log(allEpisodeList.value)
 }
 
 onMounted(() => {

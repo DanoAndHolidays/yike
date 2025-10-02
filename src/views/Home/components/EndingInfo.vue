@@ -8,7 +8,7 @@ const emit = defineEmits(['onToEpisodeMode'])
             <div class="info">喜欢就追剧吧！</div>
             <div class="button-group">
                 <button @click="emit('onToEpisodeMode', 1)" @touchend="emit('onToEpisodeMode', 1)">
-                    进入追剧模式
+                    详情
                 </button>
             </div>
         </div>

@@ -1,6 +1,15 @@
 <script setup>
 import PlayBar from './PlayBar.vue'
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+    computed,
+    onActivated,
+    onBeforeMount,
+    onBeforeUnmount,
+    onDeactivated,
+    onMounted,
+    ref,
+    watch,
+} from 'vue'
 import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
 import LoadingPage from './LoadingPage.vue'
@@ -16,26 +25,18 @@ const playMode = computed(() => {
     console.log('playMode', false)
     return false
 })
+const vid_ref = ref(route.params.vid)
+const eid_ref = ref(route.params.eid)
 
-const playInfo = computed(() => {
-    if (playMode.value) {
-        return {
-            vid: route.params.vid,
-            eid: route.params.eid,
-        }
-    }
-})
-
-// 0上一个,1当前,2下一个
-const curIndex = ref(0)
-
+// 处理交互的数据
 const isDragging = ref(false)
 const startY = ref(0)
 const currentY = ref(0)
 const offsetY = ref(0)
-// const isRequire = ref(false)
-const videoInfoList = ref([])
 
+// 维护渲染用的队列
+const curIndex = ref(0)
+const videoInfoList = ref([])
 const videoElement = ref(null)
 
 /**
@@ -49,42 +50,41 @@ const dramaInfo = useDramaInfo()
 
 /**
  * 这部分倒底是做什么的我已经不记得了，我也不敢动...
+ * 没用了
  */
-// 存储当前的短剧信息，用于获取剧集信息
-import { useEpisodeStore } from '@/stores/episode'
-const episodeStore = useEpisodeStore()
+// // 存储当前的短剧信息，用于获取剧集信息
+// import { useEpisodeStore } from '@/stores/episode'
+// const episodeStore = useEpisodeStore()
 
-const updataCurEpisodeInfo = (obj) => {
-    // applog(obj)
-    episodeStore.updata(obj)
-}
+// const updataCurEpisodeInfo = (obj) => {
+//     episodeStore.updata(obj)
+// }
 
 // 目标切换距离
 const TARGGET_Y = ref(80)
 // 用于保证切换到制定视频，不会因为默认事件而影响
 // const TIME_INTEVAL = ref(400)
 
-const _requireNew = async (di) => {
-    videoInfoList.value = await updateVideoList(di)
-    // console.log('test1', videoInfoList.value)
+const isRequiring = ref(false)
+
+const _requireNew = async (vid, eid) => {
+    isRequiring.value = true
+    if (vid && eid) {
+        videoInfoList.value = await updateVideoList(vid, eid)
+        // console.log('有参数', videoInfoList.value)
+    } else {
+        videoInfoList.value = await updateVideoList()
+        // console.log('🈚参数', videoInfoList.value)
+    }
+
     videoInfoList.value.forEach((item) => {
         dramaInfo.updateDramaInfo(item)
     })
-
-    updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
+    isRequiring.value = false
+    // updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
 }
 
 const requireNew = _.debounce(_requireNew, 100)
-
-// const updataPlayInfo = () => {
-//     for (let video of videoList.value) {
-//         // showMessage(video)
-//         video.isPlaying = false
-//         // showMessage(video)
-//     }
-//     videoList.value[curIndex.value].isPlaying = true
-//     showMessage(videoList.value)
-// }
 
 // 开发辅助函数 显示提示
 const showMessage = (text) => {
@@ -95,7 +95,7 @@ const nextHandle = () => {
     if (curIndex.value == videoInfoList.value.length - 1) {
         // showMessage('nextHandle1:' + curIndex.value)
         createMessage('请求')
-        requireNew(false)
+        requireNew(route.params.vid, route.params.eid)
         curIndex.value = videoInfoList.value.length - 2
         // showMessage('nextHandle2:' + curIndex.value)
         scrollToCurrent(false)
@@ -110,7 +110,7 @@ const next = async () => {
         scrollToCurrent()
     } else {
         createMessage('到底了')
-        await requireNew(false)
+        await requireNew(route.params.vid, route.params.eid)
         setTimeout(() => {
             curIndex.value = 0
             scrollToCurrent()
@@ -295,7 +295,8 @@ const keyupHandle = (e) => {
 // const wheelHandle = (e) => {}
 
 onBeforeMount(async () => {
-    await requireNew()
+    await requireNew(route.params.vid, route.params.eid)
+    // console.log(videoInfoList.value)
 })
 
 const addKeyAndWheelEvent = () => {
@@ -308,10 +309,19 @@ const removeKeyAndWheelEvent = () => {
     window.removeEventListener('keyup', keyupHandle)
     window.removeEventListener('wheel', handleWheel)
 }
+watch(route, () => {
+    requireNew(route.params.vid, route.params.eid)
+    curIndex.value = 0
+    createMessage('切换中...')
+})
 
 onMounted(() => {
     scrollToCurrent()
+    addKeyAndWheelEvent()
+})
 
+onActivated(() => {
+    scrollToCurrent()
     addKeyAndWheelEvent()
 })
 
@@ -319,13 +329,13 @@ onBeforeUnmount(() => {
     removeKeyAndWheelEvent()
 })
 
-onMounted(() => {
-    // console.log('Video组件加载完毕')
+onDeactivated(() => {
+    removeKeyAndWheelEvent()
 })
 
-watch(curIndex, () => {
-    updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
-})
+// watch(curIndex, () => {
+//     updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
+// })
 
 const isEpisodeDrawerOpen = ref(false)
 
@@ -342,9 +352,11 @@ const handleOnEpisode = (e) => {
 const readyVideoNum = ref(0)
 
 const videosIsReady = computed(() => {
-    if (readyVideoNum.value >= videoInfoList.value.length && videoInfoList.value.length != 0) {
-        // console.log('yes')
-
+    if (
+        readyVideoNum.value >= videoInfoList.value.length &&
+        videoInfoList.value.length != 0 &&
+        !isRequiring.value
+    ) {
         return true
     } else {
         return false
@@ -400,7 +412,7 @@ const handleVideoReady = (e) => {
 <style scoped lang="scss">
 .v-enter-active,
 .v-leave-active {
-    transition: opacity 0.6s ease;
+    transition: opacity 0.3s ease;
 }
 
 .v-enter-from,

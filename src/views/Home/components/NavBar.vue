@@ -87,7 +87,7 @@ const curIndex = ref(0)
     }
 
     // border-bottom: 1px solid $tiktok-text-color-1;
-    margin-bottom: 5px;
+    // margin-bottom: 5px;
     .tag {
         .active {
             color: $text-color-1;
