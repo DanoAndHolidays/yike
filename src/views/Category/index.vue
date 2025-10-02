@@ -23,7 +23,7 @@ const categoryContentList = ref([])
 const getCategoryEpisodeList = async (name_en, page, limit) => {
     let res = await getCategoryEpisode(name_en, page, limit)
     categoryContentList.value = await res.data.data.data
-    console.log(categoryContentList.value)
+    // console.log(categoryContentList.value)
 }
 
 const handleChange = async (index, name_en) => {

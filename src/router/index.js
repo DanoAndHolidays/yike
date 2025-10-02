@@ -4,6 +4,7 @@ import Category from '@/views/Category/index.vue'
 import Episode from '@/views/Episode/index.vue'
 import Home from '@/views/Home/index.vue'
 import Detail from '@/views/Detail/index.vue'
+import Play from '@/views/Play/index.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,10 @@ const router = createRouter({
         {
             path: '/detail',
             component: Detail,
+        },
+        {
+            path: '/play/:vid/:eid',
+            component: Play,
         },
     ],
 })

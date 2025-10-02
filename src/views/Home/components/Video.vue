@@ -5,7 +5,26 @@ import { createMessage } from '@/utils/message'
 import updateVideoList from '@/utils/handleVideo'
 import LoadingPage from './LoadingPage.vue'
 import _ from 'lodash'
-// import { applog } from '@/utils/applog'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+const playMode = computed(() => {
+    if (route.params.vid && route.params.eid) {
+        console.log('playMode', true)
+        return true
+    }
+    console.log('playMode', false)
+    return false
+})
+
+const playInfo = computed(() => {
+    if (playMode.value) {
+        return {
+            vid: route.params.vid,
+            eid: route.params.eid,
+        }
+    }
+})
 
 // 0上一个,1当前,2下一个
 const curIndex = ref(0)
@@ -323,8 +342,6 @@ const handleOnEpisode = (e) => {
 const readyVideoNum = ref(0)
 
 const videosIsReady = computed(() => {
-    // console.log(readyVideoNum.value)
-
     if (readyVideoNum.value >= videoInfoList.value.length && videoInfoList.value.length != 0) {
         // console.log('yes')
 

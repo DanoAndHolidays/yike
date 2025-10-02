@@ -7,7 +7,7 @@ import router from '@/router'
 const tabBarIndex = ref(0)
 const handleClick = (index) => {
     tabBarIndex.value = index
-    applog(`${index}?`)
+    applog(`跳转至第${index}页`)
 
     const routeLink = ref(['/', '/category', '/', '/episode', '/mine'])
 

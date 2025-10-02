@@ -48,7 +48,7 @@ const handleHistory = async () => {
 
     renderInfo.value = newCollections.reverse()
 
-    console.log('history renderInfo', renderInfo.value)
+    // console.log('history renderInfo', renderInfo.value)
 }
 
 onMounted(() => {

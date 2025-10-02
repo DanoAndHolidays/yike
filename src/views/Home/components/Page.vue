@@ -1,6 +1,7 @@
 <script setup>
 import { getAllEpisode } from '@/apis/play'
 import { computed, onMounted, ref, nextTick } from 'vue'
+import router from '@/router'
 
 const props = defineProps({
     vid: Number,
@@ -8,6 +9,7 @@ const props = defineProps({
 })
 
 import { useDramaStore } from '@/stores/useDramaStore'
+import { useRoute } from 'vue-router'
 const dramaStore = useDramaStore()
 
 const isWatched = (eid) => {
@@ -67,6 +69,16 @@ onMounted(() => {
 })
 
 const emit = defineEmits(['onToEpisodeMode'])
+
+const route = useRoute()
+
+const toPlay = (vid, eid) => {
+    emit('onToEpisodeMode', true)
+
+    router.push(`/play/${vid}/${eid}`)
+
+    // console.log('toPlay', vid, eid)
+}
 </script>
 
 <template>
@@ -79,6 +91,7 @@ const emit = defineEmits(['onToEpisodeMode'])
                 :key="item.url"
                 :ref="(el) => (episodeRefs[item.eid] = el)"
                 :class="{ wached: isWatched(item.eid), lasted: islastEpisode(item.eid) }"
+                @click="toPlay(item.vid, item.eid)"
             >
                 {{ item.episode }}
             </div>

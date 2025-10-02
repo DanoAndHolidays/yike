@@ -28,16 +28,16 @@ export const useVidStore = defineStore(
 
         function setVidAndShowDetail(num) {
             vid.value = num
-            console.log('vid:', vid.value)
+            // console.log('vid:', vid.value)
 
             showDetail.value = true
-            console.log('show:', showDetail.value)
+            // console.log('show:', showDetail.value)
         }
         const getVid = computed(() => vid.value)
 
         function unShowDetial() {
             showDetail.value = false
-            console.log('show:', showDetail.value)
+            // console.log('show:', showDetail.value)
         }
 
         const getShowdetial = computed(() => showDetail.value)

@@ -409,7 +409,7 @@ const openEpisodeMode = () => {
                         <div class="button-group">
                             <button @click="openEpisodeMode">进入追剧模式</button>
                         </div>
-                        <Page :vid="props.vid">
+                        <Page :vid="props.vid" @on-to-episode-mode="openEpisodeMode">
                             <div>全{{ props.episode_total }}集</div>
                         </Page>
                     </div>
