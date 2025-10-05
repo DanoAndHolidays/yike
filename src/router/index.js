@@ -1,37 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Mine from '@/views/Mine/index.vue'
-import Category from '@/views/Category/index.vue'
-import Episode from '@/views/Episode/index.vue'
+
 import Home from '@/views/Home/index.vue'
-import Detail from '@/views/Detail/index.vue'
-import Play from '@/views/Play/index.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            component: Home,
+           component: () => import('@/views/Home/index.vue'),
         },
         {
             path: '/mine',
-            component: Mine,
+            component: () => import('@/views/Mine/index.vue'),
         },
         {
             path: '/category',
-            component: Category,
+            component: () => import('@/views/Category/index.vue'),
         },
         {
             path: '/episode',
-            component: Episode,
+            component: () => import('@/views/Episode/index.vue'),
         },
         {
             path: '/detail',
-            component: Detail,
+            component: () => import('@/views/Detail/index.vue'),
         },
         {
             path: '/play/:vid/:eid',
-            component: Play,
+            component: () => import('@/views/Play/index.vue'),
         },
     ],
 })

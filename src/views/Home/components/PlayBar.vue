@@ -141,7 +141,6 @@ const handleLike = () => {
 
 const isEnded = ref(false)
 let player = null
-// const src = ref('https://playletcdn.nnchenxin.cn/video/sqzalsbnl/17.mp4')
 
 const autoPlay = (playing) => {
     if (playing) {
@@ -173,20 +172,17 @@ const toggleFavorite = (e) => {
 
 // 触摸开始事件
 function handleTouchStart(e) {
-    // e.stopPropagation()
-    e.preventDefault()
+    // console.log('handleTouchStart')
 
     const touch = e.touches ? e.touches[0] : e
     startX = touch.clientX
     startY = touch.clientY
-
     isDragging = false
 }
 
 // 触摸移动事件
 function handleTouchMove(e) {
-    // e.stopPropagation()
-    e.preventDefault()
+    // console.log('handleTouchMove')
 
     if (!startX || !startY) return
 
@@ -206,8 +202,7 @@ function handleTouchMove(e) {
 
 // 触摸结束事件
 function handleTouchEnd(e) {
-    // e.stopPropagation()
-    e.preventDefault()
+    // console.log('handleTouchEnd')
 
     if (!startX || !startY) return
 
@@ -224,7 +219,57 @@ function handleTouchEnd(e) {
         }
     }
 
-    // 重置状态
+    startX = 0
+    startY = 0
+}
+
+// 鼠标按下事件
+function handleMouseDown(e) {
+    // console.log('handleMouseDown')
+
+    startX = e.clientX
+    startY = e.clientY
+    isDragging = false
+}
+
+// 鼠标移动事件
+function handleMouseMove(e) {
+    // console.log('handleMouseMove')
+
+    if (!startX || !startY) return
+
+    const currentX = e.clientX
+    const currentY = e.clientY
+
+    const deltaX = Math.abs(currentX - startX)
+    const deltaY = Math.abs(currentY - startY)
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+    // 如果移动距离超过阈值，则认为是拖动
+    if (distance > currentMoveThreshold) {
+        isDragging = true
+    }
+}
+
+// 鼠标抬起事件
+function handleMouseUp(e) {
+    // console.log('handleMouseUp')
+
+    if (!startX || !startY) return
+
+    // 如果不是拖动且时间小于阈值，则认为是点击
+    if (!isDragging) {
+        // console.log('点击，不是拖动')
+
+        if (player.paused()) {
+            player.play()
+            createMessage('继续播放')
+        } else {
+            player.pause()
+            createMessage('暂停播放')
+        }
+    }
+
     startX = 0
     startY = 0
 }
@@ -419,11 +464,17 @@ const openEpisodeMode = () => {
 
         <EndingInfo @onToEpisodeMode="openEpisodeMode" class="end-info" v-if="isEnded" />
 
-        <div class="video" :class="{ 'is-ended': isEnded }">
+        <div
+            class="video"
+            :class="{ 'is-ended': isEnded }"
+            @touchstart.prevent="handleTouchStart"
+            @touchmove.prevent="handleTouchMove"
+            @touchend.prevent="handleTouchEnd"
+            @mousedown.prevent="handleMouseDown"
+            @mousemove.prevent="handleMouseMove"
+            @mouseup.prevent="handleMouseUp"
+        >
             <video
-                @touchstart="handleTouchStart"
-                @touchmove="handleTouchMove"
-                @touchend="handleTouchEnd"
                 :id="props.videoInfo"
                 webkit-playsinline="true"
                 playsinline="ture"

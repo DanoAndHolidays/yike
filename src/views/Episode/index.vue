@@ -56,3 +56,4 @@ const dramaStore = useDramaStore()
     color: $text-color-1;
 }
 </style>
+

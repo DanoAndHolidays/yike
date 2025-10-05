@@ -16,7 +16,7 @@ import { ref } from 'vue'
 
 const isReady = appStore.getIsReady()
 
-const keepAliveList = ref(['Home', 'Mine', 'Category'])
+const keepAliveList = ref(['Mine', 'Category'])
 </script>
 
 <template>

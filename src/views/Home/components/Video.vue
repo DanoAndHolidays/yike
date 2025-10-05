@@ -86,22 +86,6 @@ const _requireNew = async (vid, eid) => {
 
 const requireNew = _.debounce(_requireNew, 100)
 
-// 开发辅助函数 显示提示
-const showMessage = (text) => {
-    console.log('---CONSOLE---', text)
-}
-
-const nextHandle = () => {
-    if (curIndex.value == videoInfoList.value.length - 1) {
-        // showMessage('nextHandle1:' + curIndex.value)
-        createMessage('请求')
-        requireNew(route.params.vid, route.params.eid)
-        curIndex.value = videoInfoList.value.length - 2
-        // showMessage('nextHandle2:' + curIndex.value)
-        scrollToCurrent(false)
-        // showMessage('nextHandle3:' + curIndex.value)
-    }
-}
 
 const next = async () => {
     if (curIndex.value < videoInfoList.value.length - 1) {
@@ -176,7 +160,7 @@ const moveWithScroll = _.debounce(_moveWithScroll, 5)
 
 // 触摸开始
 const onTouchStart = (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     e.preventDefault()
     isDragging.value = true
     startY.value = e.touches[0].clientY
@@ -185,8 +169,8 @@ const onTouchStart = (e) => {
 
 // 触摸移动
 const onTouchMove = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
+    // e.stopPropagation()
+    // e.preventDefault()
     if (!isDragging.value) return
     // console.log('正在移动')
 
@@ -201,10 +185,8 @@ const onTouchMove = (e) => {
 
 // 触摸结束
 const onTouchEnd = (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     e.preventDefault()
-    // console.log('触摸结束', e)
-    // showMessage('move:' + offsetY.value)
     if (!isDragging.value) return
 
     isDragging.value = false
@@ -213,12 +195,7 @@ const onTouchEnd = (e) => {
         prev()
     } else if (offsetY.value < -TARGGET_Y.value) {
         next()
-
-        // setTimeout(() => {
-        //     nextHandle()
-        // }, 1000)
     } else {
-        // 滚动到当前视频
         scrollToCurrent()
     }
 
@@ -227,7 +204,7 @@ const onTouchEnd = (e) => {
 
 // 鼠标事件（用于桌面端测试)
 const onMouseDown = (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     // showMessage(e)
     isDragging.value = true
     startY.value = e.clientY
@@ -333,9 +310,6 @@ onDeactivated(() => {
     removeKeyAndWheelEvent()
 })
 
-// watch(curIndex, () => {
-//     updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
-// })
 
 const isEpisodeDrawerOpen = ref(false)
 
