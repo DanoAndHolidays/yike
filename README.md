@@ -34,6 +34,7 @@
   <img src="episode.gif" width="200" style="display:inline-block;" />
   <img src="mine.gif" width="200" style="display:inline-block;" />
 </p>
+（有展示GIF，可能加载较慢）
 
 ### API与请求库
 
