@@ -10,10 +10,12 @@ import {
     ref,
     watch,
 } from 'vue'
-import { createMessage } from '@/utils/message'
+import { createMessage } from '@/utils/message.ts'
 import updateVideoList from '@/utils/handleVideo'
 import LoadingPage from './LoadingPage.vue'
-import _ from 'lodash'
+
+import { debounce } from 'lodash-es'
+
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
@@ -84,8 +86,7 @@ const _requireNew = async (vid, eid) => {
     // updataCurEpisodeInfo(videoInfoList.value[curIndex.value])
 }
 
-const requireNew = _.debounce(_requireNew, 100)
-
+const requireNew = debounce(_requireNew, 100)
 
 const next = async () => {
     if (curIndex.value < videoInfoList.value.length - 1) {
@@ -156,7 +157,7 @@ const _moveWithScroll = () => {
     }
 }
 
-const moveWithScroll = _.debounce(_moveWithScroll, 5)
+const moveWithScroll = debounce(_moveWithScroll, 5)
 
 // 触摸开始
 const onTouchStart = (e) => {
@@ -257,7 +258,7 @@ const _handleWheel = (e) => {
     }
 }
 
-const handleWheel = _.debounce(_handleWheel, 200)
+const handleWheel = debounce(_handleWheel, 200)
 
 const keyupHandle = (e) => {
     e.preventDefault()
@@ -309,7 +310,6 @@ onBeforeUnmount(() => {
 onDeactivated(() => {
     removeKeyAndWheelEvent()
 })
-
 
 const isEpisodeDrawerOpen = ref(false)
 

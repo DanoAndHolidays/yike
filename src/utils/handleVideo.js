@@ -2,7 +2,6 @@ import { getRandom } from '@/apis/play'
 import { getVideoAddress } from '@/apis/play'
 import { ref } from 'vue'
 import { createMessage } from './message'
-import { getNextEpisode } from '@/apis/play'
 import { getAllEpisode } from '@/apis/play'
 
 const VIDEO_LIST_LEBGTH = 5

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { applog } from '@/utils/applog'
+import { applog } from '@/utils/applog.ts'
 import router from '@/router'
 
 // 默认首页

@@ -4,7 +4,7 @@
 
 # 一刻短剧
 
-![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/JSes6-FFCA28) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF) ![](https://img.shields.io/badge/CSS3-7E57C2)
+![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/JSes6-FFCA28) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF) ![](https://img.shields.io/badge/TS-0288D1) ![](https://img.shields.io/badge/CSS3-7E57C2)
 
 </div>
 
@@ -13,6 +13,7 @@
 [一刻短剧：](https://danoandholidays.github.io/yike/)https://danoandholidays.github.io/yike/ _推荐使用移动设备打开_
 
 ### 项目介绍
+
 > 一个高仿抖音的**短剧SPA应用**。复刻了核心交互，在性能优化、数据架构、工程化层面进行了实践探索
 
 **一刻短剧** 基于Apifox公开项目 **「悦享好剧」** 开发，仅做学习研究使用。由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖屏播放体验，前端界面将模仿抖音的交互与视觉风格。也算是我之前开发的网站 [PLAYLET-APP](https://danoandholidays.github.io/PLAYLET-APP/) 的二次开发。之前的项目，原生开发功能全靠手撸，所以有很多问题和没有写完的部分，我也不打算改了，直接重新写一个。
@@ -39,7 +40,7 @@
 
 #### 一、架构设计：
 
-- **技术栈**：采用 `Vue 3` + `Pinia` + `Vite` + `Sass` + `ElementPlus`构建
+- **技术栈**：采用 `Vue 3` + `Pinia` + `Vite` + `Sass` + `ElementPlus` + `TS`构建
 - **组件化与抽象能力**：
   - **核心播放器组件化**：将复杂的视频播放与交互逻辑（手势处理、队列管理）封装成独立组件，并通过 Props/Events 实现与业务逻辑的解耦，体现了组件的高内聚、低耦合
   - **通用组件复用**：剧集选择、分享等功能均基于同一套抽屉组件扩展，通过灵活的插槽和状态注入，实现了UI与逻辑复用
@@ -60,13 +61,14 @@
   - **路由级懒加载**：通过实验验证了懒加载对首屏时间的优化效果，并最终采纳
   - **事件优化**：对滑动、滚轮等高频事件合理应用防抖与节流，确保了性能敏感场景下的页面流畅度。
   - 采用 `<KeepAlive>` 与 `<Transition>` 组合，实现了页面和组件的状态缓存与无缝过渡，提升了应用的质感。
+- **核心工具函数使用TS类型重写**：保证调用时的稳定、减少维护成本
 
 #### 四、用户体验：
 
 - **多模式播放路径设计**：通过复用首页的滑动播放组件，设计“随机”与“追剧”两种用户场景，并通过统一的剧集抽屉和详情页进行串联
 - **跨端交互适配**：移动优先，为桌面端也提供了键盘、滚轮等交互支持（可能会有Bug
 
->「一刻短剧Yike」应该算是我第一次系统地独立完成的一个功能完整的项目，虽然技术难点不够亮眼，没有高大上的技巧，但也算是一个真正的开始，从最开始的“模仿界面”，到一个具有我自己UI/UX设计风格的APP，经历一个多月的时间，学会了很多，我也会持续的将新学的知识应用于此项目...
+> 「一刻短剧Yike」应该算是我第一次系统地独立完成的一个功能完整的项目，虽然技术难点不够亮眼，没有高大上的技巧，但也算是一个真正的开始，从最开始的“模仿界面”，到一个具有我自己UI/UX设计风格的APP，经历一个多月的时间，学会了很多，我也会持续的将新学的知识应用于此项目...
 
 ---
 
@@ -219,6 +221,79 @@
 - 今天修了一些bug，这个项目暂时就不会再继续写了，等有新的想法再说吧，我会持续的将新的知识集成到这个项目。
 - 这是一个常见的浏览器安全限制，尤其是在自动播放音视频时。现代浏览器为了防止打扰用户，通常要求用户与页面进行某种交互（例如点击、触摸等）后，才能播放音频或视频。因此，如果在没有用户交互的情况下调用 play() 方法，就会出现这个错误。
 - 懒加载路由 首页没有路由懒加载2.03s、1.59s、1.84s、2.00s、1.81s、1.84、1.90s、1.99s、1.87s、1.81s。使用懒加载1.66s、1.91s、1.86、1.87s、1.82s、1.57s、1.80s、1.83s、2.10s、1.80s。对于现代网页应用来说，2 秒以内的加载时间通常是可以接受的。尽管使用了懒加载，平均加载时间略微减少（大约减少了 0.03 秒）。这表明懒加载确实有一些优化效果，但差异不大。这也意味着首页的大小可能并没有达到需要通过懒加载优化的程度。懒加载对首页加载时间的影响较小，因为首页可能本身并不庞大，使用懒加载后，平均加载时间略微减少，但变化幅度较小，加载波动有所增加。最终还是采用首页的懒加载
+
+### 10.9
+今天使用ts重写请求接口，进行了打包优化
+
+我将elementplus单独分包出来：可以看到第三方库全部加起来中的1/3是饿了么，还有大量的icon图标，最开始使用全部导入的决定就是一个错误，我拉了一坨大的在项目里
+
+使用插件rollup-plugin-visualizer分析打包结果，其中lodash、video.js与ElementPlus所占的空间最多，通过饿了么自动导入，lodash部分引入，手动导入图标与仅导入Video.js核心
+
+
+```shell
+PS G:\Save\Grogramming\Vue3\yike> npm run build:analyze
+
+> yike@0.0.0 build:analyze
+> vite build --mode analyze
+
+当前开发模式： analyze
+vite v7.1.9 building for analyze...
+✓ 1578 modules transformed.
+dist/assets/icon-zR7YAv7b.png                   0.47 kB
+dist/index.html                                 1.81 kB │ gzip:   0.72 kB
+dist/assets/avater-DJtw_nxm.jpg                 2.12 kB
+dist/assets/bg-Ds13Oz8b.jpg                    11.67 kB
+dist/assets/avater_junhe-bDLUIwvI.webp         17.59 kB
+dist/assets/avater_ji-CulGzS0z.webp            22.12 kB
+dist/assets/avater_sister-EG9VXyg1.webp        40.19 kB
+dist/assets/avater_gebi-D1-GHdH-.webp          40.25 kB
+dist/stats.html                             1,021.13 kB │ gzip: 116.85 kB
+dist/assets/index-BZ1GMPAk.css                  0.59 kB │ gzip:   0.32 kB
+dist/assets/index-cshfLizc.css                  0.67 kB │ gzip:   0.40 kB
+dist/assets/index-D1BtapOu.css                  0.90 kB │ gzip:   0.48 kB
+dist/assets/index-pavrX4tv.css                  4.37 kB │ gzip:   1.12 kB
+dist/assets/index-D-VbuxhM.css                  4.80 kB │ gzip:   0.99 kB
+dist/assets/Video-BNK7P4i1.css                  5.76 kB │ gzip:   1.54 kB
+dist/assets/index-CFMgteSW.css                 12.18 kB │ gzip:   2.63 kB
+dist/assets/element-core-BYwOOVMN.css          26.66 kB │ gzip:   4.69 kB
+dist/assets/message-C0jGIuzQ.js                 0.14 kB │ gzip:   0.15 kB
+dist/assets/play-er5xd5JJ.js                    0.47 kB │ gzip:   0.25 kB
+dist/assets/CategoryCard-vKqGURIo.js            0.78 kB │ gzip:   0.48 kB
+dist/assets/useDramaInfo-TYOlYWlc.js            1.11 kB │ gzip:   0.53 kB
+dist/assets/index-C4xJit93.js                   1.35 kB │ gzip:   0.74 kB
+dist/assets/index-B5yvrhrR.js                   1.60 kB │ gzip:   0.88 kB
+dist/assets/Page-BADQaltE.js                    1.81 kB │ gzip:   1.05 kB
+dist/assets/index-DThusuqW.js                   2.01 kB │ gzip:   1.09 kB
+dist/assets/index-QDFXY1GY.js                   2.45 kB │ gzip:   1.35 kB
+dist/assets/useDramaStore-Cgg94Uid.js           2.51 kB │ gzip:   0.95 kB
+dist/assets/element-core-BiYJtFnd.js            3.45 kB │ gzip:   1.51 kB
+dist/assets/vendor-other-BTrOqZDZ.js            3.61 kB │ gzip:   1.61 kB
+dist/assets/index-Duul6NdU.js                   5.17 kB │ gzip:   2.05 kB
+dist/assets/index-DCnPn4Ox.js                   7.26 kB │ gzip:   2.34 kB
+dist/assets/element-utils-D4GGykBd.js           8.71 kB │ gzip:   4.09 kB
+dist/assets/index-CR1mCED1.js                  14.20 kB │ gzip:   8.03 kB
+dist/assets/lodash-utils-Ck2_itEy.js           17.57 kB │ gzip:   6.35 kB
+dist/assets/vue-ecosystem-CoKluZm0.js          27.17 kB │ gzip:  11.18 kB
+dist/assets/element-components-C848VpBO.js     33.57 kB │ gzip:  12.54 kB
+dist/assets/axios-http-ngrFHoWO.js             36.01 kB │ gzip:  14.56 kB
+dist/assets/Video-ColhTa6L.js                  59.86 kB │ gzip:  41.23 kB
+dist/assets/vue-chunks-X15gNV_l.js             90.75 kB │ gzip:  34.98 kB
+✓ built in 4.28s
+
+✨ [vite-plugin-imagemin]- compressed image resource successfully:
+dist/assets/avater-DJtw_nxm.jpg  -91%  22.04kb / tiny: 2.07kb
+dist/assets/bg-Ds13Oz8b.jpg      -80%  55.19kb / tiny: 11.40kb
+dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
+```
+最后的打包结果还算满意，但是vite-plugin-imagemin有BUG不能压缩webp，也可能是兼容问题。
+### TS
+
+- 使用ts重写请求接口
+- 使用ts重构部分组件的props
+
+### monorepo与打包
+
+- 使用Webpack与vite打包
 
 ### 未来展望...
 

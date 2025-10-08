@@ -1,21 +1,20 @@
 <script setup>
 import { createMessage } from '@/utils/message'
 import { ref, onMounted, watch, computed } from 'vue'
-import videojs from 'video.js'
-import 'video.js/dist/video-js.css'
-import _ from 'lodash'
-import { applog } from '@/utils/applog'
+// import videojs from 'video.js/core.es.js';
+// import 'video.js/dist/video-js.css'
 import ShareDrawer from './ShareDrawer.vue'
 import EndingInfo from './EndingInfo.vue'
 // import toDetial from '@/utils/toDetail'
 
-import avater_jungle from '@/assets/avater_jungle.jpg'
-import avater_cat from '@/assets/avater_cat.jpg'
-import avater_junhe from '@/assets/avater_junhe.jpg'
-import avater_sister from '@/assets/avater_sister.jpg'
-import avater_ji from '@/assets/avater_ji.jpg'
-import avater_gebi from '@/assets/avater_gebi.jpg'
-import avater_weixin from '@/assets/avater_weixin.jpg'
+
+import avater_jungle from '@/assets/avater_jungle.webp'
+import avater_cat from '@/assets/avater_cat.webp'
+import avater_junhe from '@/assets/avater_junhe.webp'
+import avater_sister from '@/assets/avater_sister.webp'
+import avater_ji from '@/assets/avater_ji.webp'
+import avater_gebi from '@/assets/avater_gebi.webp'
+import avater_weixin from '@/assets/avater_weixin.webp'
 
 // 用于跳转至详情页
 import router from '@/router'
@@ -275,6 +274,11 @@ function handleMouseUp(e) {
 }
 
 onMounted(() => {
+    // 确保 videojs 已通过 CDN 加载
+    if (typeof window.videojs === 'undefined') {
+        console.error('video.js 未加载，请检查 CDN 引入')
+        return
+    }
     // 添加初始化宽和高，否则加载播放器的时候会闪一下,添加了还是哈
     let options = {
         height: '1415',
@@ -297,7 +301,7 @@ onMounted(() => {
         },
         controls: true,
     }
-    player = videojs(props.videoInfo, options, function onPlayerReady() {
+    player = window.videojs(props.videoInfo, options, function onPlayerReady() {
         emit('onVideoReady', 1)
         appStore.setIsReady()
     })
