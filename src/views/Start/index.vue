@@ -3,7 +3,7 @@
 <template>
     <div class="container">
         <div class="icon">
-            <img src="/src/assets/icon.png" alt="图标" />
+            <img src="/public/icon.png" alt="图标" />
         </div>
 
         <div class="text">

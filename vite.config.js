@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -7,15 +7,37 @@ import ViteImagemin from 'vite-plugin-imagemin'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import imageminWebp from 'imagemin-webp'
+
+const ViteImageminOptions = {
+    webp: {
+        quality: 20,
+    },
+    gifsicle: {
+        optimizationLevel: 3,
+        interlaced: false,
+    },
+    optipng: {
+        optimizationLevel: 7,
+    },
+    mozjpeg: {
+        quality: 75,
+    },
+    pngquant: {
+        quality: [0.6, 0.8],
+        speed: 4,
+    },
+    svgo: {
+        plugins: [
+            {
+                removeViewBox: false,
+            },
+        ],
+    },
+}
 
 export default defineConfig(({ mode }) => {
-    console.log('当前开发模式：', mode)
+    console.log('当前开发模式：', mode, ' @替换为:', new URL('./src', import.meta.url).pathname)
 
-    // 加载环境变量
-    const env = loadEnv(mode, process.cwd(), '')
-
-    // 只在开发环境启用 visualizer
     const plugins = [
         vue(),
         vueDevTools(),
@@ -25,40 +47,16 @@ export default defineConfig(({ mode }) => {
         Components({
             resolvers: [ElementPlusResolver()],
         }),
-        ViteImagemin({
-            webp: {
-                quality: 20,
-            },
-            gifsicle: {
-                optimizationLevel: 3,
-                interlaced: false,
-            },
-            optipng: {
-                optimizationLevel: 7,
-            },
-            mozjpeg: {
-                quality: 75,
-            },
-            pngquant: {
-                quality: [0.6, 0.8],
-                speed: 4,
-            },
-            svgo: {
-                plugins: [
-                    {
-                        removeViewBox: false,
-                    },
-                ],
-            },
-        }),
+        ViteImagemin(ViteImageminOptions),
     ]
+
     // 只在开发模式下添加 visualizer
     if (mode === 'development' || mode === 'analyze') {
         plugins.push(
             visualizer({
                 emitFile: true,
                 filename: 'stats.html',
-                open: true, // 可选：自动在浏览器打开分析报告
+                open: true, // 自动在浏览器打开分析报告
             }),
         )
     }
