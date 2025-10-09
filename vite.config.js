@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -77,6 +78,9 @@ export default defineConfig(({ mode }) => {
           `,
                 },
             },
+        },
+        test: {
+            
         },
         build: {
             // 设置 Base64 内联阈值 (16KB 以下转 Base64)

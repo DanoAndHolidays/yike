@@ -15,7 +15,8 @@
     "build:analyze": "vite build --mode analyze",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "test": "vitest run"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -43,6 +44,7 @@
     "video.js": "^8.23.4",
     "vite": "^7.0.6",
     "vite-plugin-imagemin": "^0.6.1",
-    "vite-plugin-vue-devtools": "^8.0.0"
+    "vite-plugin-vue-devtools": "^8.0.0",
+    "vitest": "^3.2.4"
   }
 }

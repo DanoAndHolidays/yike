@@ -291,14 +291,20 @@ dist/assets/bg-Ds13Oz8b.jpg      -80%  55.19kb / tiny: 11.40kb
 dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
 ```
 最后的打包结果还算满意，但是vite-plugin-imagemin有BUG不能压缩webp，也可能是兼容问题。
-### TS
 
-- 使用ts重写请求接口
-- 使用ts重构部分组件的props
+### 10.9
+- 在项目中使用Vitest进行单元测试
+>Vitest的文档我比较喜欢，不晦涩能看懂而且有很多解释👍
 
-### monorepo与打包
+- 准备工程化实践
+  - prettier ESlint
+  - git提交规范 集合单眼测试
 
-- 使用Webpack与vite打包
+### 打包
+
+- 练习使用Webpack打包
+
+### monorepo
 
 ### 未来展望...
 
