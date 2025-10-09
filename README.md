@@ -1,6 +1,10 @@
 <div align="center">
 
-![logo](/logo.png) ![](/icon.png)
+<img width="260" alt="logo" src="https://github.com/DanoAndHolidays/yike/blob/main/media/logo.png?raw=true">
+
+<img width="120" alt="icon" src="https://github.com/DanoAndHolidays/yike/blob/main/media/icon.png?raw=true">
+
+
 
 # 一刻短剧
 
@@ -29,10 +33,14 @@
 - 「我的」静态的个人信息展示
 
 <p align="center">
-  <img src="home.gif" width="200" style="display:inline-block;" />
-  <img src="category.gif" width="200" style="display:inline-block;" />
-  <img src="episode.gif" width="200" style="display:inline-block;" />
-  <img src="mine.gif" width="200" style="display:inline-block;" />
+  <img src="https://github.com/DanoAndHolidays/yike/blob/main/media/home.gif?raw=true" width="200" style="display:inline-block;" />
+
+  <img src="https://github.com/DanoAndHolidays/yike/blob/main/media/category.gif?raw=true" width="200" style="display:inline-block;" />
+
+  <img src="https://github.com/DanoAndHolidays/yike/blob/main/media/episode.gif?raw=true" width="200" style="display:inline-block;" />
+
+  <img src="https://github.com/DanoAndHolidays/yike/blob/main/media/mine.gif?raw=true" width="200" style="display:inline-block;" />
+
 </p>
 （有展示GIF，可能加载较慢）
 
@@ -228,12 +236,12 @@
 - 懒加载路由 首页没有路由懒加载2.03s、1.59s、1.84s、2.00s、1.81s、1.84、1.90s、1.99s、1.87s、1.81s。使用懒加载1.66s、1.91s、1.86、1.87s、1.82s、1.57s、1.80s、1.83s、2.10s、1.80s。对于现代网页应用来说，2 秒以内的加载时间通常是可以接受的。尽管使用了懒加载，平均加载时间略微减少（大约减少了 0.03 秒）。这表明懒加载确实有一些优化效果，但差异不大。这也意味着首页的大小可能并没有达到需要通过懒加载优化的程度。懒加载对首页加载时间的影响较小，因为首页可能本身并不庞大，使用懒加载后，平均加载时间略微减少，但变化幅度较小，加载波动有所增加。最终还是采用首页的懒加载
 
 ### 10.9
+
 今天使用ts重写请求接口，进行了打包优化
 
 我将elementplus单独分包出来：可以看到第三方库全部加起来中的1/3是饿了么，还有大量的icon图标，最开始使用全部导入的决定就是一个错误，我拉了一坨大的在项目里
 
 使用插件rollup-plugin-visualizer分析打包结果，其中lodash、video.js与ElementPlus所占的空间最多，通过饿了么自动导入，lodash部分引入，手动导入图标与仅导入Video.js核心
-
 
 ```shell
 PS G:\Save\Grogramming\Vue3\yike> npm run build:analyze
@@ -290,11 +298,14 @@ dist/assets/avater-DJtw_nxm.jpg  -91%  22.04kb / tiny: 2.07kb
 dist/assets/bg-Ds13Oz8b.jpg      -80%  55.19kb / tiny: 11.40kb
 dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
 ```
+
 最后的打包结果还算满意，但是vite-plugin-imagemin有BUG不能压缩webp，也可能是兼容问题。
 
 ### 10.9
+
 - 在项目中使用Vitest进行单元测试
->Vitest的文档我比较喜欢，不晦涩能看懂而且有很多解释👍
+
+  > Vitest的文档我比较喜欢，不晦涩能看懂而且有很多解释👍
 
 - 准备工程化实践
   - prettier ESlint
