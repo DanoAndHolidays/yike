@@ -36,6 +36,7 @@
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
     "globals": "^16.3.0",
+    "nodemon": "^3.1.10",
     "prettier": "3.6.2",
     "rollup-plugin-visualizer": "^6.0.4",
     "unplugin-auto-import": "^20.2.0",

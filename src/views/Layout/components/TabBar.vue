@@ -9,7 +9,7 @@ const handleClick = (index) => {
     tabBarIndex.value = index
     applog(`跳转至第${index}页`)
 
-    const routeLink = ref(['/', '/category', '/', '/episode', '/mine'])
+    const routeLink = ref(['/', '/category', '/upload', '/episode', '/mine'])
 
     router.push(routeLink.value[index])
 }

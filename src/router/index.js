@@ -27,6 +27,10 @@ const router = createRouter({
             path: '/play/:vid/:eid',
             component: () => import('@/views/Play/index.vue'),
         },
+        {
+            path: '/upload',
+            component: () => import('@/views/Upload/index.vue'),
+        },
     ],
 })
 
