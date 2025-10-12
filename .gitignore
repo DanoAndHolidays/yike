@@ -16,6 +16,7 @@ coverage
 .vite-inspect
 
 
+
 /cypress/videos/
 /cypress/screenshots/
 
@@ -34,7 +35,7 @@ coverage
 # 包管理器锁文件（根据您的选择）
 package-lock.json   # 如果使用 npm
 yarn.lock          # 如果使用 yarn
-pnpm-lock.yaml 应该被提交，所以不要忽略
+pnpm-lock.yaml 
 
 # 本地服务器的存储数据
 server/save

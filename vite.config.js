@@ -21,7 +21,7 @@ const ViteImageminOptions = {
         optimizationLevel: 7,
     },
     mozjpeg: {
-        quality: 75,
+        quality: 80,
     },
     pngquant: {
         quality: [0.6, 0.8],
