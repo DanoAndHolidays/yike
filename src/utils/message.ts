@@ -1,4 +1,4 @@
-// message.js was type-rewriting by ts 
+// message.js was type-rewriting by ts
 import { ElMessage } from 'element-plus'
 export const createMessage = (message: string): void => {
     ElMessage({

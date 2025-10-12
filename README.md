@@ -310,7 +310,7 @@ dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
 
   > Vitest的文档我比较喜欢，不晦涩能看懂而且有很多解释👍
 
-- 准备工程化实践
+- 工程化实践
   - prettier ESlint
   - git提交规范 集合单眼测试
 
@@ -321,6 +321,10 @@ dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
 ### 10.12
 
 - 大文件上传已经写完了，视频剪辑功能没有实现，就只能上传
+
+
+### 表单提交
+- 这个我还没练过
 
 ### 打包
 

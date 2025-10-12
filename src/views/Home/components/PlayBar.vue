@@ -7,7 +7,6 @@ import ShareDrawer from './ShareDrawer.vue'
 import EndingInfo from './EndingInfo.vue'
 // import toDetial from '@/utils/toDetail'
 
-
 import avater_jungle from '@/assets/avater_jungle.webp'
 import avater_cat from '@/assets/avater_cat.webp'
 import avater_junhe from '@/assets/avater_junhe.webp'
