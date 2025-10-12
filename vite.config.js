@@ -11,7 +11,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 const ViteImageminOptions = {
     webp: {
-        quality: 20,
+        quality: 70,
     },
     gifsicle: {
         optimizationLevel: 3,
@@ -79,9 +79,7 @@ export default defineConfig(({ mode }) => {
                 },
             },
         },
-        test: {
-            
-        },
+        test: {},
         build: {
             // 设置 Base64 内联阈值 (16KB 以下转 Base64)
             assetsInlineLimit: 1024 * 16,
