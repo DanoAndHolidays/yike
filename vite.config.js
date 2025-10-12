@@ -11,7 +11,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 const ViteImageminOptions = {
     webp: {
-        quality: 70,
+        quality: 85,
     },
     gifsicle: {
         optimizationLevel: 3,
