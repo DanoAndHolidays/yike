@@ -4,8 +4,6 @@
 
 <img width="120" alt="icon" src="https://github.com/DanoAndHolidays/yike/blob/main/media/icon.png?raw=true">
 
-
-
 # 一刻短剧
 
 ![](https://img.shields.io/badge/Sass-953357) ![](https://img.shields.io/badge/Vite-FFAB00) ![](https://img.shields.io/badge/JSes6-FFCA28) ![](https://img.shields.io/badge/Pinia-fFD551) ![](https://img.shields.io/badge/Vue3-41B883) ![](https://img.shields.io/badge/ElementPlus-44A3FF) ![](https://img.shields.io/badge/TS-0288D1) ![](https://img.shields.io/badge/CSS3-7E57C2)
@@ -15,13 +13,14 @@
 ### 项目地址
 
 [一刻短剧：](https://danoandholidays.github.io/yike/)https://danoandholidays.github.io/yike/ _推荐使用移动设备打开_
->项目具有使用**Express构建的node后端**，可以拉取仓库，**本地启用服务**体验完整功能
+
+> 项目具有使用**Express构建的node后端**，可以拉取仓库，**本地启用服务**体验完整功能
 
 ### 项目介绍
+
 **一刻短剧** 基于Apifox公开项目 **「悦享好剧」** 开发，仅做学习研究使用。
 
 一个高仿抖音的**短剧SPA全栈应用**。复刻了核心交互，在性能优化、数据架构、工程化层面进行了实践探索
-
 
 _由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖屏播放体验，前端界面将模仿抖音的交互与视觉风格。也算是我之前开发的网站 [PLAYLET-APP](https://danoandholidays.github.io/PLAYLET-APP/) 的二次开发。之前的项目，原生开发功能全靠手撸，所以有很多问题和没有写完的部分，我也不打算改了，直接重新写一个。_
 
@@ -316,7 +315,12 @@ dist/assets/icon-zR7YAv7b.png    -91%  5.05kb / tiny: 0.46kb
   - git提交规范 集合单眼测试
 
 ### 10.11
+
 - 准备开始写后端，服务于用户信息的持久化存储与上传的文件。一会还要去上学校构式课，我服了。调休也是一大坨啊，谁拉我日历里的。
+
+### 10.12
+
+- 大文件上传已经写完了，视频剪辑功能没有实现，就只能上传
 
 ### 打包
 

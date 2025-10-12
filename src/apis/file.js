@@ -58,9 +58,13 @@ export function mergeChunk(data) {
 
 // 检查文件是否存在
 export function checkFile(data) {
-    return service({
-        url: '/verify',
-        method: 'post',
-        data,
-    })
+    try {
+        return service({
+            url: '/verify',
+            method: 'post',
+            data,
+        })
+    } catch (error) {
+        throw new Error(error)
+    }
 }

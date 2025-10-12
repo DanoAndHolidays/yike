@@ -90,7 +90,7 @@ const fileSize = (val) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .list_item {
     margin: 0 10px 20px 10px;
     display: flex;
@@ -100,7 +100,7 @@ const fileSize = (val) => {
     height: 20px;
     width: 100%;
     border-radius: 8px;
-    background-color: #1b1f24;
+    background-color: $tiktok-background-color-1;
     margin: 10px 0;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5) inset;
     position: relative;

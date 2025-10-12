@@ -1,6 +1,10 @@
 <script setup>
 import { ref, defineAsyncComponent } from 'vue'
 
+defineOptions({
+    name: 'Upload',
+})
+
 // 使用组件懒加载
 const UploadModule = defineAsyncComponent(() => import('./components/UploadModule.vue'))
 </script>

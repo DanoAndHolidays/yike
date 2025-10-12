@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
-import { uploadFile } from '@/apis/file.js'
-import { mergeChunk } from '@/apis/file.js'
-import { checkFile } from '@/apis/file.js'
+import { uploadFile } from '@/apis/file'
+import { mergeChunk } from '@/apis/file'
+import { checkFile } from '@/apis/file'
 
 import ListItems from './ListItems.vue'
 
@@ -10,8 +10,7 @@ import ListItems from './ListItems.vue'
 // 切片大小 1 * 1024 * 1024 刚好1M
 const chunkSize = 1 * 1024 * 1024
 
-// const test = { id: 1211, fileName: 'shit', percentage: 100, fileSize: 121212, state: 5 }
-
+// 上传文件列表
 const uploadFileList = ref([])
 
 // 请求最大并发数
@@ -23,14 +22,34 @@ const statistics = computed(() => {
     return `${otherArr.length}/${uploadFileList.value.length}`
 })
 
-/**
- * state === 1" 正在解析中...（在worker中生成MD5码中）
- * state === 2" 正在上传中...
- * state === 3" 暂停中
- * state === 4" 上传完成
- * state === 5" 上传中断(因网络等因素)
- * state === 6" 上传失败
- */
+// 生成文件 hash（web-worker）这里的hash是对整个文件生成的
+const useWorker = (file) => {
+    return new Promise((resolve) => {
+        const worker = new Worker(
+            new URL('@/utils/worker.js', import.meta.url),
+            // {
+            //   type: 'module',
+            // }
+        )
+        worker.postMessage({ file, chunkSize: chunkSize })
+        console.log('log { file, chunkSize: chunkSize }', {
+            file,
+            chunkSize: chunkSize,
+        })
+
+        worker.onmessage = (e) => {
+            const { fileHash, fileChunkList, percentage } = e.data
+            if (fileHash) {
+                resolve({
+                    percentage,
+                    fileHash,
+                    fileChunkList,
+                })
+            }
+        }
+    })
+}
+
 // 暂停上传（是暂停剩下未上传的）
 const pauseUpload = (taskArrItem, elsePause = true) => {
     // elsePause为true就是主动暂停，为false就是请求中断
@@ -67,33 +86,7 @@ const resumeUpload = (taskArrItem) => {
     taskArrItem.whileRequests = []
     uploadSignleFile(taskArrItem)
 }
-// 生成文件 hash（web-worker）这里的hash是对整个文件生成的
-const useWorker = (file) => {
-    return new Promise((resolve) => {
-        const worker = new Worker(
-            new URL('@/utils/worker.js', import.meta.url),
-            // {
-            //   type: 'module',
-            // }
-        )
-        worker.postMessage({ file, chunkSize: chunkSize })
-        console.log('log { file, chunkSize: chunkSize }', {
-            file,
-            chunkSize: chunkSize,
-        })
 
-        worker.onmessage = (e) => {
-            const { fileHash, fileChunkList, percentage } = e.data
-            if (fileHash) {
-                resolve({
-                    percentage,
-                    fileHash,
-                    fileChunkList,
-                })
-            }
-        }
-    })
-}
 // 取消单个
 const cancelSingle = async (taskArrItem) => {
     pauseUpload(taskArrItem)
@@ -102,6 +95,7 @@ const cancelSingle = async (taskArrItem) => {
         (itemB) => itemB.fileHash !== taskArrItem.fileHash,
     )
 }
+
 // 全部取消
 const cancelAll = () => {
     for (const item of uploadFileList.value) {
@@ -110,6 +104,7 @@ const cancelAll = () => {
 
     uploadFileList.value = []
 }
+
 // 调取合并接口处理所有切片
 const handleMerge = async (taskArrItem) => {
     const { fileName, fileHash } = taskArrItem
@@ -250,18 +245,15 @@ const uploadSignleFile = (taskArrItem) => {
         uploadChunk(item)
     }
 }
+
 // 输入框change事件
 const hanldeUploadFile = async (e) => {
     const fileEle = e.target
-
     // 如果没有文件内容
     if (!fileEle || !fileEle.files || fileEle.files.length === 0) {
         return false
     }
     const files = fileEle.files
-
-    // 这里的事件对象是一个DOM
-    console.log(`事件target：${fileEle}，target.files：${files}`, fileEle, files)
 
     // 多文件
     Array.from(files).forEach(async (item, i) => {
@@ -319,23 +311,27 @@ const hanldeUploadFile = async (e) => {
         // 所以文件hash要特殊处理
         inTaskArrItem.fileHash = `${fileHash}${baseName}`
         inTaskArrItem.state = 2
-
+        // console.log(uploadFileList.value, 'uploadFileList.value')
         // 上传之前要检查服务器是否存在该文件
         try {
+            // console.log('1')
             const res = await checkFile({
                 fileHash: `${fileHash}${baseName}`,
                 fileName: file.name,
             })
 
+            console.log('返回的code', res)
+
             if (res.code === 0) {
                 const { shouldUpload, uploadedList } = res.data
+                console.log(shouldUpload, uploadedList)
 
                 if (!shouldUpload) {
                     finishTask(inTaskArrItem)
                     console.log('文件已存在，实现秒传')
                     return false
                 }
-
+                console.log('文件不存在，开始上传')
                 inTaskArrItem.allChunkList = fileChunkList.map((item, index) => {
                     return {
                         // 总文件hash
@@ -381,10 +377,16 @@ const hanldeUploadFile = async (e) => {
                     }
                 }
 
+                console.log('开始上传')
                 // 逐步对单个文件进行切片上传
+                console.log(inTaskArrItem)
                 uploadSignleFile(inTaskArrItem)
             }
-        } catch (err) {}
+        } catch (err) {
+            let errorMessage = `本地服务器连接失败，请检查是否启动服务
+                                根目录/server 中运行 npm run dev 或 npm run start`
+            throw new Error(errorMessage)
+        }
     })
 }
 </script>
@@ -392,7 +394,7 @@ const hanldeUploadFile = async (e) => {
 <template>
     <div class="container2">
         <div class="page_top">
-            <p>正在上传 ({{ statistics }})</p>
+            <p>正在上传 {{ statistics }}</p>
             <div
                 class="page_top_right"
                 :style="{
@@ -405,7 +407,10 @@ const hanldeUploadFile = async (e) => {
             </div>
         </div>
         <div class="content" ref="contentRef">
-            <ListItem
+            <p class="warning" v-if="uploadFileList.length <= 0">
+                使用此功能需要启动本地服务器<br />请拉取仓库，根据文档启动服务
+            </p>
+            <ListItems
                 :uploadFileList="uploadFileList"
                 @pauseUpload="pauseUpload"
                 @resumeUpload="resumeUpload"
@@ -427,9 +432,21 @@ const hanldeUploadFile = async (e) => {
     background-color: $tiktok-background-color-1;
     height: calc(100vh - $tab-bar-height);
     position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    .warning {
+        position: relative;
+        color: $text-color-4;
+        text-align: center;
+        top: 40%;
+        opacity: 0.8;
+        // font-size: small;
+    }
+
     .page {
         margin: 0 auto;
-        background-color: #28323e;
+        background-color: $text-color-2;
         width: 100%;
         height: 100vh;
         color: #ffffff;
@@ -437,38 +454,36 @@ const hanldeUploadFile = async (e) => {
     }
     .page_top {
         height: 48px;
-        padding: 0 48px;
+        padding: 0 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: 14px;
-        color: #8386be;
+        color: $text-color-1;
     }
     .page_top_right {
-        width: 260px;
         display: flex;
+        padding: 12px;
     }
     .page_top > p {
         padding: 12px;
     }
     .clear_btn {
         cursor: pointer;
-        color: #853b3c;
+        color: $primary-color;
         user-select: none;
     }
     .clear_btn:hover {
         cursor: pointer;
-        color: #b65658;
+        color: $like-color;
     }
     .content {
         max-width: 1000px;
         margin: 0 auto;
         overflow-y: auto;
-        height: calc(100vh - 128px);
-        border-radius: 14px;
-        background-color: #303944;
-        border: 1px solid #252f3c;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) inset;
+        height: calc(100vh - 48px);
+        background-color: $text-color-2;
+        // border-top: 0.5px solid $tiktok-text-color-1;
     }
     .bottom_box {
         text-align: center;
@@ -490,13 +505,14 @@ const hanldeUploadFile = async (e) => {
         cursor: pointer;
     }
     .input_btn {
-        width: 200px;
-        background-color: #409eff;
-        opacity: 0.8;
+        margin: 0 15px;
+        width: 100%;
+        background-color: $share-color;
+        opacity: 0.99;
+        // border: 1px solid rgba(35, 35, 111, 0.6);
         position: relative;
         padding: 8px 16px;
         border-radius: 8px;
-        margin: 0 auto;
         user-select: none;
     }
     .input_btn:hover {

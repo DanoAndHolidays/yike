@@ -35,3 +35,6 @@ coverage
 package-lock.json   # 如果使用 npm
 yarn.lock          # 如果使用 yarn
 pnpm-lock.yaml 应该被提交，所以不要忽略
+
+# 本地服务器的存储数据
+server/save
