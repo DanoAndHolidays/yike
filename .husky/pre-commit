@@ -1,9 +1,11 @@
-#!/usr/bin/env sh
-
 echo "🚀 开始代码检查..."
 
+echo "进行测试"
 pnpm test
+echo "测试通过"
 
-pnpm format
+echo "进行代码格式、质量检测"
+pnpm format 
+echo "通过"
 
 echo "✅ 所有检查通过！"
