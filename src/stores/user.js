@@ -8,6 +8,20 @@ export const useUserStore = defineStore(
     () => {
         // 静音相关
         const isMute = ref(true)
+        const isLogin = ref(false)
+
+        function getIsLogin() {
+            return isLogin
+        }
+
+        function setIsLogin() {
+            isLogin.value = true
+        }
+
+        function setIsLogout() {
+            isLogin.value = false
+        }
+
         function getIsMute() {
             return isMute
         }
@@ -15,7 +29,15 @@ export const useUserStore = defineStore(
             isMute.value = mute
         }
 
-        return { isMute, getIsMute, setIsMute }
+        return {
+            isMute,
+            getIsMute,
+            setIsMute,
+            isLogin,
+            getIsLogin,
+            setIsLogin,
+            setIsLogout,
+        }
     },
     { persist: true },
 )

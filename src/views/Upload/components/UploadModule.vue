@@ -408,7 +408,7 @@ const hanldeUploadFile = async (e) => {
         </div>
         <div class="content" ref="contentRef">
             <p class="warning" v-if="uploadFileList.length <= 0">
-                使用此功能需要启动本地服务器<br />请拉取仓库，根据文档启动服务
+                使用完整功能需启动本地服务器<br />请拉取仓库，根据文档启动服务
             </p>
             <ListItems
                 :uploadFileList="uploadFileList"
