@@ -1,4 +1,6 @@
 import '@/styles/main.scss'
+import '@/styles/play.scss'
+import '@/styles/var.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
