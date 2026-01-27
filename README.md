@@ -102,3 +102,27 @@ _由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖
 - v1.0.0于10.18.2025发布，完成了基本的功能
 
 ---
+
+---
+
+## 项目统计与分析 (Auto-generated)
+
+### 代码行数统计
+
+项目核心代码统计结果如下：
+
+- **总行数**：7,180 行
+- **主要组成部分**：
+  - **前端 (src/)**：Vue 3 + Vite + Pinia + ElementPlus
+  - **后端 (server/)**：Express Node.js Server
+
+### 运行环境建议
+
+- **Node.js**: 推荐版本 `^20.19.0 || >=22.12.0`
+- **Package Manager**: `pnpm`
+
+### 启动说明
+
+1. **安装依赖**: `pnpm install`
+2. **启动前端**: `pnpm dev`
+3. **启动后端**: `cd server &amp;&amp; pnpm install &amp;&amp; npm run dev`
