@@ -39,3 +39,5 @@ pnpm-lock.yaml
 
 # 本地服务器的存储数据
 server/save
+
+/PLANS/*

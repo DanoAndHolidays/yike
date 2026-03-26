@@ -2,6 +2,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import react from '@vitejs/plugin-react'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { visualizer } from 'rollup-plugin-visualizer'
 import ViteImagemin from 'vite-plugin-imagemin'
@@ -41,6 +42,7 @@ export default defineConfig(({ mode }) => {
 
     const plugins = [
         vue(),
+        react(),
         vueDevTools(),
         AutoImport({
             resolvers: [ElementPlusResolver()],
@@ -73,9 +75,13 @@ export default defineConfig(({ mode }) => {
         css: {
             preprocessorOptions: {
                 scss: {
-                    additionalData: `
-            @use "@/styles/var.scss" as *;
-          `,
+                    additionalData: (content, file) => {
+                        // Avoid module loop for var.scss itself
+                        if (file.includes('var.scss')) {
+                            return content
+                        }
+                        return `@use "@/styles/var.scss" as *;\n${content}`
+                    },
                 },
             },
         },
@@ -85,6 +91,10 @@ export default defineConfig(({ mode }) => {
             assetsInlineLimit: 1024 * 16,
             target: 'es2020',
             rollupOptions: {
+                input: {
+                    main: fileURLToPath(new URL('./index.html', import.meta.url)),
+                    react: fileURLToPath(new URL('./src-react/index.html', import.meta.url)),
+                },
                 external: ['video.js'],
                 output: {
                     dir: 'dist',
