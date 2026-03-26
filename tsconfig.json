@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
     "module": "ES2020",
-    "target": "ES2020", // 确保目标也至少是 ES2020
+    "target": "ES2020",
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src-react/**/*"],
   "exclude": ["node_modules", "dist"]
 }

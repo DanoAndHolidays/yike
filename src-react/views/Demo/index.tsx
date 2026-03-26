@@ -1,9 +1,9 @@
-import React from 'react'
+import type { FC } from 'react'
 import { Button, Space, Card, Typography, Tag } from '@arco-design/web-react'
 
 const { Text } = Typography
 
-function Demo() {
+const Demo: FC = () => {
     return (
         <div style={{ padding: '24px', background: '', minHeight: '100vh' }}>
             <Card
@@ -35,7 +35,7 @@ function Demo() {
                     <div>
                         <Text bold>技术栈：</Text>
                         <ul style={{ margin: '8px 0' }}>
-                            <li>React 19</li>
+                            <li>React 19 + TypeScript</li>
                             <li>Arco Design Web React</li>
                             <li>React Router DOM</li>
                             <li>SCSS</li>
@@ -43,7 +43,7 @@ function Demo() {
                     </div>
 
                     <div style={{ marginTop: '16px' }}>
-                        <Text type="success" bold>✓ React 配置成功！</Text>
+                        <Text type="success" bold>✓ React + TypeScript 配置成功！</Text>
                     </div>
                 </Space>
             </Card>
