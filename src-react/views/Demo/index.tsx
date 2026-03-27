@@ -1,5 +1,7 @@
 import type { FC } from 'react'
+import { Suspense } from 'react'
 import { Button, Space, Card, Typography, Tag } from '@arco-design/web-react'
+import creatMessge from '../../components/message'
 
 const { Text } = Typography
 
@@ -9,6 +11,7 @@ import axios from 'axios'
 // 我们自己实现的useQuery钩子和这个库中的具有一样的参数，可以直接替换
 // import { useQuery } from 'react-query'
 import useQuery from '../../hooks/useQuery'
+import { dividerProps } from 'element-plus'
 
 // 用React Hooks获取数据
 const API = 'https://hn.algolia.com/api/v1/search'
@@ -25,6 +28,8 @@ type Story = {
     title: string
     url: string
 }
+
+creatMessge('test')
 
 const App = () => {
     // const [data, setData] = useState<Story[]>([])
@@ -135,7 +140,9 @@ const Demo: FC = () => {
                     </div>
 
                     <div>
-                        <App />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <App />
+                        </Suspense>
                     </div>
                 </Space>
             </Card>

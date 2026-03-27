@@ -18,11 +18,13 @@
     "format": "prettier --write src/",
     "test": "vitest run",
     "prepare": "husky",
-    "build:webpack": "webpack"
+    "build:webpack": "webpack",
+    "build:ssr-client": "webpack --config webpack.client.config.js"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.66.12",
     "@element-plus/icons-vue": "^2.3.2",
+    "@types/react-dom": "^19.2.3",
     "axios": "^1.11.0",
     "element-plus": "^2.11.1",
     "imagemin-webp": "^8.0.0",
