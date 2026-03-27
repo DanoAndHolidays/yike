@@ -126,3 +126,7 @@ _由于短剧竖屏播放，所以全面**模仿抖音**，专注于短剧的竖
 1. **安装依赖**: `pnpm install`
 2. **启动前端**: `pnpm dev`
 3. **启动后端**: `cd server &amp;&amp; pnpm install &amp;&amp; npm run dev`
+
+### vibe coding
+
+配置了 AGENT.md、skill等
