@@ -14,9 +14,8 @@ jobs:
 
       - name: 安装依赖，初始化
         run: |
-          npm install pnpm
-          pnpm install
-          pnpm run build
+          npm install
+          npm run build
 
       - name: 部署一刻📺
         uses: JamesIves/github-pages-deploy-action@v4
