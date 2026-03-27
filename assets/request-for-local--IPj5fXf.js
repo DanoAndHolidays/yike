@@ -1,1 +1,0 @@
-import{a as s}from"./axios-http-ngrFHoWO.js";const t=3030,r=s.create({baseURL:`http://localhost:${t}`,timeout:2e3});r.interceptors.request.use(e=>e,e=>Promise.reject(e));r.interceptors.response.use(e=>e.data,e=>Promise.reject({success:!1,message:"本地服务器连接失败，请检查是否启动",originalError:e}));export{r as h};
