@@ -14,17 +14,17 @@
   "license": "ISC",
   "packageManager": "pnpm@10.18.0",
   "devDependencies": {
-    "nodemon": "^3.1.10",
-    "tsx": "^4.19.4"
+    "nodemon": "^3.1.14",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
     "chalk": "^5.6.2",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "fs-extra": "^11.3.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.4",
     "multiparty": "^4.2.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.2"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.1"
   }
 }

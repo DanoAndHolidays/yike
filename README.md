@@ -10,6 +10,10 @@
 
 </div>
 
+### 最新消息
+
+很抱歉,由于AIPfox提供的后端服务已停止,本项目的核心接口均不能正常使用,目前无法提供服务
+
 ### 项目地址
 
 [一刻短剧：](https://danoandholidays.github.io/yike/)https://danoandholidays.github.io/yike/ _推荐使用移动设备打开_

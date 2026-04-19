@@ -100,18 +100,25 @@ const Demo: FC = () => {
     return (
         <div style={{ padding: '24px', background: '', minHeight: '100vh' }}>
             <Card
-                title="React + Arco Design 测试"
-                extra={<Tag color="arcoblue">运行中</Tag>}
+                title="很抱歉,由于APIfox的后端项目已停止提供服务,yike目前无法正常运行"
+                extra={<Tag color="red">已停止</Tag>}
                 style={{ maxWidth: '600px', margin: '0 auto' }}
             >
                 <Space direction="vertical" style={{ width: '100%' }} size="large">
                     <div>
-                        <Text type="secondary">
-                            这是一个使用 React + Arco Design + SCSS 的示例页面。
-                        </Text>
+                        <Text type="secondary">我目前正在寻找新的短剧资源,尝试恢复服务</Text>
+                        <br />
+                        <br />
+                        <a
+                            href="https://github.com/DanoAndHolidays/yike"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            查看项目介绍
+                        </a>
                     </div>
 
-                    <Space>
+                    {/* <Space>
                         <Button type="primary">主要按钮</Button>
                         <Button type="secondary">次要按钮</Button>
                         <Button type="dashed">虚线按钮</Button>
@@ -131,7 +138,7 @@ const Demo: FC = () => {
                             <li>React Router DOM</li>
                             <li>SCSS</li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     <div style={{ marginTop: '16px' }}>
                         <Text type="success" bold>
