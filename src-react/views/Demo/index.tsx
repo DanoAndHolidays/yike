@@ -1,11 +1,12 @@
 import type { FC } from 'react'
 import { Suspense } from 'react'
-import { Button, Space, Card, Typography, Tag } from '@arco-design/web-react'
+import { Button, Space, Card, Typography, Tag, Divider } from '@arco-design/web-react'
 import creatMessge from '../../components/message'
 
 const { Text } = Typography
 
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 // 我们自己实现的useQuery钩子和这个库中的具有一样的参数，可以直接替换
@@ -97,6 +98,8 @@ const App = () => {
 }
 
 const Demo: FC = () => {
+    const navigate = useNavigate()
+
     return (
         <div style={{ padding: '24px', background: '', minHeight: '100vh' }}>
             <Card
@@ -118,29 +121,9 @@ const Demo: FC = () => {
                         </a>
                     </div>
 
-                    {/* <Space>
-                        <Button type="primary">主要按钮</Button>
-                        <Button type="secondary">次要按钮</Button>
-                        <Button type="dashed">虚线按钮</Button>
-                    </Space>
-
-                    <Space>
-                        <Button status="success">成功</Button>
-                        <Button status="warning">警告</Button>
-                        <Button status="danger">危险</Button>
-                    </Space>
+                    <Divider />
 
                     <div>
-                        <Text bold>技术栈：</Text>
-                        <ul style={{ margin: '8px 0' }}>
-                            <li>React 19 + TypeScript</li>
-                            <li>Arco Design Web React</li>
-                            <li>React Router DOM</li>
-                            <li>SCSS</li>
-                        </ul>
-                    </div> */}
-
-                    <div style={{ marginTop: '16px' }}>
                         <Text type="success" bold>
                             ✓ React + TypeScript 配置成功！
                         </Text>
@@ -150,6 +133,18 @@ const Demo: FC = () => {
                         <Suspense fallback={<div>Loading...</div>}>
                             <App />
                         </Suspense>
+                    </div>
+
+                    <Divider />
+
+                    <div style={{ textAlign: 'center' }}>
+                        <Button
+                            type="outline"
+                            size="large"
+                            onClick={() => navigate('/tree-demo')}
+                        >
+                            查看树形虚拟滚动 Demo (100k 节点)
+                        </Button>
                     </div>
                 </Space>
             </Card>

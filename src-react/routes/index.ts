@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import Demo from '../views/Demo'
+import TreeDemo from '../views/TreeDemo'
 
 export interface RouteConfig {
     path: string
@@ -20,6 +21,13 @@ const routes: RouteConfig[] = [
         component: Demo,
         meta: {
             title: 'React + Arco Design 测试',
+        },
+    },
+    {
+        path: '/tree-demo',
+        component: TreeDemo,
+        meta: {
+            title: '树形虚拟滚动 — 100k 节点',
         },
     },
 ]

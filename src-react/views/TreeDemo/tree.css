@@ -1,0 +1,305 @@
+/* ── 页面布局 ─────────────────────── */
+.tree-demo-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ── 控制栏 ────────────────────────── */
+.tree-controls {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e6eb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.tree-controls .title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d2129;
+  margin-right: auto;
+}
+
+/* ── 虚拟列表容器 ───────────────────── */
+.tree-virtual-container {
+  flex: 1;
+  margin-bottom: 200px;
+  overflow: auto;
+  position: relative;
+  background: #fafafa;
+}
+
+/* ── 树节点行 ──────────────────────── */
+.tree-row {
+  box-sizing: border-box;
+  transition: background 0.15s ease;
+}
+
+/* ★ 行创建动画：新挂载的 DOM 自动播放 */
+.tree-row {
+  animation: row-mount 0.35s ease-out;
+}
+
+@keyframes row-mount {
+  0% {
+    opacity: 0;
+    transform: scale(0.96, 0.96);
+    box-shadow: inset 0 0 0 2px #52c41a;
+  }
+  40% {
+    opacity: 1;
+    box-shadow: inset 0 0 0 2px #52c41a;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+    box-shadow: inset 0 0 0 0px transparent;
+  }
+}
+
+/* 视口内行 hover */
+.tree-row-viewport:hover {
+  filter: brightness(0.96);
+}
+
+/* ── 展开/收起箭头 ──────────────────── */
+.tree-toggle {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+  color: #555;
+  user-select: none;
+  border-radius: 3px;
+}
+.tree-toggle:hover {
+  background: #e5e6eb;
+}
+
+/* ── 标签文字 ───────────────────────── */
+.tree-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 0 6px;
+}
+
+/* ── 子节点数量徽章 ─────────────────── */
+.tree-badge {
+  background: #e8f4fd;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  color: #165dff;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+/* ── 节点 ID ────────────────────────── */
+.tree-id {
+  color: #ccc;
+  font-size: 10px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+/* ── 空状态提示 ─────────────────────── */
+.tree-empty-hint {
+  padding: 80px 20px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* ── 统计标签 ───────────────────────── */
+.tree-stat {
+  font-size: 12px;
+  color: #86909c;
+  white-space: nowrap;
+}
+.tree-stat em {
+  font-weight: 600;
+  color: #165dff;
+  font-style: normal;
+}
+
+/* ── 加载提示 ───────────────────────── */
+.tree-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #86909c;
+  font-size: 13px;
+}
+
+/* ══════════════════════════════════════ */
+/*  调试边界线                            */
+/* ══════════════════════════════════════ */
+
+.debug-line-inner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* 视口边界 — 红色实线 */
+.debug-line-viewport {
+  border-top: 2px solid #ff4d4f;
+}
+
+/* overscan 边界 — 橙色虚线 */
+.debug-line-overscan {
+  border-top: 2px dashed #fa8c16;
+}
+
+/* 边界线上的文字标签 */
+.debug-line-label {
+  position: absolute;
+  font-size: 10px;
+  font-family: 'SF Mono', Monaco, monospace;
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  z-index: 21;
+}
+
+.debug-line-label-top {
+  top: -18px;
+  left: 8px;
+}
+
+.debug-line-label-bottom {
+  bottom: -18px;
+  left: 8px;
+}
+
+.debug-line-label-overscan {
+  background: rgba(250, 140, 22, 0.9);
+  font-size: 9px;
+}
+
+/* ══════════════════════════════════════ */
+/*  调试面板 (右下角固定)                  */
+/* ══════════════════════════════════════ */
+
+.debug-panel {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  color: #e5e6eb;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.debug-panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.debug-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+}
+
+.debug-panel-label {
+  color: #aaa;
+}
+
+.debug-panel-value {
+  color: #e5e6eb;
+  text-align: right;
+  font-weight: 500;
+}
+
+.debug-panel-value-highlight {
+  color: #52c41a;
+  font-weight: 700;
+}
+
+.debug-panel-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 8px 0;
+}
+
+/* ── 图例 ──────────────────────────── */
+
+.debug-panel-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.debug-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #bbb;
+}
+
+.debug-legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.debug-legend-line-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+.debug-legend-line-viewport {
+  border-top: 2px solid #ff4d4f;
+}
+
+.debug-legend-line-overscan {
+  border-top: 2px dashed #fa8c16;
+}
+
+/* ── 行号标记 ──────────────────────── */
+.debug-row-num {
+  transition: color 0.2s;
+}
+.tree-row:hover .debug-row-num {
+  color: #666 !important;
+}
