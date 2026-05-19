@@ -85,7 +85,9 @@ export default defineConfig(({ mode }) => {
                 },
             },
         },
-        test: {},
+        test: {
+            exclude: ['**/node_modules/**', '**/dist/**', 'server/**'],
+        },
         build: {
             // 设置 Base64 内联阈值 (16KB 以下转 Base64)
             assetsInlineLimit: 1024 * 16,
