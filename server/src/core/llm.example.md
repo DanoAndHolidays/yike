@@ -24,6 +24,7 @@ import {
     createAnthropicClient,
     createGeminiClient,
     createAzureClient,
+    createMinimaxClient,
     createCustomClient,
     quickChat,
 } from './llm.js'
@@ -464,11 +465,10 @@ export function createMinimaxExample() {
     if (!apiKey) {
         throw new Error('请设置 MINIMAX_API_KEY 环境变量')
     }
-    return createLLMClient({
-        provider: 'minimax',
+    return createMinimaxClient(
         apiKey,
-        model: 'abab6.5s-chat', // 或 'abab6-chat', 'MiniMax-M2.7'
-    })
+        'MiniMax-M2.7', // 或 'abab6.5s-chat', 'abab6-chat'
+    )
 }
 
 // ==================== 示例 7: 高级用法 ====================

@@ -1,8 +1,5 @@
 /**
- * Mock Tree Data Generator
- *
- * 生成约 100,000 个节点的树形数据，每个节点记录父节点 ID 和子节点 ID 列表，
- * 形成完整的树结构。数据存储在 Map 中以供 O(1) 查找。
+ * Mock Tree Data Generator — 支持全量生成与懒加载两种模式
  *
  * 层级分布:
  *   Level 0:    100 个根节点
@@ -22,15 +19,23 @@ export interface TreeNode {
   childrenIds: string[]
   label: string
   hasChildren: boolean
+  /** 子节点是否已从"后端"加载 */
+  childrenLoaded: boolean
+  /** 节点所在层级 */
+  level: number
+  /** 直接子节点总数（用于 badge 展示，加载前即可知） */
+  totalChildrenCount: number
 }
 
 export interface TreeData {
-  /** 所有节点的 Map，key 为节点 id */
   nodeMap: Map<string, TreeNode>
-  /** 根节点 ID 列表（无父节点的节点） */
   rootIds: string[]
-  /** 节点总数 */
   totalCount: number
+}
+
+export interface LazyTreeAPI {
+  treeData: TreeData
+  loadChildren: (parentId: string) => Promise<TreeNode[]>
 }
 
 /** 每层的目标节点数 */
@@ -39,31 +44,33 @@ const LEVEL_CONFIG = [100, 300, 900, 2700, 8100, 24300, 63600]
 /** 每层对应的显示名称前缀 */
 const LEVEL_PREFIX = ['集团', '事业部', '部门', '中心', '团队', '小组', '成员']
 
-/**
- * 为节点生成可读标签
- */
+/** 每层起始全局索引（累积和） */
+const CUM_START: number[] = (() => {
+  const arr = [0]
+  for (let i = 0; i < LEVEL_CONFIG.length; i++) {
+    arr.push(arr[i] + LEVEL_CONFIG[i])
+  }
+  return arr
+})()
+
+const TOTAL_NODES = CUM_START[CUM_START.length - 1]
+
 function generateLabel(level: number, indexInLevel: number): string {
   const prefix = LEVEL_PREFIX[level] ?? `L${level}`
   return `${prefix}-${String(indexInLevel + 1).padStart(4, '0')}`
 }
 
-/**
- * 生成约 100,000 个节点的模拟树数据。
- *
- * 算法:
- * 1. 按层级依次创建所有节点，存入临时 Map
- * 2. 将 level N 的节点平均分配给 level N-1 的节点作为子节点
- * 3. 所有节点汇总到 TreeData 中返回
- */
+// ══════════════════════════════════════════════════════
+//  全量生成模式（原有逻辑，保留兼容）
+// ══════════════════════════════════════════════════════
+
 export function generateMockTreeData(): TreeData {
   const nodeMap = new Map<string, TreeNode>()
   const rootIds: string[] = []
 
-  // 存储每层生成的节点 ID 列表
   const levelNodeIds: string[][] = []
   let globalIndex = 0
 
-  // ── 第一遍: 创建所有节点 ──
   for (let level = 0; level < LEVEL_CONFIG.length; level++) {
     const count = LEVEL_CONFIG[level]
     const ids: string[] = []
@@ -75,10 +82,13 @@ export function generateMockTreeData(): TreeData {
 
       const node: TreeNode = {
         id,
-        parentId: null, // 第二遍填充
-        childrenIds: [], // 第二遍填充
+        parentId: null,
+        childrenIds: [],
         label: generateLabel(level, i),
         hasChildren: !isLeaf,
+        childrenLoaded: false,
+        level,
+        totalChildrenCount: 0,
       }
 
       nodeMap.set(id, node)
@@ -88,13 +98,10 @@ export function generateMockTreeData(): TreeData {
     levelNodeIds.push(ids)
   }
 
-  // ── 第二遍: 建立父子关系 ──
-  // Level 0 节点无父节点
   for (const id of levelNodeIds[0]) {
     rootIds.push(id)
   }
 
-  // 将 level+1 的节点平均分配给 level 的节点
   for (let level = 0; level < LEVEL_CONFIG.length - 1; level++) {
     const parents = levelNodeIds[level]
     const children = levelNodeIds[level + 1]
@@ -104,6 +111,9 @@ export function generateMockTreeData(): TreeData {
       const parentNode = nodeMap.get(parents[p])!
       const startIdx = p * childrenPerParent
       const endIdx = Math.min(startIdx + childrenPerParent, children.length)
+
+      parentNode.childrenLoaded = true
+      parentNode.totalChildrenCount = endIdx - startIdx
 
       for (let c = startIdx; c < endIdx; c++) {
         const childId = children[c]
@@ -117,5 +127,131 @@ export function generateMockTreeData(): TreeData {
     nodeMap,
     rootIds,
     totalCount: globalIndex,
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  懒加载模式
+// ══════════════════════════════════════════════════════
+
+/**
+ * 创建懒加载树数据。
+ * 初始仅包含根节点，子节点通过 loadChildren() 按需生成。
+ */
+export function createLazyTreeData(): LazyTreeAPI {
+  const nodeMap = new Map<string, TreeNode>()
+  const rootIds: string[] = []
+
+  const rootCount = LEVEL_CONFIG[0]
+  const childrenPerRoot = Math.ceil(LEVEL_CONFIG[1] / rootCount)
+
+  for (let i = 0; i < rootCount; i++) {
+    const id = `node_${i}`
+    const startIdx = i * childrenPerRoot
+    const endIdx = Math.min(startIdx + childrenPerRoot, LEVEL_CONFIG[1])
+    const node: TreeNode = {
+      id,
+      parentId: null,
+      childrenIds: [],
+      label: generateLabel(0, i),
+      hasChildren: true,
+      childrenLoaded: false,
+      level: 0,
+      totalChildrenCount: Math.max(0, endIdx - startIdx),
+    }
+    nodeMap.set(id, node)
+    rootIds.push(id)
+  }
+
+  const loadChildren = (parentId: string): Promise<TreeNode[]> => {
+    return new Promise((resolve) => {
+      const delay = 150 + Math.random() * 250
+      setTimeout(() => {
+        const parent = nodeMap.get(parentId)
+        if (!parent || parent.childrenLoaded) {
+          resolve([])
+          return
+        }
+
+        const childLevel = parent.level + 1
+        if (childLevel >= LEVEL_CONFIG.length) {
+          parent.childrenLoaded = true
+          resolve([])
+          return
+        }
+
+        const childrenPerParent = Math.ceil(
+          LEVEL_CONFIG[childLevel] / LEVEL_CONFIG[parent.level],
+        )
+        const startIdx = parent.level === 0
+          ? (() => {
+              // 根节点的 indexInLevel 即其数组位置
+              const rootIdx = rootIds.indexOf(parentId)
+              return rootIdx * childrenPerParent
+            })()
+          : (() => {
+              // 非根节点：从 ID 反推 indexInLevel
+              const globalIdx = parseInt(parentId.replace('node_', ''), 10)
+              return (globalIdx - CUM_START[parent.level]) * childrenPerParent
+            })()
+
+        const endIdx = Math.min(
+          startIdx + childrenPerParent,
+          LEVEL_CONFIG[childLevel],
+        )
+
+        const children: TreeNode[] = []
+        const isLeaf = childLevel === LEVEL_CONFIG.length - 1
+
+        for (let c = startIdx; c < endIdx; c++) {
+          const globalIdx = CUM_START[childLevel] + c
+          const childId = `node_${globalIdx}`
+
+          let grandChildCount = 0
+          if (!isLeaf) {
+            const gcp = Math.ceil(
+              LEVEL_CONFIG[childLevel + 1] / LEVEL_CONFIG[childLevel],
+            )
+            const gcStart = c * gcp
+            const gcEnd = Math.min(
+              gcStart + gcp,
+              LEVEL_CONFIG[childLevel + 1],
+            )
+            grandChildCount = Math.max(0, gcEnd - gcStart)
+          }
+
+          const child: TreeNode = {
+            id: childId,
+            parentId,
+            childrenIds: [],
+            label: generateLabel(childLevel, c),
+            hasChildren: !isLeaf,
+            childrenLoaded: false,
+            level: childLevel,
+            totalChildrenCount: grandChildCount,
+          }
+
+          children.push(child)
+        }
+
+        parent.childrenIds = children.map((ch) => ch.id)
+        parent.childrenLoaded = true
+
+        for (const ch of children) {
+          nodeMap.set(ch.id, ch)
+        }
+
+        resolve(children)
+      }, delay)
+    })
+  }
+
+  return {
+    treeData: {
+      nodeMap,
+      rootIds,
+      totalCount: TOTAL_NODES,
+    },
+    loadChildren,
   }
 }
