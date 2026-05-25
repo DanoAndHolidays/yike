@@ -29,6 +29,13 @@ import {
  * - Azure: api-key: {apiKey}
  */
 const PROVIDER_CONFIGS: ProviderConfigs = {
+    deepseek: {
+        baseURL: '',
+        headerBuilder: (apiKey) => ({
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+        }),
+    },
     openai: {
         baseURL: 'https://api.openai.com/v1',
         headerBuilder: (apiKey) => ({

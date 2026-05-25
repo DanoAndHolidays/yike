@@ -1,9 +1,31 @@
+// import dotenv from 'dotenv'
+// import { fileURLToPath } from 'url'
+// import path from 'path'
+
+// console.log(import.meta)
+
+// [Object: null prototype] {
+//   dirname: 'G:\\Save\\Grogramming\\Vue3\\yike\\server\\src\\agents',
+//   filename: 'G:\\Save\\Grogramming\\Vue3\\yike\\server\\src\\agents\\simple_agent.ts',
+//   resolve: [Function: resolve],
+//   url: 'file:///G:/Save/Grogramming/Vue3/yike/server/src/agents/simple_agent.ts'
+// }
+
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
+// dotenv.config({ path: path.resolve(__dirname, '../../.env') })
+
+// console.log(import.meta.resolve)
+
+// ◇ injected env (7) from .env // tip: ⌘ override existing { override: true }
+// [Function: resolve]
+
 import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
 import path from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// 直接使用原生提供的 dirname，效果和之前完全一样
+const __dirname = import.meta.dirname
+
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 import { LLMClient } from 'src/core/client'
@@ -26,7 +48,7 @@ export class SimpleAgent extends Agent {
         this.toolRegistry = toolRegistry
         this.enableToolCalling = enableToolCalling && toolRegistry
 
-        console.log(`Agent ${name} 构建成功`)
+        console.log(`SimpleAgent ${name} 构建成功`)
     }
 
     async run(inputText: string): Promise<string> {
@@ -55,10 +77,15 @@ export class SimpleAgent extends Agent {
 
         if (!this.enableToolCalling) {
             const response = await this.llm.chat({ messages })
+            // console.log(response);
+
             const content = response.choices[0]?.message?.content || ''
             this.addMessage({ role: 'assistant', content })
             console.log(`响应完成: ${content}`)
-            console.log(messages, this._history)
+            this._history.concat(messages)
+            // this.addMessage(messages)
+            // messages.push()
+            console.log(this._history)
             return content
         }
 
@@ -72,6 +99,8 @@ const llm = new LLMClient({
     baseURL: 'https://api.deepseek.com',
     model: 'deepseek-chat',
 })
+
+// console.log(process.env);
 
 const simpleAgent = new SimpleAgent(
     llm,

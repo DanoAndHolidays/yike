@@ -150,7 +150,7 @@ export interface LLMResponse {
 /**
  * 支持的 LLM 提供商类型
  */
-export type LLMProvider = 'openai' | 'anthropic' | 'google' | 'azure' | 'minimax' | 'custom'
+export type LLMProvider = 'openai' | 'anthropic' | 'google' | 'azure' | 'minimax' | 'custom' | 'deepseek'
 
 /**
  * LLM 客户端配置

@@ -41,3 +41,5 @@ pnpm-lock.yaml
 server/save
 
 /PLANS/*
+
+.env
