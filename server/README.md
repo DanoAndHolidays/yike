@@ -12,7 +12,12 @@
 完成Agent基类的开发
 
 5/25/26
-完成典型Agent范式构建
+完成典型Agent范式React的构建
+
+5/26/26
+完成典型Agent范式Plan Reflection的构建
+ - Reflection可以优化一下，我想用这几类基本的范式来组合成更加复杂的混合范式，以解决更加复杂的问题
+
 
 ## 一刻短剧
 yike的mock后端，没有系统学过node.js，写的代码也是能跑就行

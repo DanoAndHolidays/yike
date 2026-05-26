@@ -97,6 +97,7 @@ export class ReactAgent extends Agent {
     enableToolCalling: boolean
     maxStep: number
     currentHistory: string[]
+    customPrompt: string
     constructor(
         llm: LLMClient,
         name: string,
@@ -112,8 +113,9 @@ export class ReactAgent extends Agent {
         this.enableToolCalling = enableToolCalling && toolRegistry
         this.maxStep = maxStep
         this.currentHistory = []
+        this.customPrompt = customPrompt
 
-        console.log('基础信息: ',this.getInfo())
+        console.log('基础信息: ', this.getInfo())
 
         console.log(`ReactAgent ${name} 构建成功，最大步数${maxStep}`)
     }
@@ -192,6 +194,8 @@ export class ReactAgent extends Agent {
                 // 处理 Action
                 if (action.startsWith('Finish[')) {
                     console.log(`\n最终答案: ${action.slice(7, -1)}`)
+                    console.log('\n最后一轮Prompt: ',prompt);
+                    
                     return action.slice(7, -1)
                     // TODO
                     // 这里要将对话的历史添加到this._history中去，而详细的React的步骤就不用去添加了
@@ -203,7 +207,7 @@ export class ReactAgent extends Agent {
 
                 // 添加到历史
                 this.currentHistory.push(
-                    `步骤${currentStep + 1}:\nAction: ${action} Observation: ${toolResult}`,
+                    `\n步骤${currentStep + 1}:\nAction: ${action} \nObservation: ${toolResult}`,
                 )
             }
 

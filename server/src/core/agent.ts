@@ -16,10 +16,8 @@ export class Agent {
         this.systemPropmt = systemPropmt
     }
 
-    run(inputText: string) {
-        // TODO
-        // 由于js原生没有 abstract 关键字来直接声明抽象类和抽象方法，这里就先这样了
-        console.log(inputText)
+    run(inputText: string, options?: Record<string, any>) {
+        console.log(inputText, options)
     }
 
     addMessage(message: LLMMessage) {
