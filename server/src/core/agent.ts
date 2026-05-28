@@ -2,6 +2,7 @@ import { LLMClient } from './client.js'
 import { LLMConfig, LLMMessage, LLMRequestOptions, LLMResponse, AgentConfig } from './types.js'
 
 // 实现agent基类，用于继承扩展
+// 按理来讲，这里应该使用ts的abstract关键字来声明的，我懒得搞了
 export class Agent {
     llm: LLMClient
     name: String
