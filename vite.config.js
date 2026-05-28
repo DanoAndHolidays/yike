@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
             },
         },
         test: {
-            exclude: ['**/node_modules/**', '**/dist/**', 'server/**'],
+            exclude: ['**/node_modules/**', '**/dist/**'],
         },
         build: {
             // 设置 Base64 内联阈值 (16KB 以下转 Base64)
