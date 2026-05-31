@@ -27,6 +27,7 @@ export type MessageRole = 'system' | 'user' | 'assistant' | 'tool'
 export interface LLMMessage {
     role: MessageRole
     content: string
+    timestamp?: Date
     name?: string
     tool_calls?: ToolCall[]
     tool_call_id?: string
@@ -150,7 +151,14 @@ export interface LLMResponse {
 /**
  * 支持的 LLM 提供商类型
  */
-export type LLMProvider = 'openai' | 'anthropic' | 'google' | 'azure' | 'minimax' | 'custom' | 'deepseek'
+export type LLMProvider =
+    | 'openai'
+    | 'anthropic'
+    | 'google'
+    | 'azure'
+    | 'minimax'
+    | 'custom'
+    | 'deepseek'
 
 /**
  * LLM 客户端配置

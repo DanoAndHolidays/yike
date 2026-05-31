@@ -6,6 +6,20 @@
 // 结构化 (Structure)：被选中的信息不会被随意堆砌，而是会被组织进一个清晰、固定的模板中（例如划分为角色与策略、任务、当前状态、证据、上下文、输出要求等分区）。这种结构化的呈现方式极大地提升了大模型对信息的可读性，也方便了开发者的后续调试。
 // 压缩 (Compress)：作为最后一道防线，当精挑细选后的信息总量依然超出模型的 Token 预算时，系统会启动智能摘要策略。它的目标是在缩减 Token 占用的同时，生成一份高保真摘要，尽可能保持原始信息的结构完整性，为长程对话的连贯性兜底
 
+/**
+ * 
+ * 
+ * 动态调整 token 预算：根据任务复杂度动态调整 max_tokens，简单任务使用较小预算，复杂任务增加预算。
+
+相关性计算优化：在生产环境中，将简单的关键词重叠替换为向量相似度计算，提升检索质量。
+
+缓存机制：对于不变的系统指令和知识库内容，可以实现缓存机制，避免重复计算。
+
+监控与日志：记录每次上下文构建的统计信息(选中信息数量、token 使用率等)，便于后续优化。
+
+A/B 测试：对于关键参数(如相关性权重、新近性权重)，通过 A/B 测试找到最优配置。
+ */
+
 import { LLMConfig, LLMMessage, LLMRequestOptions, LLMResponse, AgentConfig } from '../core/types'
 import { ContextConfig } from './config'
 import { ContextPacket } from './packet'
@@ -45,6 +59,8 @@ export class ContextBuilder {
     ): ContextPacket[] {
         let packets: ContextPacket[] = []
         if (systemInstructions) {
+            // console.log(systemInstructions,666)
+
             packets.push(
                 new ContextPacket(
                     systemInstructions,
@@ -57,6 +73,8 @@ export class ContextBuilder {
                     },
                 ),
             )
+
+            // console.log(packets)
         }
         // TODO
         // 这里的处理就是在记忆与RAG系统中进行获取信息了
@@ -102,12 +120,12 @@ export class ContextBuilder {
     ): ContextPacket[] {
         let selected: ContextPacket[] = []
 
-        let systemPackets = packets.filter((packet) => {
-            packet.metadata.type === 'systemInstructions'
-        })
-        let otherPackets = packets.filter((packet) => {
-            packet.metadata.type !== 'systemInstructions'
-        })
+        let systemPackets = packets.filter(
+            (packet) => packet.metadata.type === 'systemInstructions',
+        )
+        let otherPackets = packets.filter((packet) => packet.metadata.type !== 'systemInstructions')
+
+        console.log(systemPackets, otherPackets)
 
         const systemTokens = systemPackets.reduce((acc: number, cur) => {
             return acc + cur.tokenCount
@@ -207,7 +225,7 @@ export class ContextBuilder {
 
         let sections: string[] = []
 
-        if (systemInstructions.length > 0) {
+        if (systemInstructions) {
             sections.push(`[Role & Policies]\n${systemInstructions.join('\n')}`)
         }
 
