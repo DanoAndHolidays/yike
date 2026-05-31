@@ -13,6 +13,8 @@ export class ContextBuilder {
     config: ContextConfig
 
     constructor(config: ContextConfig) {
+        // TODO
+        // 这里似乎是不用写什么东西了，以后再慢慢拓展吧
         this.config = config
     }
 
@@ -46,7 +48,7 @@ export class ContextBuilder {
             packets.push(
                 new ContextPacket(
                     systemInstructions,
-                    new Date().getTime(),
+                    new Date(),
                     this.countTokens(systemInstructions),
                     1.0,
                     {
@@ -68,7 +70,7 @@ export class ContextBuilder {
                         `${his.role}: ${his.content}`,
                         // TODO
                         // 这里可以给LLM message一个时间戳
-                        new Date().getTime(),
+                        new Date(),
                         this.countTokens(his.content),
                         0.6,
                         {
@@ -86,16 +88,13 @@ export class ContextBuilder {
         return packets
     }
 
-    //     """选择最相关的信息包
-
-    // Args:
-    //     packets: 候选信息包列表
-    //     user_query: 用户查询(用于计算相关性)
-    //     available_tokens: 可用的 token 数量
-
-    // Returns:
-    //     List[ContextPacket]: 选中的信息包列表
-    // """
+    /**
+     *
+     * @param packets 候选信息包列表
+     * @param userQuery 用户查询(用于计算相关性)
+     * @param availableTokens 可用的 token 数量
+     * @returns 选中的信息包列表
+     */
     private select(
         packets: ContextPacket[],
         userQuery: string,
@@ -103,12 +102,161 @@ export class ContextBuilder {
     ): ContextPacket[] {
         let selected: ContextPacket[] = []
 
+        let systemPackets = packets.filter((packet) => {
+            packet.metadata.type === 'systemInstructions'
+        })
+        let otherPackets = packets.filter((packet) => {
+            packet.metadata.type !== 'systemInstructions'
+        })
+
+        const systemTokens = systemPackets.reduce((acc: number, cur) => {
+            return acc + cur.tokenCount
+        }, 0)
+
+        if (systemTokens > availableTokens) {
+            console.warn('select: 系统指令已经将所有的token')
+            return systemPackets
+        }
+
+        let scoredPackets = []
+
+        for (let packet of otherPackets) {
+            // 是默认值0.5，重新计算
+            if (packet.relevanceScore === 0.5) {
+                packet.relevanceScore = this.calculateRelevance(packet.content, userQuery)
+            }
+            // 综合分数 = 相关性权重 × 相关性 + 新近性权重 × 新近性
+            const combinedScore =
+                this.config.recencyWeight * packet.relevanceScore +
+                this.config.recencyWeight * this.calculateRecency(packet.timestamp)
+
+            if (packet.relevanceScore >= this.config.minRelevance) {
+                scoredPackets.push({ combinedScore, packet })
+            }
+        }
+
+        scoredPackets.sort((a, b) => a.combinedScore - b.combinedScore)
+
+        selected = systemPackets.slice()
+        let currentTokens = systemTokens
+
+        for (const { combinedScore, packet } of scoredPackets) {
+            if (currentTokens + packet.tokenCount <= availableTokens) {
+                selected.push(packet)
+                currentTokens += packet.tokenCount
+            } else {
+                break
+            }
+        }
+
         return selected
     }
 
-    private structure() {}
+    /**
+     * @description 使用简单的关键词重叠算法。在生产环境中,可以替换为向量相似度计算。
+     * @param content 内容文本
+     * @param query 查询文本
+     */
+    private calculateRelevance(content: string, query: string) {
+        const contentWords = new Set(content.toLowerCase().split(/\s+/))
+        const queryWords = new Set(query.toLowerCase().split(/\s+/))
 
-    private compress() {}
+        if (queryWords.size === 0) {
+            return 0.0
+        }
 
-    build() {}
+        const intersection = new Set([...contentWords].filter((w) => queryWords.has(w)))
+        const union = new Set([...contentWords, ...queryWords])
+
+        return union.size === 0 ? 0.0 : intersection.size / union.size
+    }
+
+    private calculateRecency(timestamp: Date): number {
+        const now = new Date()
+
+        const ageHours = (now.getTime() - timestamp.getTime()) / 1000 / 3600
+
+        const decayFactor = 0.1
+        const recencyScore = Math.exp((-decayFactor * ageHours) / 24)
+
+        return Math.max(0.1, Math.min(1.0, recencyScore))
+    }
+
+    /**
+     * @description 用来继续对select处理过的数据包继续处理的函数
+     * @param selectedPackets 选中的信息包列表
+     * @param userQuery 用户查询
+     * @returns 结构化的上下文字符串
+     */
+    private structure(selectedPackets: ContextPacket[], userQuery: string): string {
+        let systemInstructions = []
+        let evidence = []
+        let context = []
+
+        for (let packet of selectedPackets) {
+            let packetType = packet.metadata?.type
+
+            if (packetType === 'systemInstructions') {
+                systemInstructions.push(packet.content)
+            } else if (packetType === 'ragResult' || packetType === 'knowlegde') {
+                evidence.push(packet.content)
+            } else {
+                context.push(packet.content)
+            }
+        }
+
+        let sections: string[] = []
+
+        if (systemInstructions.length > 0) {
+            sections.push(`[Role & Policies]\n${systemInstructions.join('\n')}`)
+        }
+
+        sections.push(`[Task]\n${userQuery}`)
+
+        if (evidence.length > 0) {
+            sections.push(`[Evidence]\n${evidence.join('\n---\n')}`)
+        }
+
+        if (context.length > 0) {
+            sections.push(`[Context]\n${context.join('\n')}`)
+        }
+
+        sections.push('[Output]\n请基于以上信息，提供准确、有据的回答。')
+
+        return sections.join('\n\n')
+    }
+    /**
+     * @description 对超限上下文进行压缩处理
+     * @param context 从structure得到的原始上下文
+     * @param maxTokens 最大的词元数量
+     * @returns 经过压缩的上下文
+     */
+    private compress(context: string, maxTokens: number) {
+        const currentTokens = this.countTokens(context)
+
+        if (currentTokens <= maxTokens) return context
+
+        console.log(`上下文超限currentTokens: ${currentTokens} > maxTokens: ${maxTokens}，进行压缩`)
+        // TODO
+        // 这里我就先不写了，懒，以后再实现吧
+        return context
+    }
+
+    build(
+        userQuery: string,
+        systemInstructions: string,
+        conversationHistory: LLMMessage[],
+    ): string {
+        let gatherPackets = this.gather(userQuery, conversationHistory, systemInstructions)
+        // TODO
+        // 这里的1000是我随便填的
+        let selectedPackets = this.select(gatherPackets, userQuery, 1000)
+
+        let context = this.structure(selectedPackets, userQuery)
+
+        // TODO
+        // 这里的3000是我随便填的
+        let compressedContext = this.compress(context, 3000)
+        return compressedContext
+    }
 }

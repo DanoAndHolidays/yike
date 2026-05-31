@@ -4,14 +4,14 @@
 export class ContextPacket {
     // id: string
     content: string
-    timestamp: number
+    timestamp: Date
     tokenCount: number
     relevanceScore: number
     metadata: Record<string, unknown>
 
     constructor(
         content: string,
-        timestamp: number,
+        timestamp: Date,
         tokenCount: number,
         relevanceScore: number = 0.5,
         metadata: Record<string, unknown> | null = null,
