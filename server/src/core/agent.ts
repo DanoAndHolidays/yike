@@ -7,10 +7,10 @@ export class Agent {
     llm: LLMClient
     name: String
     config: AgentConfig
-    systemPropmt?: string
+    systemPropmt: string
     _history: LLMMessage[] = []
 
-    constructor(llm: LLMClient, name: string, config: AgentConfig, systemPropmt?: string) {
+    constructor(llm: LLMClient, name: string, config: AgentConfig, systemPropmt: string) {
         this.llm = llm
         this.name = name
         this.config = config

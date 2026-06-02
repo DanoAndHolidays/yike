@@ -93,22 +93,22 @@ export class SimpleAgent extends Agent {
     }
 }
 
-const llm = new LLMClient({
-    provider: 'custom',
-    apiKey: process.env.DEEPSEEK_API_KEY || '',
-    baseURL: 'https://api.deepseek.com',
-    model: 'deepseek-chat',
-})
+// const llm = new LLMClient({
+//     provider: 'custom',
+//     apiKey: process.env.DEEPSEEK_API_KEY || '',
+//     baseURL: 'https://api.deepseek.com',
+//     model: 'deepseek-chat',
+// })
 
-// console.log(process.env);
+// // console.log(process.env);
 
-const simpleAgent = new SimpleAgent(
-    llm,
-    '测试助手',
-    { shit: 'test' },
-    '你是一个友好的AI助手，用中文回答。',
-    undefined,
-    false,
-)
+// const simpleAgent = new SimpleAgent(
+//     llm,
+//     '测试助手',
+//     { shit: 'test' },
+//     '你是一个友好的AI助手，用中文回答。',
+//     undefined,
+//     false,
+// )
 
-simpleAgent.run('你好，请用一句话介绍自己').then(console.log)
+// simpleAgent.run('你好，请用一句话介绍自己').then(console.log)

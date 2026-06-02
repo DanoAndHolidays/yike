@@ -125,7 +125,7 @@ export class ContextBuilder {
         )
         let otherPackets = packets.filter((packet) => packet.metadata.type !== 'systemInstructions')
 
-        console.log(systemPackets, otherPackets)
+        // console.log(systemPackets, otherPackets)
 
         const systemTokens = systemPackets.reduce((acc: number, cur) => {
             return acc + cur.tokenCount
