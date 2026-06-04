@@ -1,4 +1,4 @@
-interface ToolParameter {
+export interface ToolParameter {
     name: string
     type: string
     description: string
