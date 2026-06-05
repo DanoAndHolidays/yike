@@ -1,6 +1,8 @@
 import { Tool } from '../base'
 import { ToolRegistry } from '../registry'
 import { ToolParameter } from '../base'
+import { MemoryConfig } from '../../memory/base'
+import { MemoryManager } from '../../memory/manager'
 
 // 记忆操作类型定义
 interface AddMemoryOptions {
@@ -18,10 +20,20 @@ export class MemoryTool extends Tool {
     memoryTypes: string[] = []
     workspace: string
     currentSessionId: Date
+    meomryConfig: MemoryConfig | null = null
+    memoryManager: MemoryManager
     constructor(workspace: string) {
-        super('memoryTool', '一个管理多种类型记忆的工具，可以持久化保存信息')
+        super('memoryTool', '记忆工具 - 可以存储和检索对话历史、知识和经验')
         this.workspace = workspace
         this.currentSessionId = new Date()
+
+        // 提供默认配置
+        this.meomryConfig = {
+            maxCapicity: 50,
+            maxAgeMinutes: 60,
+        }
+
+        this.memoryManager = new MemoryManager(this.meomryConfig as any, this.userId, true)
     }
 
     /**
@@ -65,8 +77,14 @@ export class MemoryTool extends Tool {
             // if(this.currentSessionId === null) this.
 
             // 设计记忆管理类
+            let memoryId = this.memoryManager.addMemory(
+                content || '',
+                memoryType,
+                importance,
+                metadata,
+            )
 
-            return '✅ 记忆已添加'
+            return '✅ 记忆已添加' + memoryId
         } catch (error) {
             return `❌记忆添加失败`
         }

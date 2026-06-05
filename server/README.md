@@ -171,8 +171,8 @@ hello-agents/
 │   │   ├── types/                # 记忆类型实现
 │   │   │   ├── working.py        # 工作记忆（TTL管理，纯内存）
 │   │   │   ├── episodic.py       # 情景记忆（事件序列，SQLite+Qdrant）
-│   │   │   ├── semantic.py       # 语义记忆（知识图谱，Qdrant+Neo4j）
-│   │   │   └── perceptual.py     # 感知记忆（多模态，SQLite+Qdrant）
+│   │   │   ├── semantic.py       # 语义记忆（知识图谱，Qdrant+Neo4j）  不做
+│   │   │   └── perceptual.py     # 感知记忆（多模态，SQLite+Qdrant）  不做
 │   │   ├── storage/              # 存储后端实现
 │   │   │   ├── qdrant_store.py   # Qdrant向量存储（高性能向量检索）
 │   │   │   ├── neo4j_store.py    # Neo4j图存储（知识图谱管理）
@@ -191,6 +191,8 @@ hello-agents/
 这个记忆系统对我来讲有点重了，我想要进行一个裁剪，学习其中的构建方法
 - 看看源码，明天
 
+6/5
+先不看源码，尝试实现工作记忆（TTL管理，纯内存）
 
 
 ## 一刻短剧
