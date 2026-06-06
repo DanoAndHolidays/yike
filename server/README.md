@@ -194,6 +194,24 @@ hello-agents/
 6/5
 先不看源码，尝试实现工作记忆（TTL管理，纯内存）
 
+6/6
+准备实现下mcp协议
+hello_agents/
+├── protocols/                          # 通信协议模块
+│   ├── mcp/                            # MCP协议实现（Model Context Protocol）
+│   │   ├── client.py                   # MCP客户端（支持5种传输方式）
+│   │   ├── server.py                   # MCP服务器（FastMCP封装）
+│   │   └── utils.py                    # 工具函数（create_context/parse_context）
+│   ├── a2a/                            # A2A协议实现（Agent-to-Agent Protocol）
+│   │   └── implementation.py           # A2A服务器/客户端（基于a2a-sdk，可选依赖）
+│   └── anp/                            # ANP协议实现（Agent Network Protocol）
+│       └── implementation.py           # ANP服务发现/注册（概念性实现）
+└── tools/builtin/                      # 内置工具模块
+    └── protocol_tools.py               # 协议工具包装器（MCPTool/A2ATool/ANPTool）
+
+
+
+
 
 ## 一刻短剧
 
