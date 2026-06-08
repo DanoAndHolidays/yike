@@ -97,8 +97,45 @@ const App = () => {
     )
 }
 
+// Canvas 指纹生成函数
+const generateCanvasFingerprint = async (): Promise<string> => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')!
+    canvas.width = 200
+    canvas.height = 30
+
+    // 绘制文本 - 不同设备渲染会有微小差异
+    ctx.textBaseline = 'top'
+    ctx.font = '14px Arial'
+    ctx.fillStyle = '#f60'
+    ctx.fillRect(125, 1, 62, 20)
+    ctx.fillStyle = '#069'
+    ctx.fillText('Hello World', 2, 15)
+    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)'
+    ctx.fillText('Canvas FP', 4, 17)
+
+    // 获取 base64 数据
+    const dataURL = canvas.toDataURL()
+
+    // 使用 Web Crypto API 进行 SHA-256 哈希
+    const encoder = new TextEncoder()
+    const data = encoder.encode(dataURL)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+
+    console.log(hashHex, '666')
+
+    return hashHex
+}
+
 const Demo: FC = () => {
     const navigate = useNavigate()
+    const [fingerprint, setFingerprint] = useState<string>('')
+
+    useEffect(() => {
+        generateCanvasFingerprint().then(setFingerprint)
+    }, [])
 
     return (
         <div style={{ padding: '24px', background: '', minHeight: '100vh' }}>
@@ -129,6 +166,29 @@ const Demo: FC = () => {
                         </Text>
                     </div>
 
+                    <Divider />
+
+                    <div>
+                        <Text bold>🖼️ Canvas 指纹 (设备唯一标识)</Text>
+                        <br />
+                        <div
+                            style={{
+                                marginTop: '8px',
+                                padding: '12px',
+                                background: '#f5f5f5',
+                                borderRadius: '4px',
+                                fontFamily: 'monospace',
+                                wordBreak: 'break-all',
+                                fontSize: '12px',
+                            }}
+                        >
+                            {fingerprint || '生成中...'}
+                        </div>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>
+                            基于 Canvas 渲染差异 + SHA-256 哈希
+                        </Text>
+                    </div>
+
                     <div>
                         <Suspense fallback={<div>Loading...</div>}>
                             <App />
@@ -138,11 +198,7 @@ const Demo: FC = () => {
                     <Divider />
 
                     <div style={{ textAlign: 'center' }}>
-                        <Button
-                            type="outline"
-                            size="large"
-                            onClick={() => navigate('/tree-demo')}
-                        >
+                        <Button type="outline" size="large" onClick={() => navigate('/tree-demo')}>
                             查看树形虚拟滚动 Demo (100k 节点)
                         </Button>
                     </div>
