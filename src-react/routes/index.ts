@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import Demo from '../views/Demo'
 import TreeDemo from '../views/TreeDemo'
+import PermissionDemo from '../views/PermissionDemo'
 
 export interface RouteConfig {
     path: string
@@ -21,6 +22,13 @@ const routes: RouteConfig[] = [
         component: Demo,
         meta: {
             title: 'React + Arco Design 测试',
+        },
+    },
+    {
+        path: '/permission-demo',
+        component: PermissionDemo,
+        meta: {
+            title: '权限预览面板 — Set Diff + 互斥规则',
         },
     },
     {
