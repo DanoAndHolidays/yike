@@ -3,7 +3,7 @@ import type { TreeData, TreeNode } from './mockData'
 
 // ── Types ──────────────────────────────────────────────
 
-interface FlatItem {
+export interface FlatItem {
     id: string
     level: number
 }
@@ -23,7 +23,7 @@ const OVERSCAN = 15
 
 // ── Helpers ────────────────────────────────────────────
 
-function flattenTree(
+export function flattenTree(
     nodeMap: Map<string, TreeNode>,
     ids: string[],
     level: number,

@@ -2,7 +2,8 @@ import React, { useState, useMemo, useCallback, useRef } from 'react'
 import { Button, Space, Tag, Tooltip } from '@arco-design/web-react'
 import { createLazyTreeData } from './mockData'
 import type { LazyTreeAPI } from './mockData'
-import TreeVirtualList from './TreeVirtualList'
+import TreeVirtualList, { flattenTree } from './TreeVirtualList'
+import ExportPanel from './ExportPanel'
 import './tree.css'
 
 const TreeDemo: React.FC = () => {
@@ -165,6 +166,12 @@ const TreeDemo: React.FC = () => {
     return count
   }, [treeData, dataVersion])
 
+  const flatList = useMemo(() => {
+    const out: Array<{ id: string; level: number }> = []
+    flattenTree(treeData.nodeMap, treeData.rootIds, 0, expandedIds, out)
+    return out
+  }, [treeData, expandedIds, dataVersion])
+
   return (
     <div className="tree-demo-page">
       <div className="tree-controls">
@@ -213,6 +220,8 @@ const TreeDemo: React.FC = () => {
           </Tag>
         </Tooltip>
       </div>
+
+      <ExportPanel flatList={flatList} treeData={treeData} />
 
       <TreeVirtualList
         treeData={treeData}

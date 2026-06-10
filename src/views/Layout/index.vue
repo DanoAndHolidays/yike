@@ -11,8 +11,14 @@ const appStore = useAppStore()
 import { useVidStore } from '@/stores/user'
 const vidStore = useVidStore()
 
-import { ref } from 'vue'
-// appStore.setIsReady()
+import { ref, onMounted } from 'vue'
+
+// Fallback: dismiss splash screen after timeout even if video never loads
+onMounted(() => {
+    setTimeout(() => {
+        appStore.setIsReady()
+    }, 1500)
+})
 
 const isReady = appStore.getIsReady()
 
