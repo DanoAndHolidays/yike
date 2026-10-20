@@ -230,7 +230,7 @@ const llm = new LLMClient({
 const reactAgent = new ReactAgent(
     llm,
     'ReactAgent',
-    { shit: 'test' },
+    {},
     '你是一个友好的AI助手，用中文回答。',
     undefined,
     false,
