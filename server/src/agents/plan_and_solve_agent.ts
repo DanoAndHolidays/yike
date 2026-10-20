@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 // 直接使用原生提供的 dirname，效果和之前完全一样
 const __dirname = import.meta.dirname
@@ -152,28 +153,30 @@ export class PlanAndSolveAgent extends Agent {
     }
 }
 
-const llm = new LLMClient({
-    provider: 'deepseek',
-    apiKey: process.env.DEEPSEEK_API_KEY || '',
-    baseURL: 'https://api.deepseek.com',
-    model: 'deepseek-chat',
-})
+if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
+    const llm = new LLMClient({
+        provider: 'deepseek',
+        apiKey: process.env.DEEPSEEK_API_KEY || '',
+        baseURL: 'https://api.deepseek.com',
+        model: 'deepseek-chat',
+    })
 
-// // console.log(process.env);
+    // // console.log(process.env);
 
-const planAndSolveAgent = new PlanAndSolveAgent(
-    llm,
-    'planAndSolveAgent',
-    { shit: 'test' },
-    '你是一个友好的AI助手，用中文回答。',
-    undefined,
-    false,
-    5,
-    '',
-)
-
-planAndSolveAgent
-    .run(
-        '一个水果店周一卖出了15个苹果。周二卖出的苹果数量是周一的两倍。周三卖出的数量比周二少了56个。请问这三天总共卖出了多少个苹果？',
+    const planAndSolveAgent = new PlanAndSolveAgent(
+        llm,
+        'planAndSolveAgent',
+        { shit: 'test' },
+        '你是一个友好的AI助手，用中文回答。',
+        undefined,
+        false,
+        5,
+        '',
     )
-    .then(console.log)
+
+    planAndSolveAgent
+        .run(
+            '一个水果店周一卖出了15个苹果。周二卖出的苹果数量是周一的两倍。周三卖出的数量比周二少了56个。请问这三天总共卖出了多少个苹果？',
+        )
+        .then(console.log)
+}
