@@ -23,6 +23,21 @@ function creatMessge(message: string) {
             </div>
         </>,
     )
+
+    let closed = false
+    const close = () => {
+        if (closed) return
+        closed = true
+        clearTimeout(timer)
+        root.unmount()
+        if (el.parentNode) {
+            el.parentNode.removeChild(el)
+        }
+    }
+
+    const timer = setTimeout(close, 3000)
+
+    return close
 }
 
 export default creatMessge
